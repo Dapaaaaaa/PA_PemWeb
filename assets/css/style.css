@@ -1,0 +1,156 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 50px;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 24px;
+    color: #537B2F;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 32px;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 13px;
+    color: #537B2F;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.nav-item:hover {
+    opacity: 0.7;
+}
+
+.nav-item svg {
+    margin-bottom: 3px;
+}
+
+/* HERO SECTION */
+.hero {
+    background-color: #8DA750;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 60px 80px;
+    flex-wrap: wrap;
+}
+
+.hero-text {
+    max-width: 450px;
+    color: #fff;
+}
+
+.hero-text h1 {
+    font-size: 48px;
+    font-weight: 700;
+    margin: 0 0 10px;
+}
+
+.hero-text p {
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 25px;
+}
+
+.btn-order {
+    display: inline-block;
+    background-color: #D92200;
+    padding: 12px 26px;
+    border-radius: 8px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-order:hover {
+    background-color: #F3500A;
+}
+
+.hero-image img {
+    width: 330px;
+}
+
+/* PRODUCT SECTION */
+.product-section {
+    text-align: center;
+    padding: 60px 40px;
+}
+
+.product-section h2 {
+    font-size: 28px;
+    margin-bottom: 40px;
+    color: #537B2F;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    justify-items: center;
+}
+
+.product-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px;
+    width: 270px;
+    text-align: center;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.08);
+}
+
+.product-card img {
+    width: 160px;
+    margin-bottom: 10px;
+}
+
+.product-card h3 {
+    margin: 6px 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.product-card p {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.price {
+    font-size: 18px;
+    font-weight: 600;
+    color: #537B2F;
+}
+
+/* RESPONSIVE */
+@media (max-width: 820px) {
+    .hero {
+        text-align: center;
+        justify-content: center;
+        padding: 50px 20px;
+    }
+
+    .hero-image img {
+        margin-top: 20px;
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
