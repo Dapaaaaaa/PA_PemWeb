@@ -30,7 +30,7 @@
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 6H20M4 12H20M4 18H20" stroke="#537B2F" stroke-width="2" stroke-linecap="round"/></svg>
             <span>Menu</span>
         </a>
-        <a href="about.php" class="nav-item">
+        <a href="located.php" class="nav-item">
             <!-- Location Icon -->
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3C8.13 3 5 6.13 5 10C5 15.25 12 21 12 21C12 21 19 15.25 19 10C19 6.13 15.87 3 12 3Z" stroke="#537B2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span>Located</span>
@@ -40,7 +40,7 @@
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M22 16.92V20C22 20.55 21.55 21 21 21C10.61 21 3 13.39 3 3C3 2.45 3.45 2 4 2H7.09C7.52 2 7.89 2.28 7.98 2.69C8.34 4.33 8.98 5.9 9.88 7.34C10.07 7.64 10.05 8.04 9.82 8.32L8.13 10.3C9.66 12.97 12.04 15.34 14.7 16.87L16.68 15.18C16.96 14.94 17.36 14.93 17.66 15.12C19.1 16.02 20.67 16.66 22.31 17.02C22.72 17.11 23 17.48 23 17.91V17.92H22Z" stroke="#537B2F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <span>Contact</span>
         </a>
-        <a href="#" class="nav-item">
+        <a href="account.php" class="nav-item">
             <!-- User Icon -->
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="4" stroke="#537B2F" stroke-width="2"/><path d="M6 21C6 17.13 8.69 14 12 14C15.31 14 18 17.13 18 21" stroke="#537B2F" stroke-width="2"/></svg>
             <span>Account</span>
