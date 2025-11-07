@@ -21,21 +21,21 @@
             <img src="assets/img/burger1.png" alt="">
             <h3>Premium Cheeseburger</h3>
             <p>Burger dengan daging lembut dan keju lumer.</p>
-            <span class="price">$8.99</span>
+            <span class="price">Rp13.000</span>
         </div>
 
         <div class="product-card">
             <img src="assets/img/burger2.png" alt="">
             <h3>Spicy Double Patty</h3>
             <p>Daging double dengan saus pedas khas.</p>
-            <span class="price">$10.49</span>
+            <span class="price">Rp13.000</span>
         </div>
 
         <div class="product-card">
             <img src="assets/img/burger3.png" alt="">
             <h3>Smoked BBQ Burger</h3>
             <p>Daging panggang dengan aroma barbeque smoky.</p>
-            <span class="price">$9.75</span>
+            <span class="price">Rp13.000</span>
         </div>
 
     </div>
