@@ -2,20 +2,20 @@
 
 <section class="page-header">
     <div class="page-header-content">
-        <h1>📍 Find Us</h1>
+        <h1>📍 Temukan Kami</h1>
         <p>Visit our store and experience the best burgers in town!</p>
     </div>
 </section>
 
 <section class="location-main">
     <div class="location-intro">
-        <h2>Welcome to OurStuff</h2>
-        <p>We are conveniently located in the heart of Samarinda, ready to serve you with the most delicious burgers crafted with love and premium ingredients. Whether you're dining in or ordering for delivery, we're here to satisfy your cravings!</p>
+        <h2>Selamat Datang di OurStuffies!</h2>
+        <p>Kami berada di tengah kota Samarinda, siap melayani Anda dengan menu paling lezat yang dibuat dengan cinta dan bahan berkualitas premium.Anda dapat memesan untuk pengantaran, kami siap memuaskan selera Anda!</p>
     </div>
 
     <!-- Google Maps -->
     <div class="map-wrapper">
-        <h3>📌 Our Location on Map</h3>
+        <h3>📌 Lokasi Kami Pada Map</h3>
         <div class="map-container">
             <iframe 
                 class="google-map"
@@ -31,7 +31,7 @@
     <div class="location-details">
         <div class="detail-card">
             <div class="detail-icon">📍</div>
-            <h3>Address</h3>
+            <h3>Alamat</h3>
             <p>Blk. A-B No.53b, Gn. Kelua</p>
             <p>Kec. Samarinda Ulu</p>
             <p>Kota Samarinda, Kalimantan Timur</p>
@@ -41,7 +41,7 @@
 
         <div class="detail-card">
             <div class="detail-icon">🕐</div>
-            <h3>Opening Hours</h3>
+            <h3>Jam Operasional</h3>
             <div class="hours-list">
                 <div class="hours-item">
                     <span class="day">Senin - Jumat</span>
@@ -57,7 +57,7 @@
 
         <div class="detail-card">
             <div class="detail-icon">📞</div>
-            <h3>Contact Us</h3>
+            <h3>Hubungi Kami</h3>
             <div class="contact-info">
                 <p><strong>WhatsApp:</strong></p>
                 <a href="https://wa.me/6285974906945" class="contact-link" target="_blank">
@@ -67,14 +67,14 @@
             </div>
             <a href="https://wa.me/6285974906945?text=Halo%20OurStuff,%20saya%20ingin%20order%20burger!" 
                class="btn-whatsapp" target="_blank">
-                💬 Chat on WhatsApp
+                💬 Chat di WhatsApp
             </a>
         </div>
     </div>
 
     <!-- Why Visit Us Section -->
     <div class="why-visit">
-        <h2>Why Visit OurStuff?</h2>
+        <h2>Kenapa OurStuffies?</h2>
         <div class="reasons-grid">
             <div class="reason-card">
                 <div class="reason-icon">🍔</div>
@@ -86,11 +86,11 @@
                 <h4>Expert Chefs</h4>
                 <p>Tim chef berpengalaman yang passionate dalam setiap burger</p>
             </div>
-            <div class="reason-card">
+            <!-- <div class="reason-card">
                 <div class="reason-icon">🏪</div>
                 <h4>Cozy Atmosphere</h4>
                 <p>Tempat yang nyaman untuk makan bersama keluarga dan teman</p>
-            </div>
+            </div> -->
             <div class="reason-card">
                 <div class="reason-icon">🚚</div>
                 <h4>Fast Delivery</h4>

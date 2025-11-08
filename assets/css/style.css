@@ -1,4 +1,10 @@
+* {
+  max-width: auto;
+  box-sizing: border-box;
+}
+
 body {
+  width: 100%;
   margin: 0;
   padding: 0;
   font-family: "Inter", sans-serif;
@@ -46,7 +52,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 60px 80px;
+  padding: 60px 10rem;
   flex-wrap: wrap;
 }
 
@@ -99,10 +105,11 @@ body {
 }
 
 .product-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  display: flex;
+  flex-wrap: wrap;
   justify-items: center;
+  justify-content: center;
+  gap: 4rem;
 }
 
 .product-card {
