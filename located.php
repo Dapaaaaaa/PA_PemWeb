@@ -86,11 +86,6 @@
                 <h4>Expert Chefs</h4>
                 <p>Tim chef berpengalaman yang passionate dalam setiap burger</p>
             </div>
-            <!-- <div class="reason-card">
-                <div class="reason-icon">🏪</div>
-                <h4>Cozy Atmosphere</h4>
-                <p>Tempat yang nyaman untuk makan bersama keluarga dan teman</p>
-            </div> -->
             <div class="reason-card">
                 <div class="reason-icon">🚚</div>
                 <h4>Fast Delivery</h4>
