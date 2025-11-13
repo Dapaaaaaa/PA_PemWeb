@@ -73,7 +73,7 @@
                 <div class="info-content">
                     <h3>Call or Text</h3>
                     <p><strong>WhatsApp:</strong></p>
-                    <a href="https://wa.me/6285974906945" class="Kontak-phone">+62 859-7490-6945</a>
+                    <a href="https://wa.me/6285974906945" class="Kontak-phone" target="_blank">+62 859-7490-6945</a>
                     <p class="info-note">Available during business hours</p>
                 </div>
             </div>
