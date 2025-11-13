@@ -23,10 +23,16 @@
 
 <header class="main-header">
     <a href="index.php" class="logo">
-        <div class="logo">OurStuffies</div>
+        OurStuffies
     </a>
 
-    <nav class="nav-menu">  
+     <div class="nav-toggle" id="nav-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+    </div>
+
+    <nav class="nav-menu" id="nav-menu">  
         <a href="index.php" class="nav-item">
             <!-- Beranda Icon -->
             <span class="material-icons">
@@ -61,4 +67,25 @@
             <span>Account</span>
         </a>
     </nav>
+
+    <div class="nav-overlay" id="nav-overlay">
+    </div>
 </header>
+
+<script>
+const toggle = document.getElementById('nav-toggle');
+const menu = document.getElementById('nav-menu');
+const overlay = document.getElementById('nav-overlay');
+
+toggle.addEventListener('click', () => {
+  menu.classList.toggle('active');
+  overlay.classList.toggle('active');
+});
+
+// Klik di overlay untuk menutup
+overlay.addEventListener('click', () => {
+  menu.classList.remove('active');
+  overlay.classList.remove('active');
+});
+
+</script>
