@@ -1,3 +1,14 @@
+<?php 
+
+include 'includes/session.php';
+
+if (isAdminLoggedIn()) {
+    header('Location: dashboard.php');
+    exit();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +31,21 @@
             <p>Welcome back! Please login to your account.</p>
         </div>
 
-        <form class="login-form" action="dashboard.php" method="POST">
+        <?php
+        // Tampilkan pesan error jika ada
+        if (isset($_SESSION['error'])) {
+            echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
+            unset($_SESSION['error']); // Hapus setelah ditampilkan
+        }
+        
+        // Tampilkan pesan sukses jika ada
+        if (isset($_SESSION['success'])) {
+            echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
+            unset($_SESSION['success']);
+        }
+        ?>
+
+        <form class="login-form" action="process_login.php" method="POST">
             <div class="form-group">
                 <label for="email">Email Address</label>
                 <input type="email" id="email" name="email" required 
