@@ -3,7 +3,7 @@ include '../koneksi.php';
 // include 'includes/session.php';
 
 // Cek login, jika belum login redirect ke login.php
-// requireAdminLogin();
+// requireAdminLogin()
 
 $query_total_menu = "SELECT COUNT(*) as total FROM produk WHERE aktif = 1";
 $result_total_menu = mysqli_query($conn, $query_total_menu);
