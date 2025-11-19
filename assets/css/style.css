@@ -904,11 +904,12 @@ body {
 
 /* Menu CTA */
 .menu-cta {
+  width: 600px;
+  margin: 60px auto 0;
   text-align: center;
   background: linear-gradient(135deg, #8da750 0%, #537b2f 100%);
   color: white;
   padding: 3rem 2rem;
-  margin: 0 30rem;
   border-radius: 16px;
   margin-top: 60px;
 }

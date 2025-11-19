@@ -1,3 +1,64 @@
+<?php
+include '../koneksi.php';
+include 'includes/session.php';
+requireAdminLogin();
+
+// Handle DELETE
+if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
+    $id = intval($_GET['id']);
+    $query_delete = "DELETE FROM kategori WHERE id = $id";
+    if (mysqli_query($conn, $query_delete)) {
+        $_SESSION['success'] = "Kategori berhasil dihapus!";
+    } else {
+        $_SESSION['error'] = "Gagal menghapus kategori!";
+    }
+    header("Location: categories.php");
+    exit();
+}
+
+// Handle ADD CATEGORY (POST)
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'add') {
+    $nama = mysqli_real_escape_string($conn, $_POST['category_name']);
+    $slug = mysqli_real_escape_string($conn, $_POST['slug']);
+    $deskripsi = mysqli_real_escape_string($conn, $_POST['description']);
+    
+    $query = "INSERT INTO kategori (nama, slug, deskripsi) VALUES ('$nama', '$slug', '$deskripsi')";
+    
+    if (mysqli_query($conn, $query)) {
+        $_SESSION['success'] = "Kategori berhasil ditambahkan!";
+    } else {
+        $_SESSION['error'] = "Gagal menambahkan kategori: " . mysqli_error($conn);
+    }
+    header("Location: categories.php");
+    exit();
+}
+
+// Handle UPDATE CATEGORY
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'edit') {
+    $id = intval($_POST['category_id']);
+    $nama = mysqli_real_escape_string($conn, $_POST['category_name']);
+    $slug = mysqli_real_escape_string($conn, $_POST['slug']);
+    $deskripsi = mysqli_real_escape_string($conn, $_POST['description']);
+    
+    $query = "UPDATE kategori SET nama = '$nama', slug = '$slug', deskripsi = '$deskripsi' WHERE id = $id";
+    
+    if (mysqli_query($conn, $query)) {
+        $_SESSION['success'] = "Kategori berhasil diupdate!";
+    } else {
+        $_SESSION['error'] = "Gagal mengupdate kategori!";
+    }
+    header("Location: categories.php");
+    exit();
+}
+
+// READ: Ambil semua kategori
+$query_categories = "SELECT k.*, COUNT(p.id) as total_produk 
+                     FROM kategori k 
+                     LEFT JOIN produk p ON k.id = p.kategori_id 
+                     GROUP BY k.id 
+                     ORDER BY k.id ASC";
+$result_categories = mysqli_query($conn, $query_categories);
+?>
 <?php include 'includes/admin_header.php'; ?>
 <?php include 'includes/admin_sidebar.php'; ?>
 
@@ -10,9 +71,9 @@
             </div>
             <div class="topbar-right">
                 <div class="admin-user">
-                    <div class="admin-user-avatar">A</div>
+                    <div class="admin-user-avatar"><?php echo strtoupper(substr($_SESSION['admin_name'] ?? 'A', 0, 1)); ?></div>
                     <div class="admin-user-info">
-                        <h4>Admin User</h4>
+                        <h4><?php echo htmlspecialchars($_SESSION['admin_name'] ?? 'Admin User'); ?></h4>
                         <p>Administrator</p>
                     </div>
                 </div>
@@ -21,13 +82,26 @@
 
         <!-- Main Area -->
         <div class="admin-main">
+            <?php
+            if (isset($_SESSION['success'])) {
+                echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
+                unset($_SESSION['success']);
+            }
+            if (isset($_SESSION['error'])) {
+                echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
+                unset($_SESSION['error']);
+            }
+            ?>
+
             <!-- Add Category Section -->
             <div class="content-section">
                 <div class="section-header">
                     <h2>Tambah Kategori Baru</h2>
                 </div>
 
-                <form class="admin-form" id="addCategoryForm">
+                <form class="admin-form" method="POST">
+                    <input type="hidden" name="action" value="add">
+                    
                     <div class="form-row">
                         <div class="form-group">
                             <label for="category-name">Nama Kategori *</label>
@@ -56,8 +130,6 @@
             <div class="content-section">
                 <div class="section-header">
                     <h2>Semua Kategori</h2>
-                    <input type="text" placeholder="Search categories..." 
-                           style="padding: 8px 16px; border: 2px solid #ddd; border-radius: 8px;">
                 </div>
 
                 <table class="data-table">
@@ -73,109 +145,24 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <?php while ($kategori = mysqli_fetch_assoc($result_categories)) { ?>
                         <tr>
-                            <td>1</td>
-                            <td><strong>Kebab</strong></td>
-                            <td><code>kebab</code></td>
-                            <td>Aneka kebab dengan isian pilihan</td>
-                            <td><span class="badge badge-info">2 item</span></td>
-                            <td>2025-01-10</td>
+                            <td><?php echo $kategori['id']; ?></td>
+                            <td><strong><?php echo htmlspecialchars($kategori['nama']); ?></strong></td>
+                            <td><code><?php echo htmlspecialchars($kategori['slug']); ?></code></td>
+                            <td><?php echo htmlspecialchars($kategori['deskripsi']); ?></td>
+                            <td><span class="badge badge-info"><?php echo $kategori['total_produk']; ?> item</span></td>
+                            <td><?php echo date('Y-m-d', strtotime($kategori['dibuat_pada'])); ?></td>
                             <td class="table-actions">
-                                <button class="btn btn-sm btn-success" onclick="editCategory(1)">Edit</button>
-                                <button class="btn btn-sm btn-danger" onclick="deleteCategory(1)">Hapus</button>
+                                <a href="edit_category.php?id=<?php echo $kategori['id']; ?>" class="btn btn-sm btn-success">Edit</a>
+                                <a href="categories.php?action=delete&id=<?php echo $kategori['id']; ?>" 
+                                   class="btn btn-sm btn-danger" 
+                                   onclick="return confirm('Yakin ingin menghapus kategori ini?')">Hapus</a>
                             </td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td><strong>Burger</strong></td>
-                            <td><code>burger</code></td>
-                            <td>Burger segar dengan daging berkualitas</td>
-                            <td><span class="badge badge-info">2 item</span></td>
-                            <td>2025-01-10</td>
-                            <td class="table-actions">
-                                <button class="btn btn-sm btn-success" onclick="editCategory(2)">Edit</button>
-                                <button class="btn btn-sm btn-danger" onclick="deleteCategory(2)">Hapus</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td><strong>Minuman</strong></td>
-                            <td><code>minuman</code></td>
-                            <td>Berbagai minuman segar</td>
-                            <td><span class="badge badge-info">2 items</span></td>
-                            <td>2025-01-10</td>
-                            <td class="table-actions">
-                                <button class="btn btn-sm btn-success" onclick="editCategory(3)">Edit</button>
-                                <button class="btn btn-sm btn-danger" onclick="deleteCategory(3)">Hapus</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td><strong>Snack</strong></td>
-                            <td><code>snack</code></td>
-                            <td>Camilan pelengkap</td>
-                            <td><span class="badge badge-info">1 item</span></td>
-                            <td>2025-01-10</td>
-                            <td class="table-actions">
-                                <button class="btn btn-sm btn-success" onclick="editCategory(4)">Edit</button>
-                                <button class="btn btn-sm btn-danger" onclick="deleteCategory(4)">Hapus</button>
-                            </td>
-                        </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
-            </div>
-
-            <!-- Category Statistics -->
-            <div class="content-section">
-                <div class="section-header">
-                    <h2>Statistik Kategori</h2>
-                </div>
-
-                <div class="dashboard-stats">
-                    <div class="stat-card">
-                        <div class="stat-icon green">
-                            🍔
-                        </div>
-                        <div class="stat-info">
-                            <h3>Burger</h3>
-                            <div class="stat-number">2</div>
-                            <p style="font-size: 12px; color: #999; margin-top: 5px;">Paling Populer</p>
-                        </div>
-                    </div>
-
-                    <div class="stat-card">
-                        <div class="stat-icon orange">
-                            🌯
-                        </div>
-                        <div class="stat-info">
-                            <h3>Kebab</h3>
-                            <div class="stat-number">2</div>
-                            <p style="font-size: 12px; color: #999; margin-top: 5px;">Terlaris</p>
-                        </div>
-                    </div>
-
-                    <div class="stat-card">
-                        <div class="stat-icon blue">
-                            🥤
-                        </div>
-                        <div class="stat-info">
-                            <h3>Minuman</h3>
-                            <div class="stat-number">2</div>
-                            <p style="font-size: 12px; color: #999; margin-top: 5px;">Refreshing</p>
-                        </div>
-                    </div>
-
-                    <div class="stat-card">
-                        <div class="stat-icon red">
-                            🍟
-                        </div>
-                        <div class="stat-info">
-                            <h3>Snack</h3>
-                            <div class="stat-number">1</div>
-                            <p style="font-size: 12px; color: #999; margin-top: 5px;">Side Dishes</p>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div class="info-box">
@@ -202,26 +189,6 @@ document.getElementById('category-name').addEventListener('input', function(e) {
         .replace(/^-+|-+$/g, '');
     document.getElementById('category-slug').value = slug;
 });
-
-// Form submission
-document.getElementById('addCategoryForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const categoryName = document.getElementById('category-name').value;
-    alert('Category "' + categoryName + '" added successfully! (Frontend demo only)');
-    this.reset();
-});
-
-// Edit category function
-function editCategory(id) {
-    alert('Edit category #' + id + '\n\nThis would open an edit form to modify category details.\n\n(Frontend demo only)');
-}
-
-// Delete category function
-function deleteCategory(id) {
-    if (confirm('Are you sure you want to delete this category?\n\nNote: This will also affect all menu items in this category.')) {
-        alert('Category #' + id + ' deleted! (Frontend demo only)');
-    }
-}
 </script>
 
 </body>

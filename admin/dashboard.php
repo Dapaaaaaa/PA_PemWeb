@@ -1,9 +1,9 @@
 <?php
 include '../koneksi.php';
-// include 'includes/session.php';
+include 'includes/session.php';
 
 // Cek login, jika belum login redirect ke login.php
-// requireAdminLogin()
+requireAdminLogin();
 
 $query_total_menu = "SELECT COUNT(*) as total FROM produk WHERE aktif = 1";
 $result_total_menu = mysqli_query($conn, $query_total_menu);
@@ -55,10 +55,10 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
             <div class="topbar-right">
                 <div class="admin-user">
                     <div class="admin-user-avatar">
-                        <?php echo strtoupper(substr($_SESSION['admin_name'], 0, 1)); ?>
+                        <?php echo strtoupper(substr($_SESSION['admin_name'] ?? 'A', 0, 1)); ?>
                     </div>
                     <div class="admin-user-info">
-                        <h4><?php echo htmlspecialchars($_SESSION['admin_name']); ?></h4>
+                        <h4><?php echo htmlspecialchars($_SESSION['admin_name'] ?? 'Admin User'); ?></h4>
                         <p>Administrator</p>
                     </div>
                 </div>
