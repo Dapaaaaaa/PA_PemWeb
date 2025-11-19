@@ -203,14 +203,12 @@ $result_kategori = mysqli_query($conn, $query_kategori);
                 <div class="section-header">
                     <h2>Semua Menu Item</h2>
                     <div>
-                        <input type="text" placeholder="Search menu..." 
-                               style="padding: 8px 16px; border: 2px solid #ddd; border-radius: 8px; margin-right: 10px;">
-                        <select style="padding: 8px 16px; border: 2px solid #ddd; border-radius: 8px;">
+                        <select id="categoryFilter" style="padding: 8px 16px; border: 2px solid #ddd; border-radius: 8px;">
                             <option value="">Semua Kategori</option>
                             <?php
                             mysqli_data_seek($result_kategori, 0);
                             while ($kat = mysqli_fetch_assoc($result_kategori)) {
-                                echo "<option value='{$kat['id']}'>{$kat['nama']}</option>";
+                                echo "<option value='{$kat['nama']}'>{$kat['nama']}</option>";
                             }
                             ?>
                         </select>
@@ -229,15 +227,15 @@ $result_kategori = mysqli_query($conn, $query_kategori);
                             <th>Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="menuTableBody">
                         <?php while ($menu = mysqli_fetch_assoc($result_menus)) { ?>
-                        <tr>
+                        <tr data-kategori="<?php echo htmlspecialchars($menu['kategori_nama']); ?>">
                             <td>
                                 <img src="../<?php echo $menu['url_gambar'] ?: 'assets/img/no-image.png'; ?>" 
                                      class="table-image" alt="<?php echo $menu['nama']; ?>">
                             </td>
                             <td><?php echo htmlspecialchars($menu['nama']); ?></td>
-                            <td><span class="badge badge-info"><?php echo $menu['kategori_nama']; ?></span></td>
+                            <td><span class="badge badge-info"><?php echo htmlspecialchars($menu['kategori_nama']); ?></span></td>
                             <td>Rp <?php echo number_format($menu['harga'], 0, ',', '.'); ?></td>
                             <td><?php echo $menu['stok']; ?></td>
                             <!-- PERBAIKAN: Tambah kolom Status -->
@@ -270,6 +268,22 @@ document.querySelectorAll('.menu-item').forEach(item => {
     if (item.href === window.location.href) {
         item.classList.add('active');
     }
+});
+
+// Filter kategori
+document.getElementById('categoryFilter').addEventListener('change', function() {
+    const selectedCategory = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#menuTableBody tr');
+    
+    rows.forEach(row => {
+        const kategori = row.getAttribute('data-kategori').toLowerCase();
+        
+        if (selectedCategory === '' || kategori === selectedCategory) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
 });
 </script>
 
