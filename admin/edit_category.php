@@ -31,7 +31,7 @@ $kategori = mysqli_fetch_assoc($result);
         <!-- Topbar -->
         <div class="admin-topbar">
             <div class="topbar-left">
-                <h1>✏️ Edit Kategori</h1>
+                <h1> Edit Kategori</h1>
             </div>
             <div class="topbar-right">
                 <div class="admin-user">
@@ -85,8 +85,8 @@ $kategori = mysqli_fetch_assoc($result);
                     </div>
 
                     <div style="display: flex; gap: 10px;">
-                        <button type="submit" class="btn btn-primary">💾 Simpan Perubahan</button>
-                        <a href="categories.php" class="btn btn-secondary">❌ Batal</a>
+                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        <a href="categories.php" class="btn btn-secondary">Batal</a>
                     </div>
                 </form>
             </div>

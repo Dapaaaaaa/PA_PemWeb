@@ -76,7 +76,7 @@ while ($kategori = mysqli_fetch_assoc($resultKategori)) {
                                     <input type="hidden" name="redirect" value="menu.php">
                                     <button type="submit" class="btn-add-cart" 
                                             <?php echo ($produk['stok'] <= 0) ? 'disabled' : ''; ?>>
-                                        🛒 Add
+                                        Add
                                     </button>
                                 </form>
                                 <!-- WhatsApp Order -->
@@ -101,7 +101,7 @@ while ($kategori = mysqli_fetch_assoc($resultKategori)) {
         <p>Contact us via WhatsApp for fast ordering and delivery!</p>
         <a href="https://wa.me/6285974906945?text=Halo%20OurStuff,%20saya%20ingin%20melihat%20menu%20lengkap!" 
            class="btn-whatsapp-large" target="_blank">
-            💬 Order via WhatsApp
+            Order via WhatsApp
         </a>
     </div>
 </section>

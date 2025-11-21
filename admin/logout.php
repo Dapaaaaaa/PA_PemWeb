@@ -16,7 +16,7 @@
 <section class="admin-login-page">
     <div class="login-container">
         <div class="login-header">
-            <h1>👋 Logging Out...</h1>
+            <h1>Logging Out...</h1>
             <p>Thank you for using OurStuffies Admin Panel</p>
         </div>
 

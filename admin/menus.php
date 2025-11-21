@@ -112,7 +112,7 @@ $result_kategori = mysqli_query($conn, $query_kategori);
         <!-- Topbar -->
         <div class="admin-topbar">
             <div class="topbar-left">
-                <h1>🍔 Manajemen Menu</h1>
+                <h1>Manajemen Menu</h1>
             </div>
             <div class="topbar-right">
                 <div class="admin-user">

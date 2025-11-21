@@ -55,7 +55,7 @@ function getSetting($key, $default = '') {
         <!-- Topbar -->
         <div class="admin-topbar">
             <div class="topbar-left">
-                <h1>⚙️ Store Settings</h1>
+                <h1>Store Settings</h1>
             </div>
             <div class="topbar-right">
                 <div class="admin-user">
@@ -148,7 +148,7 @@ function getSetting($key, $default = '') {
 
                 <form class="admin-form" method="POST" action="settings.php">
                     <div class="info-box">
-                        <p>⏰ Set your store's operating hours. These will be displayed on your website and used to inform customers.</p>
+                        <p>Set your store's operating hours. These will be displayed on your website and used to inform customers.</p>
                     </div>
 
                     <div class="form-row">
@@ -181,32 +181,32 @@ function getSetting($key, $default = '') {
                     <h2>Location & Map</h2>
                 </div>
 
-                <form class="admin-form" id="locationForm">
+                <form class="admin-form" id="locationForm" method="POST" action="settings.php">
                     <div class="form-group">
-                        <label for="maps-embed">Google Maps Embed Code *</label>
-                        <textarea id="maps-embed" name="maps_embed" rows="4" required
-                                  placeholder='<iframe src="https://www.google.com/maps/embed?..." ...></iframe>'>https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.687140235874!2d117.14484747589199!3d-0.46461823528196516!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2df67900560a5033%3A0xd14b9dfd79c14c60!2sOurStuffies!5e0!3m2!1sid!2sid!4v1762506331525!5m2!1sid!2sid</textarea>
+                        <label for="maps-embed">Google Maps Embed URL or iframe *</label>
+                        <textarea id="maps-embed" name="map_embed_url" rows="3" required
+                                  placeholder='Either paste the embed <iframe> HTML or only the map "src" URL'><?php echo htmlspecialchars(getSetting('map_embed_url', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.687140235874!2d117.14484747589199!3d-0.46461823528196516!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2df67900560a5033%3A0xd14b9dfd79c14c60!2sOurStuffies!5e0!3m2!1sid!2sid!4v1762506331525!5m2!1sid!2sid')); ?></textarea>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label for="maps-latitude">Latitude</label>
-                            <input type="text" id="maps-latitude" name="latitude" 
-                                   value="-0.464618" placeholder="e.g., -0.464618">
+                            <input type="text" id="maps-latitude" name="map_latitude" 
+                                   value="<?php echo htmlspecialchars(getSetting('map_latitude', '-0.464618')); ?>" placeholder="e.g., -0.464618">
                         </div>
 
                         <div class="form-group">
                             <label for="maps-longitude">Longitude</label>
-                            <input type="text" id="maps-longitude" name="longitude" 
-                                   value="117.147623" placeholder="e.g., 117.147623">
+                            <input type="text" id="maps-longitude" name="map_longitude" 
+                                   value="<?php echo htmlspecialchars(getSetting('map_longitude', '117.147623')); ?>" placeholder="e.g., 117.147623">
                         </div>
                     </div>
 
                     <div class="info-box">
-                        <p>📍 <strong>How to get Google Maps embed code:</strong><br>
+                        <p><strong>How to get Google Maps embed code:</strong><br>
                         1. Open Google Maps and find your store location<br>
                         2. Click "Share" → "Embed a map"<br>
-                        3. Copy the iframe code and paste it above</p>
+                        3. Copy the iframe code and paste it above (or paste only the src URL)</p>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Save Location Settings</button>
@@ -281,7 +281,7 @@ function getSetting($key, $default = '') {
             <!-- Danger Zone -->
             <div class="content-section" style="border: 2px solid #e74c3c;">
                 <div class="section-header">
-                    <h2 style="color: #e74c3c;">⚠️ Danger Zone</h2>
+                    <h2 style="color: #e74c3c;"> Danger Zone</h2>
                 </div>
 
                 <div class="warning-box">

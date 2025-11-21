@@ -67,7 +67,7 @@ $result_categories = mysqli_query($conn, $query_categories);
         <!-- Topbar -->
         <div class="admin-topbar">
             <div class="topbar-left">
-                <h1>📂 Manajemen Kategori</h1>
+                <h1>Manajemen Kategori</h1>
             </div>
             <div class="topbar-right">
                 <div class="admin-user">

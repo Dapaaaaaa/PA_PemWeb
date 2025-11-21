@@ -6,7 +6,7 @@ include 'includes/settings_helper.php';
 
 <section class="page-header">
     <div class="page-header-content">
-        <h1>📞 Kontak Us</h1>
+        <h1>Kontak Us</h1>
         <p>We'd love to hear from you! Get in touch with us today.</p>
     </div>
 </section>
@@ -61,7 +61,7 @@ include 'includes/settings_helper.php';
             <h2>Get In Touch</h2>
             
             <div class="Kontak-info-card">
-                <div class="info-icon">📍</div>
+                <div class="info-icon"></div>
                 <div class="info-content">
                     <h3>Visit Us</h3>
                     <p>Blk. A-B No.53b, Gn. Kelua<br>
@@ -73,7 +73,7 @@ include 'includes/settings_helper.php';
             </div>
 
             <div class="Kontak-info-card">
-                <div class="info-icon">📞</div>
+                <div class="info-icon"></div>
                 <div class="info-content">
                     <h3>Call or Text</h3>
                     <p><strong>WhatsApp:</strong></p>
@@ -83,17 +83,17 @@ include 'includes/settings_helper.php';
             </div>
 
             <div class="Kontak-info-card">
-                <div class="info-icon">🕐</div>
+                <div class="info-icon"></div>
                 <div class="info-content">
                     <h3>Business Hours</h3>
                     <p><strong>Senin - Minggu</strong><br>
                     10:00 AM - 5:00 PM</p>
-                    <p class="info-warning">⚠️ Orders after closing time will be processed the next day</p>
+                    <p class="info-warning">Orders after closing time will be processed the next day</p>
                 </div>
             </div>
 
             <div class="Kontak-info-card">
-                <div class="info-icon">💬</div>
+                <div class="info-icon"></div>
                 <div class="info-content">
                     <h3>Quick Order</h3>
                     <p>Want to order right away?</p>
@@ -141,19 +141,19 @@ include 'includes/settings_helper.php';
         <h2>Frequently Asked Questions</h2>
         <div class="faq-grid">
             <div class="faq-item">
-                <h4>🚚 Do you offer delivery?</h4>
+                <h4>Do you offer delivery?</h4>
                 <p>Yes! We offer delivery services throughout Samarinda. Delivery fee varies based on distance.</p>
             </div>
             <div class="faq-item">
-                <h4>💳 What payment methods do you accept?</h4>
+                <h4>What payment methods do you accept?</h4>
                 <p>We accept cash, bank transfer, e-wallets (GoPay, OVO, Dana), and debit/credit cards.</p>
             </div>
             <div class="faq-item">
-                <h4>🎉 Do you cater for events?</h4>
+                <h4>Do you cater for events?</h4>
                 <p>Absolutely! We offer catering services for parties, corporate events, and special occasions. Kontak us for details!</p>
             </div>
             <div class="faq-item">
-                <h4>⏰ Can I pre-order?</h4>
+                <h4>Can I pre-order?</h4>
                 <p>Yes, you can pre-order by Kontaking us via WhatsApp. We recommend ordering at least 1 hour in advance.</p>
             </div>
         </div>

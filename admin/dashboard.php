@@ -50,7 +50,7 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
         <!-- Topbar -->
         <div class="admin-topbar">
             <div class="topbar-left">
-                <h1>📊 Dashboard</h1>
+                <h1>Dashboard</h1>
             </div>
             <div class="topbar-right">
                 <div class="admin-user">
@@ -71,7 +71,7 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
             <div class="dashboard-stats">
                 <div class="stat-card">
                     <div class="stat-icon green">
-                        🍔
+                        
                     </div>
                     <div class="stat-info">
                         <h3>Total Menu</h3>
@@ -81,7 +81,7 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
 
                 <div class="stat-card">
                     <div class="stat-icon blue">
-                        📂
+                        
                     </div>
                     <div class="stat-info">
                         <h3>Kategori</h3>
@@ -91,7 +91,7 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
 
                 <div class="stat-card">
                     <div class="stat-icon orange">
-                        📦
+                        
                     </div>
                     <div class="stat-info">
                         <h3>Total Pesanan</h3>
@@ -101,7 +101,7 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
 
                 <div class="stat-card">
                     <div class="stat-icon red">
-                        💰
+                        
                     </div>
                     <div class="stat-info">
                         <h3>Pendapatan</h3>
@@ -203,15 +203,15 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
                 </div>
 
                 <div class="info-box">
-                    <p><strong>📍 Alamat:</strong> Blk. A-B No.53b, Gn. Kelua, Kec. Samarinda Ulu, Kota Samarinda, Kalimantan Timur 75243</p>
+                    <p><strong> Alamat:</strong> Blk. A-B No.53b, Gn. Kelua, Kec. Samarinda Ulu, Kota Samarinda, Kalimantan Timur 75243</p>
                 </div>
 
                 <div class="info-box">
-                    <p><strong>📞 WhatsApp:</strong> +62 859-7490-6945</p>
+                    <p><strong> WhatsApp:</strong> +62 859-7490-6945</p>
                 </div>
 
                 <div class="info-box">
-                    <p><strong>🕐 Jam Operasional:</strong> Senin - Minggu: 10:00 AM - 5:00 PM</p>
+                    <p><strong> Jam Operasional:</strong> Senin - Minggu: 10:00 AM - 5:00 PM</p>
                 </div>
             </div>
         </div>

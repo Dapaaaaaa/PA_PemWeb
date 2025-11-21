@@ -27,7 +27,7 @@ if (isAdminLoggedIn()) {
 <section class="admin-login-page">
     <div class="login-container">
         <div class="login-header">
-            <h1>🔐 Admin Login</h1>
+            <h1>Admin Login</h1>
             <p>Welcome back! Please login to your account.</p>
         </div>
 

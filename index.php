@@ -7,7 +7,7 @@ include 'koneksi.php';
 <?php if (isset($_GET['status']) && $_GET['status'] == 'order_placed'): ?>
 <div style="max-width: 800px; margin: 30px auto; padding: 20px;">
     <div class="alert-message alert-success" style="text-align: center; font-size: 18px;">
-        🎉 Pesanan Anda telah berhasil diproses!
+        Pesanan Anda telah berhasil diproses!
         <?php if (isset($_GET['order'])): ?>
             <br><strong>Nomor Pesanan: <?php echo htmlspecialchars($_GET['order']); ?></strong>
         <?php endif; ?>

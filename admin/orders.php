@@ -50,7 +50,7 @@ $result_orders = mysqli_query($conn, $query_orders);
         <!-- Topbar -->
         <div class="admin-topbar">
             <div class="topbar-left">
-                <h1>📦 Manajemen Pesanan</h1>
+                <h1>Manajemen Pesanan</h1>
             </div>
             <div class="topbar-right">
                 <div class="admin-user">
@@ -80,7 +80,7 @@ $result_orders = mysqli_query($conn, $query_orders);
             <div class="dashboard-stats">
                 <div class="stat-card">
                     <div class="stat-icon orange">
-                        ⏳
+                        
                     </div>
                     <div class="stat-info">
                         <h3>Pending</h3>
@@ -90,7 +90,7 @@ $result_orders = mysqli_query($conn, $query_orders);
 
                 <div class="stat-card">
                     <div class="stat-icon blue">
-                        🔄
+                        
                     </div>
                     <div class="stat-info">
                         <h3>Proses</h3>

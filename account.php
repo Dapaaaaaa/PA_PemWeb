@@ -99,28 +99,28 @@ $userName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : '';
                 <h2>Why Create an Account?</h2>
                 <div class="benefits-list">
                     <div class="benefit-item">
-                        <div class="benefit-icon">🎁</div>
+                        <div class="benefit-icon"></div>
                         <div class="benefit-text">
                             <h4>Exclusive Rewards</h4>
                             <p>Earn points with every purchase and get special discounts</p>
                         </div>
                     </div>
                     <div class="benefit-item">
-                        <div class="benefit-icon">🚀</div>
+                        <div class="benefit-icon"></div>
                         <div class="benefit-text">
                             <h4>Fast Checkout</h4>
                             <p>Save your info for quicker ordering next time</p>
                         </div>
                     </div>
                     <div class="benefit-item">
-                        <div class="benefit-icon">📜</div>
+                        <div class="benefit-icon"></div>
                         <div class="benefit-text">
                             <h4>Order History</h4>
                             <p>Track your orders and reorder your favorites easily</p>
                         </div>
                     </div>
                     <div class="benefit-item">
-                        <div class="benefit-icon">🔔</div>
+                        <div class="benefit-icon"></div>
                         <div class="benefit-text">
                             <h4>Special Offers</h4>
                             <p>Get notified about new menu items and promotions</p>
@@ -133,7 +133,7 @@ $userName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : '';
                     <p>You can always order directly via WhatsApp!</p>
                     <a href="https://wa.me/6285974906945?text=Halo%20OurStuff,%20saya%20ingin%20order!" 
                        class="btn-whatsapp-account" target="_blank">
-                        💬 Order via WhatsApp
+                        Order via WhatsApp
                     </a>
                 </div>
             </div>
@@ -155,7 +155,7 @@ function toggleForms() {
 <!-- User Dashboard -->
 <section class="page-header">
     <div class="page-header-content">
-        <h1>👋 Hello, <?php echo htmlspecialchars($userName); ?>!</h1>
+        <h1>Hello, <?php echo htmlspecialchars($userName); ?>!</h1>
         <p>Welcome to your account dashboard</p>
     </div>
 </section>
@@ -174,22 +174,22 @@ function toggleForms() {
 
             <nav class="dashboard-nav">
                 <a href="#" class="nav-link active" data-section="orders">
-                    <span>📦</span> My Orders
+                    <span></span> My Orders
                 </a>
                 <a href="#" class="nav-link" data-section="profile">
-                    <span>👤</span> Profile
+                    <span></span> Profile
                 </a>
                 <a href="#" class="nav-link" data-section="rewards">
-                    <span>🎁</span> Rewards
+                    <span></span> Rewards
                 </a>
                 <a href="#" class="nav-link" data-section="addresses">
-                    <span>📍</span> Saved Addresses
+                    <span></span> Saved Addresses
                 </a>
                 <a href="#" class="nav-link" data-section="settings">
-                    <span>⚙️</span> Settings
+                    <span></span> Settings
                 </a>
                 <a href="logout.php" class="nav-link logout">
-                    <span>🚪</span> Logout
+                    <span></span> Logout
                 </a>
             </nav>
         </div>
