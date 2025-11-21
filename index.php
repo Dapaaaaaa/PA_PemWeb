@@ -3,11 +3,24 @@ include 'includes/header.php';
 include 'koneksi.php';
 ?>
 
+<!-- Success Message untuk Order Placed -->
+<?php if (isset($_GET['status']) && $_GET['status'] == 'order_placed'): ?>
+<div style="max-width: 800px; margin: 30px auto; padding: 20px;">
+    <div class="alert-message alert-success" style="text-align: center; font-size: 18px;">
+        🎉 Pesanan Anda telah berhasil diproses!
+        <?php if (isset($_GET['order'])): ?>
+            <br><strong>Nomor Pesanan: <?php echo htmlspecialchars($_GET['order']); ?></strong>
+        <?php endif; ?>
+        <br><small>Admin kami akan segera menghubungi Anda untuk konfirmasi.</small>
+    </div>
+</div>
+<?php endif; ?>
+
 <section class="hero">
     <div class="hero-text">
         <h1>Single Patty</h1>
         <p>Enjoy the taste of a fresh, juicy, flavorful burger made with premium ingredients and crafted with love.</p>
-        <a href="#" class="btn-order">Order Now</a>
+        <a href="menu.php" class="btn-order">Order Now</a>
     </div>
 
     <div class="hero-image">

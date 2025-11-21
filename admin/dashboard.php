@@ -1,6 +1,50 @@
+<?php
+include '../koneksi.php';
+include 'includes/session.php';
+
+// Cek login, jika belum login redirect ke login.php
+requireAdminLogin();
+
+$query_total_menu = "SELECT COUNT(*) as total FROM produk WHERE aktif = 1";
+$result_total_menu = mysqli_query($conn, $query_total_menu);
+$total_menu = mysqli_fetch_assoc($result_total_menu)['total'];
+
+$query_total_kategori = "SELECT COUNT(*) as total FROM kategori";
+$result_total_kategori = mysqli_query($conn, $query_total_kategori);
+$total_kategori = mysqli_fetch_assoc($result_total_kategori)['total'];
+
+$query_total_pesanan = "SELECT COUNT(*) as total FROM pesanan";
+$result_total_pesanan = mysqli_query($conn, $query_total_pesanan);
+$total_pesanan = mysqli_num_rows($result_total_pesanan) > 0 ? mysqli_fetch_assoc($result_total_pesanan)['total'] : 0;
+
+$query_total_pendapatan = "SELECT SUM(total) as pendapatan FROM pesanan WHERE status = 'completed'";
+$result_pendapatan = mysqli_query($conn, $query_total_pendapatan);
+$total_pendapatan = 0;
+if (mysqli_num_rows($result_pendapatan) > 0) {
+    $row_pendapatan = mysqli_fetch_assoc($result_pendapatan);
+    $total_pendapatan = $row_pendapatan['pendapatan'] ?? 0;
+}
+
+// Ambil pesanan terbaru
+$query_pesanan = "SELECT p.*, pl.nama as nama_pelanggan 
+                  FROM pesanan p 
+                  JOIN pelanggan pl ON p.pelanggan_id = pl.id 
+                  ORDER BY p.dibuat_pada DESC LIMIT 4";
+$result_pesanan = mysqli_query($conn, $query_pesanan);
+
+// Ambil menu populer
+$query_menu_populer = "SELECT p.*, k.nama as kategori_nama 
+                       FROM produk p 
+                       LEFT JOIN kategori k ON p.kategori_id = k.id 
+                       WHERE p.aktif = 1
+                       ORDER BY p.id DESC LIMIT 3";
+$result_menu_populer = mysqli_query($conn, $query_menu_populer);
+?>
+
 <?php include 'includes/admin_header.php'; ?>
 <?php include 'includes/admin_sidebar.php'; ?>
 
+!doctype html
     <!-- Main Content -->
     <div class="admin-content">
         <!-- Topbar -->
@@ -10,9 +54,11 @@
             </div>
             <div class="topbar-right">
                 <div class="admin-user">
-                    <div class="admin-user-avatar">A</div>
+                    <div class="admin-user-avatar">
+                        <?php echo strtoupper(substr($_SESSION['admin_name'] ?? 'A', 0, 1)); ?>
+                    </div>
                     <div class="admin-user-info">
-                        <h4>Admin User</h4>
+                        <h4><?php echo htmlspecialchars($_SESSION['admin_name'] ?? 'Admin User'); ?></h4>
                         <p>Administrator</p>
                     </div>
                 </div>
@@ -29,7 +75,7 @@
                     </div>
                     <div class="stat-info">
                         <h3>Total Menu</h3>
-                        <div class="stat-number">24</div>
+                        <div class="stat-number"><?php echo $total_menu; ?></div>
                     </div>
                 </div>
 
@@ -39,7 +85,7 @@
                     </div>
                     <div class="stat-info">
                         <h3>Kategori</h3>
-                        <div class="stat-number">6</div>
+                        <div class="stat-number"><?php echo $total_kategori; ?></div>
                     </div>
                 </div>
 
@@ -49,7 +95,7 @@
                     </div>
                     <div class="stat-info">
                         <h3>Total Pesanan</h3>
-                        <div class="stat-number">142</div>
+                        <div class="stat-number"><?php echo $total_pesanan; ?></div>
                     </div>
                 </div>
 
@@ -59,7 +105,7 @@
                     </div>
                     <div class="stat-info">
                         <h3>Pendapatan</h3>
-                        <div class="stat-number">Rp 5.2Jt</div>
+                        <div class="stat-number">Rp <?php echo number_format($total_pendapatan, 0, ',', '.'); ?></div>
                     </div>
                 </div>
             </div>
@@ -83,38 +129,27 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <?php
+                        $query_pesanan = "SELECT p.*, pl.nama as nama_pelanggan 
+                                         FROM pesanan p 
+                                         JOIN pelanggan pl ON p.pelanggan_id = pl.id 
+                                         ORDER BY p.dibuat_pada DESC LIMIT 10";
+                        $result_pesanan = mysqli_query($conn, $query_pesanan);
+                        
+                        while ($pesanan = mysqli_fetch_assoc($result_pesanan)) {
+                            $status_badge = 'info';
+                            if ($pesanan['status'] == 'completed') $status_badge = 'success';
+                            elseif ($pesanan['status'] == 'processing') $status_badge = 'warning';
+                            elseif ($pesanan['status'] == 'cancelled') $status_badge = 'danger';
+                        ?>
                         <tr>
-                            <td>#ORD20250001</td>
-                            <td>John Doe</td>
-                            <td>2x Burger Beef, 1x French Fries</td>
-                            <td>Rp 62,000</td>
-                            <td><span class="badge badge-success">Beres</span></td>
-                            <td>2025-01-15</td>
+                            <td><?php echo $pesanan['nomor_pesanan']; ?></td>
+                            <td><?php echo htmlspecialchars($pesanan['nama_pelanggan']); ?></td>
+                            <td>Rp <?php echo number_format($pesanan['total'], 0, ',', '.'); ?></td>
+                            <td><span class="badge badge-<?php echo $status_badge; ?>"><?php echo ucfirst($pesanan['status']); ?></span></td>
+                            <td><?php echo date('d M Y', strtotime($pesanan['dibuat_pada'])); ?></td>
                         </tr>
-                        <tr>
-                            <td>#ORD20250002</td>
-                            <td>Jane Smith</td>
-                            <td>1x Kebab Sapi, 1x Jus Jeruk</td>
-                            <td>Rp 30,000</td>
-                            <td><span class="badge badge-warning">Lagi dimasak</span></td>
-                            <td>2025-01-15</td>
-                        </tr>
-                        <tr>
-                            <td>#ORD20250003</td>
-                            <td>Ahmad Rahman</td>
-                            <td>3x Burger Chicken</td>
-                            <td>Rp 60,000</td>
-                            <td><span class="badge badge-info">Pending</span></td>
-                            <td>2025-01-14</td>
-                        </tr>
-                        <tr>
-                            <td>#ORD20250004</td>
-                            <td>Siti Nurhaliza</td>
-                            <td>2x Kebab Ayam, 2x Es Teh Manis</td>
-                            <td>Rp 40,000</td>
-                            <td><span class="badge badge-success">Beres</span></td>
-                            <td>2025-01-14</td>
-                        </tr>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
@@ -138,30 +173,24 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <?php
+                        if (mysqli_num_rows($result_menu_populer) > 0) {
+                            while ($menu = mysqli_fetch_assoc($result_menu_populer)) {
+                                // Hitung jumlah pesanan (dummy untuk sekarang)
+                                $jumlah_pesanan = rand(20, 50);
+                        ?>
                         <tr>
-                            <td><img src="../assets/img/hero-burger.png" alt="Burger" class="table-image"></td>
-                            <td>Burger Beef</td>
-                            <td>Burger</td>
-                            <td>Rp 25,000</td>
-                            <td>45 Pesanan</td>
+                            <td><img src="../<?php echo $menu['url_gambar'] ?: 'assets/img/hero-burger.png'; ?>" alt="<?php echo $menu['nama']; ?>" class="table-image"></td>
+                            <td><?php echo htmlspecialchars($menu['nama']); ?></td>
+                            <td><?php echo htmlspecialchars($menu['kategori_nama'] ?? '-'); ?></td>
+                            <td>Rp <?php echo number_format($menu['harga'], 0, ',', '.'); ?></td>
+                            <td><?php echo $jumlah_pesanan; ?> Pesanan</td>
                             <td><span class="badge badge-success">Aktif</span></td>
                         </tr>
-                        <tr>
-                            <td><img src="../assets/img/hero-burger.png" alt="Kebab" class="table-image"></td>
-                            <td>Kebab Sapi</td>
-                            <td>Kebab</td>
-                            <td>Rp 20,000</td>
-                            <td>38 Pesanan</td>
-                            <td><span class="badge badge-success">Aktif</span></td>
-                        </tr>
-                        <tr>
-                            <td><img src="../assets/img/hero-burger.png" alt="Burger" class="table-image"></td>
-                            <td>Burger Chicken</td>
-                            <td>Burger</td>
-                            <td>Rp 20,000</td>
-                            <td>32 Pesanan</td>
-                            <td><span class="badge badge-success">Aktif</span></td>
-                        </tr>
+                        <?php 
+                            }
+                        }
+                    ?>
                     </tbody>
                 </table>
             </div>

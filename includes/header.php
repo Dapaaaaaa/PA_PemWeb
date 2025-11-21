@@ -1,5 +1,15 @@
 <?php
 // header.php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+// Hitung jumlah item di cart
+$cart_count = 0;
+if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
+    foreach ($_SESSION['cart'] as $item) {
+        $cart_count += $item['qty'];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,6 +70,16 @@
                 phone_iphone
             </span>
             <span>Kontak</span>
+        </a>
+        <a href="cart.php" class="nav-item cart-badge">
+            <!-- Cart Icon -->
+            <span class="material-icons">
+                shopping_cart
+            </span>
+            <span>Cart</span>
+            <?php if ($cart_count > 0): ?>
+                <span class="cart-badge-count"><?php echo $cart_count; ?></span>
+            <?php endif; ?>
         </a>
         <a href="account.php" class="nav-item">
             <!-- User Icon -->

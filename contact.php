@@ -1,4 +1,8 @@
-<?php include 'includes/header.php'; ?>
+<?php 
+include 'includes/header.php'; 
+include 'koneksi.php';
+include 'includes/settings_helper.php';
+?>
 
 <section class="page-header">
     <div class="page-header-content">
@@ -73,7 +77,7 @@
                 <div class="info-content">
                     <h3>Call or Text</h3>
                     <p><strong>WhatsApp:</strong></p>
-                    <a href="https://wa.me/6285974906945" class="Kontak-phone" target="_blank">+62 859-7490-6945</a>
+                    <a href="https://wa.me/<?php echo getSetting('store_whatsapp', '6285974906945'); ?>" class="Kontak-phone" target="_blank"><?php echo getSetting('store_phone', '+62 859-7490-6945'); ?></a>
                     <p class="info-note">Available during business hours</p>
                 </div>
             </div>
@@ -93,7 +97,7 @@
                 <div class="info-content">
                     <h3>Quick Order</h3>
                     <p>Want to order right away?</p>
-                    <a href="https://wa.me/6285974906945?text=Halo%20OurStuff,%20saya%20ingin%20order!" 
+                    <a href="https://wa.me/<?php echo getSetting('store_whatsapp', '6285974906945'); ?>?text=Halo%20OurStuff,%20saya%20ingin%20order!" 
                        class="btn-whatsapp-Kontak" target="_blank">
                         Chat on WhatsApp
                     </a>
@@ -121,7 +125,7 @@
                             <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </a>
-                    <a href="https://wa.me/6285974906945" class="social-link" title="WhatsApp">
+                    <a href="https://wa.me/<?php echo getSetting('store_whatsapp', '6285974906945'); ?>" class="social-link" title="WhatsApp">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
                             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="currentColor"/>
                             <path d="M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652a12.062 12.062 0 0 0 5.713 1.447h.005c6.581 0 11.941-5.334 11.944-11.893 0-3.176-1.24-6.165-3.477-8.453zm-8.475 18.302h-.004a9.945 9.945 0 0 1-5.057-1.383l-.363-.214-3.76.982.999-3.648-.235-.374a9.86 9.86 0 0 1-1.511-5.26c.002-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.892 6.993c-.002 5.45-4.436 9.885-9.888 9.885z" fill="currentColor"/>
@@ -176,7 +180,7 @@ document.getElementById('KontakForm').addEventListener('submit', function(e) {
                      `*Message:*%0A${encodeURIComponent(message)}`;
     
     // Redirect to WhatsApp
-    window.open(`https://wa.me/6285974906945?text=${waMessage}`, '_blank');
+    window.open(`https://wa.me/<?php echo getSetting('store_whatsapp', '6285974906945'); ?>?text=${waMessage}`, '_blank');
     
     // Optional: Reset form
     this.reset();

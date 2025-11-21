@@ -1,3 +1,52 @@
+<?php 
+include '../koneksi.php';
+include 'includes/session.php';
+requireAdminLogin();
+
+// Handle SAVE SETTINGS
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $updates = [];
+    
+    foreach ($_POST as $key => $value) {
+        if ($key != 'action') {
+            $key_escaped = mysqli_real_escape_string($conn, $key);
+            $value_escaped = mysqli_real_escape_string($conn, $value);
+            
+            $query = "INSERT INTO settings (setting_key, setting_value) 
+                      VALUES ('$key_escaped', '$value_escaped')
+                      ON DUPLICATE KEY UPDATE setting_value = '$value_escaped'";
+            
+            if (mysqli_query($conn, $query)) {
+                $updates[] = $key;
+            }
+        }
+    }
+    
+    if (count($updates) > 0) {
+        $_SESSION['success'] = "Settings berhasil disimpan! (" . count($updates) . " item updated)";
+    } else {
+        $_SESSION['error'] = "Tidak ada perubahan yang disimpan.";
+    }
+    
+    header("Location: settings.php");
+    exit();
+}
+
+// Load current settings
+$settings = [];
+$query_settings = "SELECT setting_key, setting_value FROM settings";
+$result_settings = mysqli_query($conn, $query_settings);
+
+while ($row = mysqli_fetch_assoc($result_settings)) {
+    $settings[$row['setting_key']] = $row['setting_value'];
+}
+
+// Helper function
+function getSetting($key, $default = '') {
+    global $settings;
+    return $settings[$key] ?? $default;
+}
+?>
 <?php include 'includes/admin_header.php'; ?>
 <?php include 'includes/admin_sidebar.php'; ?>
 
@@ -21,24 +70,35 @@
 
         <!-- Main Area -->
         <div class="admin-main">
+            <?php
+            if (isset($_SESSION['success'])) {
+                echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
+                unset($_SESSION['success']);
+            }
+            if (isset($_SESSION['error'])) {
+                echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
+                unset($_SESSION['error']);
+            }
+            ?>
+
             <!-- Store Information -->
             <div class="content-section">
                 <div class="section-header">
                     <h2>Store Information</h2>
                 </div>
 
-                <form class="admin-form" id="storeInfoForm">
+                <form class="admin-form" method="POST" action="settings.php">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="store-name">Store Name *</label>
                             <input type="text" id="store-name" name="store_name" required 
-                                   value="OurStuffies" placeholder="Your store name">
+                                   value="<?php echo htmlspecialchars(getSetting('store_name', 'OurStuffies')); ?>" placeholder="Your store name">
                         </div>
 
                         <div class="form-group">
                             <label for="store-email">Email Address *</label>
                             <input type="email" id="store-email" name="store_email" required 
-                                   value="info@ourstuffies.com" placeholder="store@example.com">
+                                   value="<?php echo htmlspecialchars(getSetting('store_email', 'info@ourstuffies.com')); ?>" placeholder="store@example.com">
                         </div>
                     </div>
 
@@ -46,33 +106,33 @@
                         <div class="form-group">
                             <label for="store-phone">Phone Number *</label>
                             <input type="tel" id="store-phone" name="store_phone" required 
-                                   value="+62 859-7490-6945" placeholder="+62 xxx-xxxx-xxxx">
+                                   value="<?php echo htmlspecialchars(getSetting('store_phone', '+62 859-7490-6945')); ?>" placeholder="+62 xxx-xxxx-xxxx">
                         </div>
 
                         <div class="form-group">
                             <label for="store-whatsapp">WhatsApp Number *</label>
                             <input type="tel" id="store-whatsapp" name="store_whatsapp" required 
-                                   value="6285974906945" placeholder="628xxxxxxxxxx">
+                                   value="<?php echo htmlspecialchars(getSetting('store_whatsapp', '6285974906945')); ?>" placeholder="628xxxxxxxxxx">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="store-address">Store Address *</label>
                         <textarea id="store-address" name="store_address" required rows="3"
-                                  placeholder="Full store address">Blk. A-B No.53b, Gn. Kelua, Kec. Samarinda Ulu, Kota Samarinda, Kalimantan Timur 75243</textarea>
+                                  placeholder="Full store address"><?php echo htmlspecialchars(getSetting('store_address', '')); ?></textarea>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label for="store-city">City *</label>
                             <input type="text" id="store-city" name="store_city" required 
-                                   value="Samarinda" placeholder="City name">
+                                   value="<?php echo htmlspecialchars(getSetting('store_city', 'Samarinda')); ?>" placeholder="City name">
                         </div>
 
                         <div class="form-group">
                             <label for="store-postal">Postal Code *</label>
                             <input type="text" id="store-postal" name="store_postal" required 
-                                   value="75243" placeholder="Postal code">
+                                   value="<?php echo htmlspecialchars(getSetting('store_postal', '75243')); ?>" placeholder="Postal code">
                         </div>
                     </div>
 
@@ -86,7 +146,7 @@
                     <h2>Business Hours</h2>
                 </div>
 
-                <form class="admin-form" id="businessHoursForm">
+                <form class="admin-form" method="POST" action="settings.php">
                     <div class="info-box">
                         <p>⏰ Set your store's operating hours. These will be displayed on your website and used to inform customers.</p>
                     </div>
@@ -94,46 +154,21 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="opening-time">Opening Time *</label>
-                            <input type="time" id="opening-time" name="opening_time" required value="10:00">
+                            <input type="time" id="opening-time" name="opening_time" required 
+                                   value="<?php echo htmlspecialchars(getSetting('opening_time', '10:00')); ?>">
                         </div>
 
                         <div class="form-group">
                             <label for="closing-time">Closing Time *</label>
-                            <input type="time" id="closing-time" name="closing_time" required value="17:00">
+                            <input type="time" id="closing-time" name="closing_time" required 
+                                   value="<?php echo htmlspecialchars(getSetting('closing_time', '22:00')); ?>">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label>Operating Days *</label>
-                        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 10px;">
-                            <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
-                                <input type="checkbox" name="days[]" value="senin" checked> Senin
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
-                                <input type="checkbox" name="days[]" value="selasa" checked> Selasa
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
-                                <input type="checkbox" name="days[]" value="rabu" checked> Rabu
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
-                                <input type="checkbox" name="days[]" value="kamis" checked> Kamis
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
-                                <input type="checkbox" name="days[]" value="jumat" checked> Jumat
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
-                                <input type="checkbox" name="days[]" value="sabtu" checked> Sabtu
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
-                                <input type="checkbox" name="days[]" value="minggu" checked> Minggu
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="holiday-note">Special Holiday Notes</label>
+                        <label for="holiday-note">Holiday Note</label>
                         <textarea id="holiday-note" name="holiday_note" rows="2"
-                                  placeholder="e.g., Closed on public holidays">⚠️ Orders after closing time will be processed the next day</textarea>
+                                  placeholder="e.g., Closed on national holidays"><?php echo htmlspecialchars(getSetting('holiday_note', '')); ?></textarea>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Save Business Hours</button>
@@ -184,22 +219,25 @@
                     <h2>Social Media Links</h2>
                 </div>
 
-                <form class="admin-form" id="socialMediaForm">
+                <form class="admin-form" method="POST" action="settings.php">
                     <div class="form-group">
                         <label for="instagram">Instagram URL</label>
-                        <input type="url" id="instagram" name="instagram" 
+                        <input type="url" id="instagram" name="social_instagram" 
+                               value="<?php echo htmlspecialchars(getSetting('social_instagram', '')); ?>"
                                placeholder="https://instagram.com/ourstuffies">
                     </div>
 
                     <div class="form-group">
                         <label for="facebook">Facebook URL</label>
-                        <input type="url" id="facebook" name="facebook" 
+                        <input type="url" id="facebook" name="social_facebook" 
+                               value="<?php echo htmlspecialchars(getSetting('social_facebook', '')); ?>"
                                placeholder="https://facebook.com/ourstuffies">
                     </div>
 
                     <div class="form-group">
                         <label for="twitter">Twitter / X URL</label>
-                        <input type="url" id="twitter" name="twitter" 
+                        <input type="url" id="twitter" name="social_twitter" 
+                               value="<?php echo htmlspecialchars(getSetting('social_twitter', '')); ?>"
                                placeholder="https://twitter.com/ourstuffies">
                     </div>
 
@@ -213,25 +251,27 @@
                     <h2>Delivery Settings</h2>
                 </div>
 
-                <form class="admin-form" id="deliveryForm">
+                <form class="admin-form" method="POST" action="settings.php">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="delivery-fee">Standard Delivery Fee (Rp)</label>
                             <input type="number" id="delivery-fee" name="delivery_fee" 
-                                   value="10000" placeholder="10000" min="0">
+                                   value="<?php echo htmlspecialchars(getSetting('delivery_fee', '10000')); ?>" 
+                                   placeholder="10000" min="0">
                         </div>
 
                         <div class="form-group">
                             <label for="free-delivery">Free Delivery Above (Rp)</label>
-                            <input type="number" id="free-delivery" name="free_delivery" 
-                                   value="100000" placeholder="100000" min="0">
+                            <input type="number" id="free-delivery" name="free_delivery_min" 
+                                   value="<?php echo htmlspecialchars(getSetting('free_delivery_min', '100000')); ?>" 
+                                   placeholder="100000" min="0">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="delivery-note">Delivery Notes</label>
                         <textarea id="delivery-note" name="delivery_note" rows="3"
-                                  placeholder="Special delivery instructions...">Delivery available throughout Samarinda. Delivery time: 30-45 minutes.</textarea>
+                                  placeholder="Special delivery instructions..."><?php echo htmlspecialchars(getSetting('delivery_note', '')); ?></textarea>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Save Delivery Settings</button>
@@ -266,58 +306,10 @@ document.querySelectorAll('.menu-item').forEach(item => {
         item.classList.add('active');
     }
 });
+</script>
 
-// Form submissions
-document.getElementById('storeInfoForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert('Store information saved successfully! (Frontend demo only)');
-});
-
-document.getElementById('businessHoursForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert('Business hours saved successfully! (Frontend demo only)');
-});
-
-document.getElementById('locationForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert('Location settings saved successfully! (Frontend demo only)');
-});
-
-document.getElementById('socialMediaForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert('Social media links saved successfully! (Frontend demo only)');
-});
-
-document.getElementById('deliveryForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert('Delivery settings saved successfully! (Frontend demo only)');
-});
-
-// Danger zone functions
-function clearOrders() {
-    if (confirm('Are you ABSOLUTELY SURE you want to clear all orders?\n\nThis action cannot be undone!')) {
-        if (confirm('Last confirmation: Delete ALL orders?')) {
-            alert('All orders cleared! (Frontend demo only)');
-        }
-    }
-}
-
-function resetDatabase() {
-    if (confirm('Are you ABSOLUTELY SURE you want to reset the entire database?\n\nThis will delete ALL data including menu, orders, and customers!\n\nThis action cannot be undone!')) {
-        if (confirm('Last confirmation: Reset entire database?')) {
-            alert('Database reset! (Frontend demo only)');
-        }
-    }
-}
-
-function deleteAccount() {
-    if (confirm('Are you ABSOLUTELY SURE you want to delete your admin account?\n\nYou will lose access to this panel!\n\nThis action cannot be undone!')) {
-        const password = prompt('Enter your password to confirm:');
-        if (password) {
-            alert('Admin account deleted! (Frontend demo only)');
-        }
-    }
-}
+</body>
+</html>
 </script>
 
 </body>

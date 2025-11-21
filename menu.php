@@ -66,8 +66,23 @@ while ($kategori = mysqli_fetch_assoc($resultKategori)) {
                         <p><?php echo $deskripsi; ?></p>
                         <div class="menu-item-footer">
                             <span class="price">Rp <?php echo $harga; ?></span>
-                            <a href="https://wa.me/6285974906945?text=Halo,%20saya%20ingin%20order%20<?php echo $namaEncode; ?>" 
-                               class="btn-order-menu" target="_blank">Order Now</a>
+                            <div style="display: flex; gap: 8px;">
+                                <!-- Add to Cart Form -->
+                                <form method="POST" action="add_to_cart.php" style="margin: 0;">
+                                    <input type="hidden" name="name" value="<?php echo $nama; ?>">
+                                    <input type="hidden" name="price" value="<?php echo $produk['harga']; ?>">
+                                    <input type="hidden" name="img" value="<?php echo $gambar; ?>">
+                                    <input type="hidden" name="qty" value="1">
+                                    <input type="hidden" name="redirect" value="menu.php">
+                                    <button type="submit" class="btn-add-cart" 
+                                            <?php echo ($produk['stok'] <= 0) ? 'disabled' : ''; ?>>
+                                        🛒 Add
+                                    </button>
+                                </form>
+                                <!-- WhatsApp Order -->
+                                <a href="https://wa.me/6285974906945?text=Halo,%20saya%20ingin%20order%20<?php echo $namaEncode; ?>" 
+                                   class="btn-order-menu" target="_blank">Order</a>
+                            </div>
                         </div>
                     </div>
                 </div>
