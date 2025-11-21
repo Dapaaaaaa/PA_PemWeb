@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 13, 2025 at 11:05 AM
+-- Generation Time: Nov 21, 2025 at 10:41 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.4.14
 
@@ -75,6 +75,28 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `fn_format_rupiah` (`amount` DECIMAL(
 END$$
 
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `id` int NOT NULL,
+  `nama` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `dibuat_pada` datetime DEFAULT CURRENT_TIMESTAMP,
+  `diperbarui_pada` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`id`, `nama`, `email`, `password`, `dibuat_pada`, `diperbarui_pada`) VALUES
+(1, 'Admin OurStuffies', 'admin@ourstuffies.com', 'admin123', '2025-11-18 16:23:10', '2025-11-18 16:23:10');
 
 -- --------------------------------------------------------
 
@@ -301,17 +323,17 @@ CREATE TABLE `struk` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_item_keranjang` (
-`keranjang_id` int
-,`pelanggan_id` int
-,`session_id` varchar(128)
-,`item_keranjang_id` int
-,`produk_id` int
-,`nama_produk` varchar(150)
-,`url_gambar` varchar(255)
-,`qty` int
+`catatan` varchar(255)
 ,`harga_saat_tambah` decimal(10,2)
+,`item_keranjang_id` int
+,`keranjang_id` int
+,`nama_produk` varchar(150)
+,`pelanggan_id` int
+,`produk_id` int
+,`qty` int
+,`session_id` varchar(128)
 ,`subtotal` decimal(20,2)
-,`catatan` varchar(255)
+,`url_gambar` varchar(255)
 );
 
 -- --------------------------------------------------------
@@ -321,28 +343,35 @@ CREATE TABLE `v_item_keranjang` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_item_pesanan` (
-`pesanan_id` int
-,`nomor_pesanan` varchar(20)
-,`status` varchar(30)
-,`total` decimal(12,2)
-,`ongkir` decimal(10,2)
-,`tanggal_pesanan` datetime
-,`nama_pelanggan` varchar(150)
-,`telepon_pelanggan` varchar(32)
-,`jalan` text
-,`kota` varchar(100)
-,`kode_pos` varchar(20)
-,`produk_id` int
-,`nama_produk` varchar(150)
-,`qty` int
+`catatan_item` varchar(255)
 ,`harga_satuan` decimal(10,2)
+,`jalan` text
+,`kode_pos` varchar(20)
+,`kota` varchar(100)
+,`nama_pelanggan` varchar(150)
+,`nama_produk` varchar(150)
+,`nomor_pesanan` varchar(20)
+,`ongkir` decimal(10,2)
+,`pesanan_id` int
+,`produk_id` int
+,`qty` int
+,`status` varchar(30)
 ,`subtotal` decimal(12,2)
-,`catatan_item` varchar(255)
+,`tanggal_pesanan` datetime
+,`telepon_pelanggan` varchar(32)
+,`total` decimal(12,2)
 );
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Indexes for table `alamat`
@@ -441,6 +470,12 @@ ALTER TABLE `struk`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `alamat`
