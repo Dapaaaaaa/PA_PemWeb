@@ -1,6 +1,7 @@
 <?php 
 include 'includes/header.php'; 
 include 'koneksi.php';
+include 'includes/settings_helper.php';
 ?>
 
 <!-- Success Message untuk Order Placed -->
@@ -28,27 +29,43 @@ include 'koneksi.php';
     </div>
 </section>
 
-<section class="product-section">
+<<section class="product-section">
     <h2>Menu Kami!</h2>
 
     <div class="product-grid">
 
     <?php 
-    
-    $query = "SELECT * FROM produk";
-    $query = mysqli_query($conn, $query);
+    // Ambil semua kategori (misal 1 = makanan, 2 = minuman, 3 = snack, dst)
+    $kategori_q = mysqli_query($conn, "SELECT * FROM kategori ORDER BY id ASC");
 
-    while ($row = mysqli_fetch_assoc($query)) {
-        echo '
-            <div class="product-card">
-                <img src ="' .$row['url_gambar']. '"alt ="'. $row['nama']. '">
-                <h3>'. $row['nama']. '</h3>
-                <p>'. $row['deskripsi']. '</p>
-                <span class = "price">Rp' . number_format($row['harga'], 0, ','. '.') .' </span>
-            </div>
-        ';
+    while ($kat = mysqli_fetch_assoc($kategori_q)) {
+
+        // Ambil 1 produk pertama dari kategori ini
+        $produk_q = mysqli_query($conn, "
+            SELECT * FROM produk 
+            WHERE kategori_id = ".$kat['id']." AND aktif = 1
+            ORDER BY id ASC
+            LIMIT 1
+        ");
+
+        // Kalau produk kategori ini ada
+        if ($produk = mysqli_fetch_assoc($produk_q)) {
+
+            echo '
+                    <div class="product-card">
+                        <img src="'.$produk['url_gambar'].'" alt="'.$produk['nama'].'">
+                        <h3>'.$produk['nama'].'</h3>
+                        <p>'.$produk['deskripsi'].'</p>
+                        <span class="price">Rp '.number_format($produk['harga'], 0, ',', '.').'</span>
+
+                        <a href="menu.php?kategori='.$kat['id'].'" class="btn-lihat">
+                            Lihat Semua '.$kat['nama'].'
+                        </a>
+                    </div>
+                ';
+
+        }
     }
-
     ?>
 
     </div>
@@ -75,7 +92,7 @@ include 'koneksi.php';
         </div>
         <div class="info-box">
             <h3>Kontak</h3>
-            <p>WhatsApp: +62 859-7490-6945</p>
+            <p>WhatsApp: <?php echo getSetting('store_phone', '+62 859-7490-6945'); ?></p>
         </div>
         <div class="info-box">
             <h3>Jam Operasional</h3>
