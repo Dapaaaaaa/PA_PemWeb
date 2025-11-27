@@ -81,12 +81,12 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
                 <span class="cart-badge-count"><?php echo $cart_count; ?></span>
             <?php endif; ?>
         </a>
-        <a href="account.php" class="nav-item">
-            <!-- User Icon -->
+        <!-- <a href="account.php" class="nav-item">
+            User Icon
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="4" stroke="#537B2F" stroke-width="2"/><path d="M6 21C6 17.13 8.69 14 12 14C15.31 14 18 17.13 18 21" stroke="#537B2F" stroke-width="2"/></svg>
             <span>Account</span>
         </a>
-    </nav>
+    </nav> -->
 
     <div class="nav-overlay" id="nav-overlay">
     </div>

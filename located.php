@@ -104,7 +104,7 @@ include 'includes/settings_helper.php';
         <p>Visit us today or order online for delivery!</p>
         <div class="cta-buttons">
             <a href="menu.php" class="btn-primary">View Menu</a>
-            <a href="https://wa.me/6285974906945?text=Halo%20OurStuff,%20saya%20ingin%20order!" 
+            <a href="https://wa.me/<?php echo getSetting('store_whatsapp', '6285974906945'); ?>?text=Halo%20OurStuff,%20saya%20ingin%20order!" 
                class="btn-secondary" target="_blank">Order Now</a>
         </div>
     </div>
