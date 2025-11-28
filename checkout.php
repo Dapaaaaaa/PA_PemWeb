@@ -107,8 +107,8 @@ if (isset($_POST['complete_order'])) {
             // HAPUS keranjang sesi setelah pesanan sukses
             unset($_SESSION['cart']);
             
-            // Redirect dengan nomor pesanan
-            header('Location: index.php?status=order_placed&order=' . $order_number);
+            // Redirect ke halaman pembayaran QRIS
+            header('Location: payment_qris.php?order=' . $order_number);
             exit;
             
         } catch (Exception $e) {
