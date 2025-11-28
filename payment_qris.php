@@ -12,10 +12,11 @@ if (!isset($_GET['order']) || empty($_GET['order'])) {
 $order_number = mysqli_real_escape_string($conn, $_GET['order']);
 
 // Ambil data pesanan dari database
-$query = "SELECT p.*, pel.nama, pel.email, pel.telepon, a.alamat_lengkap, a.kota, a.kode_pos
+$query = "SELECT p.*, pel.nama, pel.email, pel.telepon, a.jalan, a.kota, a.kode_pos,
+          (p.total + p.ongkir) as total_bayar
           FROM pesanan p
           JOIN pelanggan pel ON p.pelanggan_id = pel.id
-          JOIN alamat a ON p.alamat_id = a.id
+          LEFT JOIN alamat a ON p.alamat_id = a.id
           WHERE p.nomor_pesanan = '$order_number'
           LIMIT 1";
 
@@ -84,9 +85,9 @@ include 'includes/header.php';
                 <h2>Detail Pesanan</h2>
                 <div class="customer-info">
                     <p><strong>Nama:</strong> <?php echo htmlspecialchars($order['nama']); ?></p>
-                    <p><strong>Email:</strong> <?php echo htmlspecialchars($order['email']); ?></p>
+                    <p><strong>Email:</strong> <?php echo htmlspecialchars($order['email'] ?? '-'); ?></p>
                     <p><strong>Telepon:</strong> <?php echo htmlspecialchars($order['telepon']); ?></p>
-                    <p><strong>Alamat Pengiriman:</strong> <?php echo htmlspecialchars($order['alamat_lengkap']); ?>, <?php echo htmlspecialchars($order['kota']); ?> <?php echo htmlspecialchars($order['kode_pos']); ?></p>
+                    <p><strong>Alamat Pengiriman:</strong> <?php echo htmlspecialchars($order['jalan'] ?? '-'); ?>, <?php echo htmlspecialchars($order['kota'] ?? '-'); ?> <?php echo htmlspecialchars($order['kode_pos'] ?? ''); ?></p>
                 </div>
 
                 <h3>Item Pesanan</h3>

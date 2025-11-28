@@ -721,7 +721,7 @@ body {
 
 /* Menu Section */
 .menu-section {
-  margin-bottom: 60px;  
+  margin-bottom: 60px;
 }
 
 .menu-section-title {
@@ -862,7 +862,7 @@ body {
 }
 
 .btn-add-cart {
-  padding:8px 16px;
+  padding: 8px 16px;
   background: #537b2f;
   color: white;
   border: none;
@@ -2471,5 +2471,116 @@ body {
   .payment-instructions ol {
     padding-left: 15px;
     font-size: 0.95rem;
+  }
+
+  /* Hero Section Mobile */
+  .hero {
+    flex-direction: column;
+    padding: 80px 20px 40px;
+    text-align: center;
+  }
+
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+
+  .hero-text p {
+    font-size: 0.95rem;
+  }
+
+  .hero-image img {
+    max-width: 250px;
+  }
+
+  /* Product Grid Mobile */
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    padding: 0 15px;
+  }
+
+  .product-card {
+    padding: 15px;
+  }
+
+  /* Menu Item Mobile */
+  .menu-item {
+    padding: 15px;
+  }
+
+  .menu-item-footer {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .menu-item-footer > div {
+    width: 100%;
+  }
+
+  .btn-add-cart,
+  .btn-order-menu {
+    width: 100% !important;
+    padding: 10px !important;
+    font-size: 0.9rem !important;
+  }
+
+  /* Category Filter Mobile */
+  .menu-categories {
+    overflow-x: auto;
+    gap: 8px;
+    padding: 0 15px 15px;
+  }
+
+  .category-btn {
+    white-space: nowrap;
+    font-size: 0.85rem;
+    padding: 8px 15px;
+  }
+
+  /* Page Header Mobile */
+  .page-header {
+    padding: 100px 20px 40px;
+  }
+
+  .page-header-content h1 {
+    font-size: 1.8rem;
+  }
+
+  .page-header-content p {
+    font-size: 0.95rem;
+  }
+
+  /* Location Section Mobile */
+  .Lokasi-info {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .info-box {
+    padding: 15px;
+  }
+
+  /* Menu CTA Mobile */
+  .menu-cta {
+    padding: 30px 20px;
+  }
+
+  .menu-cta h2 {
+    font-size: 1.5rem;
+  }
+
+  /* Table Responsive */
+  .order-items-table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  /* Form Elements Mobile */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  textarea,
+  select {
+    font-size: 16px !important; /* Prevent zoom on iOS */
   }
 }
