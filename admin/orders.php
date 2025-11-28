@@ -23,6 +23,10 @@ $query_pending = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'pending'
 $result_pending = mysqli_query($conn, $query_pending);
 $total_pending = mysqli_fetch_assoc($result_pending)['total'];
 
+$query_waiting = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'waiting_confirmation'";
+$result_waiting = mysqli_query($conn, $query_waiting);
+$total_waiting = mysqli_fetch_assoc($result_waiting)['total'];
+
 $query_processing = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'processing'";
 $result_processing = mysqli_query($conn, $query_processing);
 $total_processing = mysqli_fetch_assoc($result_processing)['total'];
@@ -80,7 +84,7 @@ $result_orders = mysqli_query($conn, $query_orders);
             <div class="dashboard-stats">
                 <div class="stat-card">
                     <div class="stat-icon orange">
-                        
+                        ⏳
                     </div>
                     <div class="stat-info">
                         <h3>Pending</h3>
@@ -89,8 +93,18 @@ $result_orders = mysqli_query($conn, $query_orders);
                 </div>
 
                 <div class="stat-card">
+                    <div class="stat-icon purple">
+                        💬
+                    </div>
+                    <div class="stat-info">
+                        <h3>Menunggu Konfirmasi</h3>
+                        <div class="stat-number"><?php echo $total_waiting; ?></div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
                     <div class="stat-icon blue">
-                        
+                        🔄
                     </div>
                     <div class="stat-info">
                         <h3>Proses</h3>
@@ -129,6 +143,7 @@ $result_orders = mysqli_query($conn, $query_orders);
                         <select style="padding: 8px 16px; border: 2px solid #ddd; border-radius: 8px;">
                             <option value="">Semua Status</option>
                             <option value="pending">Pending</option>
+                            <option value="waiting_confirmation">Menunggu Konfirmasi</option>
                             <option value="processing">Proses</option>
                             <option value="completed">Beres</option>
                             <option value="cancelled">Batal</option>
@@ -168,6 +183,7 @@ $result_orders = mysqli_query($conn, $query_orders);
                                 // Badge status
                                 $status_badge = 'info';
                                 if ($order['status'] == 'completed') $status_badge = 'success';
+                                elseif ($order['status'] == 'waiting_confirmation') $status_badge = 'purple';
                                 elseif ($order['status'] == 'processing') $status_badge = 'warning';
                                 elseif ($order['status'] == 'cancelled') $status_badge = 'danger';
                         ?>
@@ -185,6 +201,7 @@ $result_orders = mysqli_query($conn, $query_orders);
                                     <select onchange="updateStatus(<?php echo $order['id']; ?>, this.value)" class="btn btn-sm btn-primary" style="padding: 4px 8px;">
                                         <option value="">Update Status</option>
                                         <option value="pending">Pending</option>
+                                        <option value="waiting_confirmation">Menunggu Konfirmasi</option>
                                         <option value="processing">Processing</option>
                                         <option value="completed">Completed</option>
                                         <option value="cancelled">Cancelled</option>
