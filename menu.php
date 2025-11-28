@@ -13,6 +13,18 @@ include 'includes/settings_helper.php';
     </div>
 </section>
 
+<!-- <section class="menu-page"> -->
+    <!-- Menu Categories -->
+    <!-- <div class="menu-categories">
+        <button class="category-btn active" data-category="all">All Menu</button>
+        <button class="category-btn" data-category="signature">Signature Burgers</button>
+        <button class="category-btn" data-category="special">Special Edition</button>
+        <button class="category-btn" data-category="sides">Sides & Drinks</button>
+    </div> -->
+
+    <!-- Signature Burgers -->
+    <!-- <div class="menu-page"> -->
+
 <!-- Menu Categories Filter -->
 <div class="menu-categories">
     <button class="category-btn active" data-category="all">All Menu</button>
@@ -26,9 +38,6 @@ include 'includes/settings_helper.php';
     }
     ?>
 </div>
-
-    <!-- Signature Burgers -->
-    <!-- <div class="menu-page"> -->
 
 <?php 
 // Ambil semua kategori dari database
