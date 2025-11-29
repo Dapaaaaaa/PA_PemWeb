@@ -71,7 +71,7 @@ include 'includes/settings_helper.php';
             </div>
             <a href="https://wa.me/<?php echo getSetting('store_whatsapp', '6285974906945'); ?>?text=Halo%20OurStuff,%20saya%20ingin%20order%20burger!" 
                class="btn-whatsapp" target="_blank">
-                💬 Chat di WhatsApp
+                Chat di WhatsApp
             </a>
         </div>
     </div>

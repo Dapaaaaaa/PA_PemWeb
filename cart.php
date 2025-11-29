@@ -81,10 +81,10 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
 
             <div class="cart-actions">
                 <button type="submit" name="batal_beli" class="btn-action btn-cancel">
-                    ❌ Batalkan Semua
+                    Batalkan Semua
                 </button>
                 <button type="submit" name="lanjut_beli" class="btn-action btn-continue">
-                    ✅ Lanjut ke Pembayaran
+                    Lanjut ke Pembayaran
                 </button>
             </div>
         </form>

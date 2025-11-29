@@ -94,9 +94,9 @@ while ($kategori = mysqli_fetch_assoc($resultKategori)) {
                                         Add
                                     </button>
                                 </form>
-                                <!-- WhatsApp Order -->
+                                <!-- WhatsApp Order
                                 <a href="https://wa.me/<?php echo getSetting('store_whatsapp', '6285974906945'); ?>?text=Halo,%20saya%20ingin%20order%20<?php echo $namaEncode; ?>" 
-                                   class="btn-order-menu" target="_blank">Order Now</a>
+                                   class="btn-order-menu" target="_blank">Order Now</a> -->
                             </div>
                         </div>
                     </div>
@@ -116,7 +116,7 @@ while ($kategori = mysqli_fetch_assoc($resultKategori)) {
         <p>Contact us via WhatsApp for fast ordering and delivery!</p>
         <a href="https://wa.me/<?php echo getSetting('store_whatsapp', '6285974906945'); ?>?text=Halo%20OurStuff,%20saya%20ingin%20melihat%20menu%20lengkap!" 
            class="btn-whatsapp-large" target="_blank">
-            💬 Order via WhatsApp
+            Order via WhatsApp
         </a>
     </div>
 </section>
