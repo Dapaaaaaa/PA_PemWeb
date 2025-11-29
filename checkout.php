@@ -107,8 +107,8 @@ if (isset($_POST['complete_order'])) {
             // HAPUS keranjang sesi setelah pesanan sukses
             unset($_SESSION['cart']);
             
-            // Redirect dengan nomor pesanan
-            header('Location: index.php?status=order_placed&order=' . $order_number);
+            // Redirect ke halaman pembayaran QRIS
+            header('Location: payment_qris.php?order=' . $order_number);
             exit;
             
         } catch (Exception $e) {
@@ -121,7 +121,7 @@ if (isset($_POST['complete_order'])) {
 ?>
 
 <div class="cart-container">
-    <h2>📦 Konfirmasi Pesanan</h2>
+    <h2>Konfirmasi Pesanan</h2>
     <p>Silakan lengkapi detail Anda dan konfirmasi pesanan.</p>
 
     <?php if (isset($_SESSION['error'])): ?>
@@ -158,7 +158,7 @@ if (isset($_POST['complete_order'])) {
         </div>
 
         <button type="submit" name="complete_order" class="btn-action btn-continue">
-            💳 Bayar & Selesaikan Pesanan
+            Bayar & Selesaikan Pesanan
         </button>
     </form>
     

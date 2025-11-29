@@ -1,6 +1,8 @@
 <?php
 session_start();
 include 'includes/header.php';
+include 'koneksi.php';
+include 'includes/settings_helper.php';
 
 // Check if user is logged in (simple check - you can expand this)
 $isLoggedIn = isset($_SESSION['user_id']);
@@ -131,9 +133,9 @@ $userName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : '';
                 <div class="quick-order">
                     <h3>Want to Order Without Account?</h3>
                     <p>You can always order directly via WhatsApp!</p>
-                    <a href="https://wa.me/6285974906945?text=Halo%20OurStuff,%20saya%20ingin%20order!" 
+                    <a href="https://wa.me/<?php echo getSetting('store_whatsapp', '6285974906945'); ?>?text=Halo%20OurStuff,%20saya%20ingin%20order!" 
                        class="btn-whatsapp-account" target="_blank">
-                        Order via WhatsApp
+                        💬 Order via WhatsApp
                     </a>
                 </div>
             </div>

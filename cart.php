@@ -31,11 +31,11 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
     <h2>🛒 Keranjang Pesanan Anda</h2>
 
     <?php if (isset($_GET['status']) && $_GET['status'] == 'cancelled'): ?>
-        <p class="alert-message alert-error">❌ Semua pesanan telah dibatalkan!</p>
+        <p class="alert-message alert-error">Semua pesanan telah dibatalkan!</p>
     <?php endif; ?>
 
     <?php if (isset($_GET['added']) && $_GET['added'] == 'success'): ?>
-        <p class="alert-message alert-success">✅ Item berhasil ditambahkan ke keranjang!</p>
+        <p class="alert-message alert-success">Item berhasil ditambahkan ke keranjang!</p>
     <?php endif; ?>
 
     <?php if (empty($_SESSION['cart'])): ?>
@@ -81,10 +81,10 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
 
             <div class="cart-actions">
                 <button type="submit" name="batal_beli" class="btn-action btn-cancel">
-                    ❌ Batalkan Semua
+                    Batalkan Semua
                 </button>
                 <button type="submit" name="lanjut_beli" class="btn-action btn-continue">
-                    ✅ Lanjut ke Pembayaran
+                    Lanjut ke Pembayaran
                 </button>
             </div>
         </form>

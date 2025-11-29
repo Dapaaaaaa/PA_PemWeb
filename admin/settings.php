@@ -55,13 +55,13 @@ function getSetting($key, $default = '') {
         <!-- Topbar -->
         <div class="admin-topbar">
             <div class="topbar-left">
-                <h1>Store Settings</h1>
+                <h1>Pengaturan Toko</h1>
             </div>
             <div class="topbar-right">
                 <div class="admin-user">
                     <div class="admin-user-avatar">A</div>
                     <div class="admin-user-info">
-                        <h4>Admin User</h4>
+                        <h4>Pengguna Admin</h4>
                         <p>Administrator</p>
                     </div>
                 </div>
@@ -84,82 +84,82 @@ function getSetting($key, $default = '') {
             <!-- Store Information -->
             <div class="content-section">
                 <div class="section-header">
-                    <h2>Store Information</h2>
+                    <h2>Informasi Toko</h2>
                 </div>
 
                 <form class="admin-form" method="POST" action="settings.php">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="store-name">Store Name *</label>
+                            <label for="store-name">Nama Toko *</label>
                             <input type="text" id="store-name" name="store_name" required 
-                                   value="<?php echo htmlspecialchars(getSetting('store_name', 'OurStuffies')); ?>" placeholder="Your store name">
+                                   value="<?php echo htmlspecialchars(getSetting('store_name', 'OurStuffies')); ?>" placeholder="Nama toko Anda">
                         </div>
 
                         <div class="form-group">
-                            <label for="store-email">Email Address *</label>
+                            <label for="store-email">Alamat Email *</label>
                             <input type="email" id="store-email" name="store_email" required 
-                                   value="<?php echo htmlspecialchars(getSetting('store_email', 'info@ourstuffies.com')); ?>" placeholder="store@example.com">
+                                   value="<?php echo htmlspecialchars(getSetting('store_email', 'info@ourstuffies.com')); ?>" placeholder="toko@contoh.com">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="store-phone">Phone Number *</label>
+                            <label for="store-phone">Nomor Telepon *</label>
                             <input type="tel" id="store-phone" name="store_phone" required 
                                    value="<?php echo htmlspecialchars(getSetting('store_phone', '+62 859-7490-6945')); ?>" placeholder="+62 xxx-xxxx-xxxx">
                         </div>
 
                         <div class="form-group">
-                            <label for="store-whatsapp">WhatsApp Number *</label>
+                            <label for="store-whatsapp">Nomor WhatsApp *</label>
                             <input type="tel" id="store-whatsapp" name="store_whatsapp" required 
                                    value="<?php echo htmlspecialchars(getSetting('store_whatsapp', '6285974906945')); ?>" placeholder="628xxxxxxxxxx">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="store-address">Store Address *</label>
+                        <label for="store-address">Alamat Toko *</label>
                         <textarea id="store-address" name="store_address" required rows="3"
-                                  placeholder="Full store address"><?php echo htmlspecialchars(getSetting('store_address', '')); ?></textarea>
+                                  placeholder="Alamat lengkap toko"><?php echo htmlspecialchars(getSetting('store_address', '')); ?></textarea>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="store-city">City *</label>
+                            <label for="store-city">Kota *</label>
                             <input type="text" id="store-city" name="store_city" required 
-                                   value="<?php echo htmlspecialchars(getSetting('store_city', 'Samarinda')); ?>" placeholder="City name">
+                                   value="<?php echo htmlspecialchars(getSetting('store_city', 'Samarinda')); ?>" placeholder="Nama kota">
                         </div>
 
                         <div class="form-group">
-                            <label for="store-postal">Postal Code *</label>
+                            <label for="store-postal">Kode Pos *</label>
                             <input type="text" id="store-postal" name="store_postal" required 
-                                   value="<?php echo htmlspecialchars(getSetting('store_postal', '75243')); ?>" placeholder="Postal code">
+                                   value="<?php echo htmlspecialchars(getSetting('store_postal', '75243')); ?>" placeholder="Kode pos">
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Save Store Information</button>
+                    <button type="submit" class="btn btn-primary">Simpan Informasi Toko</button>
                 </form>
             </div>
 
             <!-- Business Hours -->
             <div class="content-section">
                 <div class="section-header">
-                    <h2>Business Hours</h2>
+                    <h2>Jam Operasional</h2>
                 </div>
 
                 <form class="admin-form" method="POST" action="settings.php">
                     <div class="info-box">
-                        <p>Set your store's operating hours. These will be displayed on your website and used to inform customers.</p>
+                        <p>Atur jam operasional toko Anda. Informasi ini akan ditampilkan di situs web Anda dan digunakan untuk memberi tahu pelanggan.</p>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="opening-time">Opening Time *</label>
+                            <label for="opening-time">Jam Buka *</label>
                             <input type="time" id="opening-time" name="opening_time" required 
                                    value="<?php echo htmlspecialchars(getSetting('opening_time', '10:00')); ?>">
                         </div>
 
                         <div class="form-group">
-                            <label for="closing-time">Closing Time *</label>
+                            <label for="closing-time">Jam Tutup *</label>
                             <input type="time" id="closing-time" name="closing_time" required 
                                    value="<?php echo htmlspecialchars(getSetting('closing_time', '22:00')); ?>">
                         </div>

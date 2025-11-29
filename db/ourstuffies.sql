@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 21, 2025 at 10:41 AM
+-- Generation Time: Nov 28, 2025 at 06:17 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.4.14
 
@@ -305,6 +305,45 @@ INSERT INTO `produk` (`id`, `kategori_id`, `nama`, `slug`, `deskripsi`, `harga`,
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `settings`
+--
+
+CREATE TABLE `settings` (
+  `id` int NOT NULL,
+  `setting_key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `setting_value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `setting_group` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'general',
+  `diperbarui_pada` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `settings`
+--
+
+INSERT INTO `settings` (`id`, `setting_key`, `setting_value`, `setting_group`, `diperbarui_pada`) VALUES
+(1, 'store_name', 'Toko Gua', 'store', '2025-11-27 13:59:19'),
+(2, 'store_email', 'info@ourstuffies.com', 'store', '2025-11-27 13:46:52'),
+(3, 'store_phone', '+62 859-7490-6945', 'store', '2025-11-27 13:46:52'),
+(4, 'store_whatsapp', '6285974906945', 'store', '2025-11-27 13:46:52'),
+(5, 'store_address', 'Blk. A-B No.53b, Gn. Kelua, Kec. Samarinda Ulu, Kota Samarinda, Kalimantan Timur 75243', 'store', '2025-11-27 13:46:52'),
+(6, 'store_city', 'Balikpapan', 'store', '2025-11-27 15:15:47'),
+(7, 'store_postal', '75243', 'store', '2025-11-27 13:46:52'),
+(8, 'opening_time', '10:00', 'hours', '2025-11-27 13:46:52'),
+(9, 'closing_time', '22:00', 'hours', '2025-11-27 13:46:52'),
+(10, 'holiday_note', 'Buka setiap hari kecuali hari libur nasional', 'hours', '2025-11-27 13:46:52'),
+(11, 'map_latitude', '-0.4897', 'location', '2025-11-27 13:46:52'),
+(12, 'map_longitude', '117.1436', 'location', '2025-11-27 13:46:52'),
+(13, 'map_embed_url', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.6607285388495!2d117.14139931475395!3d-0.4897068997544673!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2df67f15e96c0c91%3A0x5e5e5e5e5e5e5e5e!2sGunung%20Kelua!5e0!3m2!1sen!2sid!4v1234567890123!5m2!1sen!2sid', 'location', '2025-11-27 13:46:52'),
+(14, 'social_instagram', 'https://instagram.com/ourstuffies', 'social', '2025-11-27 13:46:52'),
+(15, 'social_facebook', 'https://facebook.com/ourstuffies', 'social', '2025-11-27 13:46:52'),
+(16, 'social_twitter', '', 'social', '2025-11-27 13:46:52'),
+(17, 'delivery_fee', '10000', 'delivery', '2025-11-27 13:46:52'),
+(18, 'free_delivery_min', '100000', 'delivery', '2025-11-27 13:46:52'),
+(19, 'delivery_note', 'Pengiriman tersedia di seluruh Samarinda. Estimasi waktu: 30-45 menit.', 'delivery', '2025-11-27 13:46:52');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `struk`
 --
 
@@ -323,17 +362,17 @@ CREATE TABLE `struk` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_item_keranjang` (
-`catatan` varchar(255)
-,`harga_saat_tambah` decimal(10,2)
-,`item_keranjang_id` int
-,`keranjang_id` int
-,`nama_produk` varchar(150)
+`keranjang_id` int
 ,`pelanggan_id` int
-,`produk_id` int
-,`qty` int
 ,`session_id` varchar(128)
-,`subtotal` decimal(20,2)
+,`item_keranjang_id` int
+,`produk_id` int
+,`nama_produk` varchar(150)
 ,`url_gambar` varchar(255)
+,`qty` int
+,`harga_saat_tambah` decimal(10,2)
+,`subtotal` decimal(20,2)
+,`catatan` varchar(255)
 );
 
 -- --------------------------------------------------------
@@ -343,23 +382,23 @@ CREATE TABLE `v_item_keranjang` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_item_pesanan` (
-`catatan_item` varchar(255)
-,`harga_satuan` decimal(10,2)
-,`jalan` text
-,`kode_pos` varchar(20)
-,`kota` varchar(100)
-,`nama_pelanggan` varchar(150)
-,`nama_produk` varchar(150)
+`pesanan_id` int
 ,`nomor_pesanan` varchar(20)
-,`ongkir` decimal(10,2)
-,`pesanan_id` int
-,`produk_id` int
-,`qty` int
 ,`status` varchar(30)
-,`subtotal` decimal(12,2)
-,`tanggal_pesanan` datetime
-,`telepon_pelanggan` varchar(32)
 ,`total` decimal(12,2)
+,`ongkir` decimal(10,2)
+,`tanggal_pesanan` datetime
+,`nama_pelanggan` varchar(150)
+,`telepon_pelanggan` varchar(32)
+,`jalan` text
+,`kota` varchar(100)
+,`kode_pos` varchar(20)
+,`produk_id` int
+,`nama_produk` varchar(150)
+,`qty` int
+,`harga_satuan` decimal(10,2)
+,`subtotal` decimal(12,2)
+,`catatan_item` varchar(255)
 );
 
 --
@@ -459,6 +498,13 @@ ALTER TABLE `produk`
   ADD KEY `idx_aktif` (`aktif`);
 
 --
+-- Indexes for table `settings`
+--
+ALTER TABLE `settings`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `setting_key` (`setting_key`);
+
+--
 -- Indexes for table `struk`
 --
 ALTER TABLE `struk`
@@ -536,6 +582,12 @@ ALTER TABLE `pesanan`
 --
 ALTER TABLE `produk`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `settings`
+--
+ALTER TABLE `settings`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `struk`

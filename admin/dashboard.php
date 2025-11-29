@@ -1,6 +1,7 @@
 <?php
 include '../koneksi.php';
 include 'includes/session.php';
+include '../includes/settings_helper.php';
 
 // Cek login, jika belum login redirect ke login.php
 requireAdminLogin();
@@ -44,7 +45,6 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
 <?php include 'includes/admin_header.php'; ?>
 <?php include 'includes/admin_sidebar.php'; ?>
 
-!doctype html
     <!-- Main Content -->
     <div class="admin-content">
         <!-- Topbar -->
@@ -203,15 +203,15 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
                 </div>
 
                 <div class="info-box">
-                    <p><strong> Alamat:</strong> Blk. A-B No.53b, Gn. Kelua, Kec. Samarinda Ulu, Kota Samarinda, Kalimantan Timur 75243</p>
+                    <p><strong>📍 Alamat:</strong> <?php echo getSetting('store_address', 'Blk. A-B No.53b, Gn. Kelua, Kec. Samarinda Ulu, Kota Samarinda, Kalimantan Timur 75243'); ?></p>
                 </div>
 
                 <div class="info-box">
-                    <p><strong> WhatsApp:</strong> +62 859-7490-6945</p>
+                    <p><strong>📞 WhatsApp:</strong> <?php echo getSetting('store_phone', '+62 859-7490-6945'); ?></p>
                 </div>
 
                 <div class="info-box">
-                    <p><strong> Jam Operasional:</strong> Senin - Minggu: 10:00 AM - 5:00 PM</p>
+                    <p><strong>🕐 Jam Operasional:</strong> Senin - Minggu: <?php echo getSetting('opening_time', '10:00'); ?> - <?php echo getSetting('closing_time', '22:00'); ?></p>
                 </div>
             </div>
         </div>
