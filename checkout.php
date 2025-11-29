@@ -121,7 +121,7 @@ if (isset($_POST['complete_order'])) {
 ?>
 
 <div class="cart-container">
-    <h2>📦 Konfirmasi Pesanan</h2>
+    <h2>Konfirmasi Pesanan</h2>
     <p>Silakan lengkapi detail Anda dan konfirmasi pesanan.</p>
 
     <?php if (isset($_SESSION['error'])): ?>
@@ -158,7 +158,7 @@ if (isset($_POST['complete_order'])) {
         </div>
 
         <button type="submit" name="complete_order" class="btn-action btn-continue">
-            💳 Bayar & Selesaikan Pesanan
+            Bayar & Selesaikan Pesanan
         </button>
     </form>
     

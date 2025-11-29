@@ -85,21 +85,21 @@ include 'includes/settings_helper.php';
             <div class="Kontak-info-card">
                 <div class="info-icon"></div>
                 <div class="info-content">
-                    <h3>Business Hours</h3>
+                    <h3>Jam Kerja</h3>
                     <p><strong>Senin - Minggu</strong><br>
                     10:00 AM - 5:00 PM</p>
-                    <p class="info-warning">Orders after closing time will be processed the next day</p>
+                    <p class="info-warning">Pesanan setelah jam tutup akan diproses keesokan harinya</p>
                 </div>
             </div>
 
             <div class="Kontak-info-card">
                 <div class="info-icon"></div>
                 <div class="info-content">
-                    <h3>Quick Order</h3>
-                    <p>Want to order right away?</p>
+                    <h3>Order Instant</h3>
+                    <p>Ingin memesan sekarang?</p>
                     <a href="https://wa.me/<?php echo getSetting('store_whatsapp', '6285974906945'); ?>?text=Halo%20OurStuff,%20saya%20ingin%20order!" 
                        class="btn-whatsapp-Kontak" target="_blank">
-                        Chat on WhatsApp
+                        Chat di WhatsApp
                     </a>
                 </div>
             </div>

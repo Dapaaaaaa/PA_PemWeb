@@ -84,7 +84,7 @@ $result_orders = mysqli_query($conn, $query_orders);
             <div class="dashboard-stats">
                 <div class="stat-card">
                     <div class="stat-icon orange">
-                        ⏳
+                        
                     </div>
                     <div class="stat-info">
                         <h3>Pending</h3>
@@ -94,7 +94,7 @@ $result_orders = mysqli_query($conn, $query_orders);
 
                 <div class="stat-card">
                     <div class="stat-icon purple">
-                        💬
+                        
                     </div>
                     <div class="stat-info">
                         <h3>Menunggu Konfirmasi</h3>
@@ -104,7 +104,7 @@ $result_orders = mysqli_query($conn, $query_orders);
 
                 <div class="stat-card">
                     <div class="stat-icon blue">
-                        🔄
+                        
                     </div>
                     <div class="stat-info">
                         <h3>Proses</h3>
@@ -114,7 +114,7 @@ $result_orders = mysqli_query($conn, $query_orders);
 
                 <div class="stat-card">
                     <div class="stat-icon green">
-                        ✅
+                        
                     </div>
                     <div class="stat-info">
                         <h3>Beres</h3>
@@ -124,7 +124,7 @@ $result_orders = mysqli_query($conn, $query_orders);
 
                 <div class="stat-card">
                     <div class="stat-icon red">
-                        ❌
+                        
                     </div>
                     <div class="stat-info">
                         <h3>Batal</h3>
