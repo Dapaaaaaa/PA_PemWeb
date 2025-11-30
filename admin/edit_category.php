@@ -73,7 +73,7 @@ $kategori = mysqli_fetch_assoc($result);
                         </div>
 
                         <div class="form-group">
-                            <label for="category-slug">Slug *</label>
+                            <label for="category-slug">Selogan *</label>
                             <input type="text" id="category-slug" name="slug" required 
                                    value="<?php echo htmlspecialchars($kategori['slug']); ?>">
                         </div>

@@ -28,7 +28,7 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
 ?>
 
 <div class="cart-container">
-    <h2>🛒 Keranjang Pesanan Anda</h2>
+    <h2>Keranjang Pesanan Anda</h2>
 
     <?php if (isset($_GET['status']) && $_GET['status'] == 'cancelled'): ?>
         <p class="alert-message alert-error">Semua pesanan telah dibatalkan!</p>

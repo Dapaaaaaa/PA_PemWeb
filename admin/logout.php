@@ -35,7 +35,7 @@ session_destroy();
         </div>
 
         <div style="text-align: center; padding: 30px 0;">
-            <div style="font-size: 64px; margin-bottom: 20px;">✅</div>
+            <div style="font-size: 64px; margin-bottom: 20px;"></div>
             <p style="font-size: 16px; color: #666; margin-bottom: 25px;">
                 You have been successfully logged out.
             </p>

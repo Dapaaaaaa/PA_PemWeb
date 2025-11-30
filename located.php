@@ -7,7 +7,7 @@ include 'includes/settings_helper.php';
 <section class="page-header">
     <div class="page-header-content">
         <h1>Temukan Kami</h1>
-        <p>Visit our store and experience the best burgers in town!</p>
+        <p>Kunjungi toko kami dan rasakan burger terbaik di kota!</p>
     </div>
 </section>
 
@@ -93,15 +93,15 @@ include 'includes/settings_helper.php';
             <div class="reason-card">
                 <div class="reason-icon"></div>
                 <h4>Fast Delivery</h4>
-                <p>Layanan delivery cepat ke seluruh area Samarinda</p>
+                <p>Layanan pengantaran cepat ke seluruh area Samarinda</p>
             </div>
         </div>
     </div>
 
     <!-- Call to Action -->
     <div class="Lokasi-cta">
-        <h2>Ready to Try Our Burgers?</h2>
-        <p>Visit us today or order online for delivery!</p>
+        <h2>Siap Mencoba Burger Kami?</h2>
+        <p>Kunjungi kami hari ini atau pesan online untuk pengantaran!</p>
         <div class="cta-buttons">
             <a href="menu.php" class="btn-primary">View Menu</a>
             <a href="https://wa.me/<?php echo getSetting('store_whatsapp', '6285974906945'); ?>?text=Halo%20OurStuff,%20saya%20ingin%20order!" 

@@ -110,7 +110,7 @@ $result_categories = mysqli_query($conn, $query_categories);
                         </div>
 
                         <div class="form-group">
-                            <label for="category-slug">Slug *</label>
+                            <label for="category-slug">Selogan *</label>
                             <input type="text" id="category-slug" name="slug" required 
                                    placeholder="e.g., burger, minuman, snack">
                         </div>
@@ -137,7 +137,7 @@ $result_categories = mysqli_query($conn, $query_categories);
                         <tr>
                             <th>ID</th>
                             <th>Nama Kategori</th>
-                            <th>Slug</th>
+                            <th>Selogan</th>
                             <th>Deskripsi</th>
                             <th>Total Item</th>
                             <th>Tanggal Dibuat</th>
@@ -165,9 +165,9 @@ $result_categories = mysqli_query($conn, $query_categories);
                 </table>
             </div>
 
-            <div class="info-box">
+            <!-- <div class="info-box">
                 <p>💡 <strong>Tip:</strong> Kategori membantu mengatur item menu Anda. Pastikan setiap kategori memiliki slug unik untuk penamaan yang ramah URL.</p>
-            </div>
+            </div> -->
         </div>
     </div>
 

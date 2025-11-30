@@ -166,24 +166,24 @@ function getSetting($key, $default = '') {
                     </div>
 
                     <div class="form-group">
-                        <label for="holiday-note">Holiday Note</label>
+                        <label for="holiday-note">Catatan Hari Libur</label>
                         <textarea id="holiday-note" name="holiday_note" rows="2"
                                   placeholder="e.g., Closed on national holidays"><?php echo htmlspecialchars(getSetting('holiday_note', '')); ?></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Save Business Hours</button>
+                    <button type="submit" class="btn btn-primary">Simpan Jam Operasional</button>
                 </form>
             </div>
 
             <!-- Google Maps -->
             <div class="content-section">
                 <div class="section-header">
-                    <h2>Location & Map</h2>
+                    <h2>Lokasi & Peta</h2>
                 </div>
 
                 <form class="admin-form" id="locationForm" method="POST" action="settings.php">
                     <div class="form-group">
-                        <label for="maps-embed">Google Maps Embed URL or iframe *</label>
+                        <label for="maps-embed">Google Maps Embed URL atau iframe *</label>
                         <textarea id="maps-embed" name="map_embed_url" rows="3" required
                                   placeholder='Either paste the embed <iframe> HTML or only the map "src" URL'><?php echo htmlspecialchars(getSetting('map_embed_url', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.687140235874!2d117.14484747589199!3d-0.46461823528196516!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2df67900560a5033%3A0xd14b9dfd79c14c60!2sOurStuffies!5e0!3m2!1sid!2sid!4v1762506331525!5m2!1sid!2sid')); ?></textarea>
                     </div>
@@ -203,65 +203,65 @@ function getSetting($key, $default = '') {
                     </div>
 
                     <div class="info-box">
-                        <p><strong>How to get Google Maps embed code:</strong><br>
-                        1. Open Google Maps and find your store location<br>
-                        2. Click "Share" → "Embed a map"<br>
-                        3. Copy the iframe code and paste it above (or paste only the src URL)</p>
+                        <p><strong>Cara mendapatkan kode embed Google Maps:</strong><br>
+                        1. Buka Google Maps dan temukan lokasi toko Anda<br>
+                        2. Klik "Bagikan" → "Sematkan peta"<br>
+                        3. Salin kode iframe dan tempelkan di atas (atau tempel hanya URL src)</p>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Save Location Settings</button>
+                    <button type="submit" class="btn btn-primary">Simpan Pengaturan Lokasi</button>
                 </form>
             </div>
 
             <!-- Social Media -->
             <div class="content-section">
                 <div class="section-header">
-                    <h2>Social Media Links</h2>
+                    <h2>Link Media Sosial</h2>
                 </div>
 
                 <form class="admin-form" method="POST" action="settings.php">
                     <div class="form-group">
-                        <label for="instagram">Instagram URL</label>
+                        <label for="instagram">URL Instagram</label>
                         <input type="url" id="instagram" name="social_instagram" 
                                value="<?php echo htmlspecialchars(getSetting('social_instagram', '')); ?>"
                                placeholder="https://instagram.com/ourstuffies">
                     </div>
 
                     <div class="form-group">
-                        <label for="facebook">Facebook URL</label>
+                        <label for="facebook">URL Facebook</label>
                         <input type="url" id="facebook" name="social_facebook" 
                                value="<?php echo htmlspecialchars(getSetting('social_facebook', '')); ?>"
                                placeholder="https://facebook.com/ourstuffies">
                     </div>
 
                     <div class="form-group">
-                        <label for="twitter">Twitter / X URL</label>
+                        <label for="twitter">URL Twitter / X</label>
                         <input type="url" id="twitter" name="social_twitter" 
                                value="<?php echo htmlspecialchars(getSetting('social_twitter', '')); ?>"
                                placeholder="https://twitter.com/ourstuffies">
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Save Social Media Links</button>
+                    <button type="submit" class="btn btn-primary">Simpan Link Media Sosial</button>
                 </form>
             </div>
 
             <!-- Delivery Settings -->
             <div class="content-section">
                 <div class="section-header">
-                    <h2>Delivery Settings</h2>
+                    <h2>Pengaturan Pengiriman</h2>
                 </div>
 
                 <form class="admin-form" method="POST" action="settings.php">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="delivery-fee">Standard Delivery Fee (Rp)</label>
+                            <label for="delivery-fee">Biaya Pengiriman Standar (Rp)</label>
                             <input type="number" id="delivery-fee" name="delivery_fee" 
                                    value="<?php echo htmlspecialchars(getSetting('delivery_fee', '10000')); ?>" 
                                    placeholder="10000" min="0">
                         </div>
 
                         <div class="form-group">
-                            <label for="free-delivery">Free Delivery Above (Rp)</label>
+                            <label for="free-delivery">Gratis Pengiriman Di Atas (Rp)</label>
                             <input type="number" id="free-delivery" name="free_delivery_min" 
                                    value="<?php echo htmlspecialchars(getSetting('free_delivery_min', '100000')); ?>" 
                                    placeholder="100000" min="0">
@@ -269,29 +269,29 @@ function getSetting($key, $default = '') {
                     </div>
 
                     <div class="form-group">
-                        <label for="delivery-note">Delivery Notes</label>
+                        <label for="delivery-note">Catatan Pengiriman</label>
                         <textarea id="delivery-note" name="delivery_note" rows="3"
-                                  placeholder="Special delivery instructions..."><?php echo htmlspecialchars(getSetting('delivery_note', '')); ?></textarea>
+                                  placeholder="Instruksi pengiriman khusus..."><?php echo htmlspecialchars(getSetting('delivery_note', '')); ?></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Save Delivery Settings</button>
+                    <button type="submit" class="btn btn-primary">Simpan Pengaturan Pengiriman</button>
                 </form>
             </div>
 
             <!-- Danger Zone -->
             <div class="content-section" style="border: 2px solid #e74c3c;">
                 <div class="section-header">
-                    <h2 style="color: #e74c3c;"> Danger Zone</h2>
+                    <h2 style="color: #e74c3c;"> Zona Bahaya</h2>
                 </div>
 
                 <div class="warning-box">
-                    <p><strong>Warning:</strong> These actions are irreversible. Please be absolutely certain before proceeding.</p>
+                    <p><strong>Peringatan:</strong> Tindakan ini tidak dapat dibatalkan. Harap pastikan sebelum melanjutkan.</p>
                 </div>
 
                 <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                    <button class="btn btn-danger" onclick="clearOrders()">Clear All Orders</button>
+                    <button class="btn btn-danger" onclick="clearOrders()">Hapus Semua Pesanan</button>
                     <button class="btn btn-danger" onclick="resetDatabase()">Reset Database</button>
-                    <button class="btn btn-danger" onclick="deleteAccount()">Delete Admin Account</button>
+                    <button class="btn btn-danger" onclick="deleteAccount()">Hapus Akun Admin</button>
                 </div>
             </div>
         </div>

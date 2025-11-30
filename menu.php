@@ -112,11 +112,11 @@ while ($kategori = mysqli_fetch_assoc($resultKategori)) {
 
     <!-- Call to Action -->
     <div class="menu-cta">
-        <h2>Ready to Order?</h2>
-        <p>Contact us via WhatsApp for fast ordering and delivery!</p>
-        <a href="https://wa.me/<?php echo getSetting('store_whatsapp', '6285974906945'); ?>?text=Halo%20OurStuff,%20saya%20ingin%20melihat%20menu%20lengkap!" 
+        <h2>Siap untuk Memesan?</h2>
+        <p>Hubungi kami lewat WhatsApp untuk pemesanan cepat dan pengantaran!</p>
+        <a href="https://wa.me/<?php echo getSetting('store_whatsapp', '6285974906945'); ?>?text=Halo%2C%20saya%20ingin%20melihat%20menu%20lengkap%21" 
            class="btn-whatsapp-large" target="_blank">
-            Order via WhatsApp
+            Pesan via WhatsApp
         </a>
     </div>
 </section>

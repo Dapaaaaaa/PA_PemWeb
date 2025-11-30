@@ -115,6 +115,8 @@ Menu → Add to Cart → Cart → Checkout Form → Payment QRIS Page → WhatsA
 ```css
 .payment-page          /* Main container */
 /* Main container */
+/* Main container */
+/* Main container */
 .payment-header        /* Page title and order number */
 .payment-content       /* Grid layout (2 columns) */
 .order-details-box     /* Left column - Order details */
@@ -198,6 +200,8 @@ pending → waiting_confirmation → processing → completed
 
 ```css
 .stat-icon.purple    /* Purple stat icon */
+/* Purple stat icon */
+/* Purple stat icon */
 /* Purple stat icon */
 .badge-purple; /* Purple status badge */
 ```

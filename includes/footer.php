@@ -2,7 +2,7 @@
 // footer.php
 ?>
 <footer class="main-footer">
-    <p>© 2025 OurStuffies. All Rights Reserved.</p>
+    <p>© 2025 OurStuffies. Semua hak dilindungi undang‑undang.</p>
 </footer>
 
 </body>
