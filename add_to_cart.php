@@ -37,7 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'name' => $name,
             'price' => $price,
             'img' => $img,
-            'qty' => $qty
+            'qty' => $qty,
+            'notes' => '',
+            'sauce_options' => []
         ];
     }
 

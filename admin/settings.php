@@ -10,7 +10,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     foreach ($_POST as $key => $value) {
         if ($key != 'action') {
             $key_escaped = mysqli_real_escape_string($conn, $key);
-            $value_escaped = mysqli_real_escape_string($conn, $value);
+            
+            // Handle array values (untuk checkbox)
+            if (is_array($value)) {
+                $value_escaped = mysqli_real_escape_string($conn, implode(',', $value));
+            } else {
+                $value_escaped = mysqli_real_escape_string($conn, $value);
+            }
             
             $query = "INSERT INTO settings (setting_key, setting_value) 
                       VALUES ('$key_escaped', '$value_escaped')
@@ -275,6 +281,51 @@ function getSetting($key, $default = '') {
                     </div>
 
                     <button type="submit" class="btn btn-primary">Simpan Pengaturan Pengiriman</button>
+                </form>
+            </div>
+
+            <!-- Sauce Options Settings -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Pilihan Saus Produk</h2>
+                </div>
+
+                <form class="admin-form" method="POST" action="settings.php">
+                    <div class="info-box">
+                        <p>Atur pilihan saus yang tersedia untuk produk. Pelanggan dapat memilih beberapa pilihan saus sekaligus.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pilihan Saus yang Tersedia</label>
+                        <div style="display: grid; gap: 10px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="sauce_no_sauce" name="sauce_options[]" value="tidak-bersaus" 
+                                       <?php echo (strpos(getSetting('sauce_options', 'tidak-bersaus,pedas,manis'), 'tidak-bersaus') !== false) ? 'checked' : ''; ?>>
+                                <label for="sauce_no_sauce" style="margin: 0; font-weight: normal;">Tidak Bersaus</label>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="sauce_spicy" name="sauce_options[]" value="pedas" 
+                                       <?php echo (strpos(getSetting('sauce_options', 'tidak-bersaus,pedas,manis'), 'pedas') !== false) ? 'checked' : ''; ?>>
+                                <label for="sauce_spicy" style="margin: 0; font-weight: normal;">Pedas</label>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="sauce_sweet" name="sauce_options[]" value="manis" 
+                                       <?php echo (strpos(getSetting('sauce_options', 'tidak-bersaus,pedas,manis'), 'manis') !== false) ? 'checked' : ''; ?>>
+                                <label for="sauce_sweet" style="margin: 0; font-weight: normal;">Manis</label>
+                            </div>
+                        </div>
+                        <small style="color: #666; display: block; margin-top: 8px;">Centang pilihan yang ingin Anda tampilkan ke pelanggan</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sauce_label">Label untuk Pilihan Saus</label>
+                        <input type="text" id="sauce_label" name="sauce_label" 
+                               value="<?php echo htmlspecialchars(getSetting('sauce_label', 'Pilih Saus')); ?>" 
+                               placeholder="Pilih Saus">
+                        <small style="color: #666; display: block; margin-top: 5px;">Label yang akan ditampilkan di halaman keranjang</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Simpan Pengaturan Saus</button>
                 </form>
             </div>
 
