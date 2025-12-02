@@ -83,9 +83,9 @@ $result_orders = mysqli_query($conn, $query_orders);
             <!-- Order Stats -->
             <div class="dashboard-stats">
                 <div class="stat-card">
-                    <div class="stat-icon orange">
+                    <!-- <div class="stat-icon orange">
                         
-                    </div>
+                    </div> -->
                     <div class="stat-info">
                         <h3>Pending</h3>
                         <div class="stat-number"><?php echo $total_pending; ?></div>
@@ -93,9 +93,9 @@ $result_orders = mysqli_query($conn, $query_orders);
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon purple">
+                    <!-- <div class="stat-icon purple">
                         
-                    </div>
+                    </div> -->
                     <div class="stat-info">
                         <h3>Menunggu Konfirmasi</h3>
                         <div class="stat-number"><?php echo $total_waiting; ?></div>
@@ -103,9 +103,9 @@ $result_orders = mysqli_query($conn, $query_orders);
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon blue">
+                    <!-- <div class="stat-icon blue">
                         
-                    </div>
+                    </div> -->
                     <div class="stat-info">
                         <h3>Proses</h3>
                         <div class="stat-number"><?php echo $total_processing; ?></div>
@@ -113,9 +113,9 @@ $result_orders = mysqli_query($conn, $query_orders);
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon green">
+                    <!-- <div class="stat-icon green">
                         
-                    </div>
+                    </div> -->
                     <div class="stat-info">
                         <h3>Beres</h3>
                         <div class="stat-number"><?php echo $total_completed; ?></div>
@@ -123,9 +123,9 @@ $result_orders = mysqli_query($conn, $query_orders);
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon red">
+                    <!-- <div class="stat-icon red">
                         
-                    </div>
+                    </div> -->
                     <div class="stat-info">
                         <h3>Batal</h3>
                         <div class="stat-number"><?php echo $total_cancelled; ?></div>

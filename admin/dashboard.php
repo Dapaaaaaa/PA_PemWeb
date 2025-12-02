@@ -70,9 +70,9 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
             <!-- Dashboard Stats -->
             <div class="dashboard-stats">
                 <div class="stat-card">
-                    <div class="stat-icon green">
+                    <!-- <div class="stat-icon green">
                         
-                    </div>
+                    </div> -->
                     <div class="stat-info">
                         <h3>Total Menu</h3>
                         <div class="stat-number"><?php echo $total_menu; ?></div>
@@ -80,9 +80,9 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon blue">
+                    <!-- <div class="stat-icon blue">
                         
-                    </div>
+                    </div> -->
                     <div class="stat-info">
                         <h3>Kategori</h3>
                         <div class="stat-number"><?php echo $total_kategori; ?></div>
@@ -90,9 +90,9 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon orange">
+                    <!-- <div class="stat-icon orange">
                         
-                    </div>
+                    </div> -->
                     <div class="stat-info">
                         <h3>Total Pesanan</h3>
                         <div class="stat-number"><?php echo $total_pesanan; ?></div>
@@ -100,9 +100,9 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon red">
+                    <!-- <div class="stat-icon red">
                         
-                    </div>
+                    </div> -->
                     <div class="stat-info">
                         <h3>Pendapatan</h3>
                         <div class="stat-number">Rp <?php echo number_format($total_pendapatan, 0, ',', '.'); ?></div>
