@@ -28,6 +28,23 @@ if (isset($_POST['batal_beli'])) {
 }
 if (isset($_POST['lanjut_beli'])) {
     if (!empty($_SESSION['cart'])) {
+        // Validasi: Setiap item harus punya pilihan saus
+        $all_items_have_sauce = true;
+        $missing_sauce_items = [];
+        
+        foreach ($_SESSION['cart'] as $index => $item) {
+            if (empty($item['sauce_options']) || count($item['sauce_options']) == 0) {
+                $all_items_have_sauce = false;
+                $missing_sauce_items[] = $item['name'];
+            }
+        }
+        
+        if (!$all_items_have_sauce) {
+            $_SESSION['checkout_error'] = 'Silakan pilih saus untuk semua item sebelum melanjutkan ke checkout!';
+            header('Location: cart.php?error=sauce_required');
+            exit;
+        }
+        
         header('Location: checkout.php');
         exit;
     }
@@ -70,6 +87,15 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
 
     <?php if (isset($_GET['updated']) && $_GET['updated'] == 'success'): ?>
         <p class="alert-message alert-success">Catatan pesanan berhasil diperbarui!</p>
+    <?php endif; ?>
+
+    <?php if (isset($_GET['error']) && $_GET['error'] == 'sauce_required'): ?>
+        <p class="alert-message alert-error">
+            <?php 
+            echo isset($_SESSION['checkout_error']) ? $_SESSION['checkout_error'] : 'Silakan pilih saus untuk semua item!';
+            unset($_SESSION['checkout_error']);
+            ?>
+        </p>
     <?php endif; ?>
 
     <?php if (empty($_SESSION['cart'])): ?>
@@ -156,7 +182,7 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
                             ];
                             foreach ($item['sauce_options'] as $sauce): 
                             ?>
-                            <span class="badge badge-spice">🍽️ <?php echo $sauce_labels[$sauce] ?? $sauce; ?></span>
+                            <span class="badge badge-spice"> <?php echo $sauce_labels[$sauce] ?? $sauce; ?></span>
                             <?php endforeach; ?>
                         <?php endif; ?>
                         <?php if (!empty($item['notes'])): ?>

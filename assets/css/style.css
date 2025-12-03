@@ -1909,7 +1909,7 @@ body {
 
 .checkout-container {
   width: 100%;
-  max-width: 900px; /* Lebih sempit untuk checkout form */
+  max-width: 700px; /* Lebih sempit untuk checkout form */
   margin: 60px auto;
   padding: 40px;
   background: white;
@@ -2482,6 +2482,16 @@ body {
   resize: vertical;
 }
 
+/* Checkout Form Submit Button - align right */
+.checkout-form .btn-action {
+  display: block;
+  margin-left: auto;
+  margin-right: 0;
+  margin-top: 25px;
+  width: auto;
+  min-width: 250px;
+}
+
 /* Cart Badge in Header */
 .cart-badge {
   position: relative;
@@ -2489,8 +2499,8 @@ body {
 
 .cart-badge-count {
   position: absolute;
-  top: -8px;
-  right: -8px;
+  bottom: 50px;
+  right: -35px;
   background: #d92200;
   color: white;
   font-size: 11px;
