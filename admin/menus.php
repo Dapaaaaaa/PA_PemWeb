@@ -152,7 +152,7 @@ $result_kategori = mysqli_query($conn, $query_kategori);
                         <div class="form-group">
                             <label for="menu-name">Nama Menu *</label>
                             <input type="text" id="menu-name" name="menu_name" required 
-                                   placeholder="e.g., Premium Cheeseburger">
+                                   placeholder="Burger Kebab">
                         </div>
 
                         <div class="form-group">

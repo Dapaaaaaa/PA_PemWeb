@@ -19,13 +19,20 @@ include 'includes/settings_helper.php';
 
 <section class="hero">
     <div class="hero-text">
-        <h1><?php echo htmlspecialchars(getSetting('hero_title', 'Single Patty')); ?></h1>
+        <h1><?php echo htmlspecialchars(getSetting('hero_title', 'Burger Ayam')); ?></h1>
         <p><?php echo htmlspecialchars(getSetting('hero_description', 'Nikmati rasa burger yang segar, juicy, dan lezat yang dibuat dengan bahan premium dan penuh cinta.')); ?></p>
         <a href="menu.php" class="btn-order"><?php echo htmlspecialchars(getSetting('hero_button_text', 'Pesan Sekarang')); ?></a>
     </div>
 
     <div class="hero-image">
-        <img src="assets/img/hero-burger.png" alt="Burger">
+        <?php
+        // Ambil URL gambar dari DB (menggunakan helper getSetting)
+        // Pastikan ada default jika belum diset di DB
+        $heroImage = getSetting('hero_image', 'assets/img/hero-burger.png');
+        $heroAlt   = getSetting('hero_image_alt', 'Burger');
+        $heroImage = trim($heroImage) !== '' ? $heroImage : 'assets/img/hero-burger.png';
+        ?>
+        <img src="<?php echo htmlspecialchars($heroImage, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($heroAlt, ENT_QUOTES, 'UTF-8'); ?>">
     </div>
 </section>
 
