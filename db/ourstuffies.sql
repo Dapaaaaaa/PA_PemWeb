@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 28, 2025 at 06:17 AM
+-- Generation Time: Dec 03, 2025 at 12:29 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.4.14
 
@@ -121,7 +121,8 @@ CREATE TABLE `alamat` (
 
 INSERT INTO `alamat` (`id`, `pelanggan_id`, `label`, `jalan`, `kota`, `kode_pos`, `catatan`, `dibuat_pada`) VALUES
 (1, 1, 'Rumah', 'Jl. Merdeka No. 123', 'Jakarta', '12345', NULL, '2025-11-11 00:29:35'),
-(2, 2, 'Kantor', 'Jl. Sudirman No. 456', 'Jakarta', '12346', NULL, '2025-11-11 00:29:35');
+(2, 2, 'Kantor', 'Jl. Sudirman No. 456', 'Jakarta', '12346', NULL, '2025-11-11 00:29:35'),
+(3, 3, 'Default', 'Jalan suwandi blok A no 7', 'Jakarta', NULL, NULL, '2025-11-29 00:11:09');
 
 -- --------------------------------------------------------
 
@@ -154,6 +155,13 @@ CREATE TABLE `item_pesanan` (
   `subtotal` decimal(12,2) NOT NULL,
   `catatan` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `item_pesanan`
+--
+
+INSERT INTO `item_pesanan` (`id`, `pesanan_id`, `produk_id`, `qty`, `harga_satuan`, `subtotal`, `catatan`) VALUES
+(1, 1, 1, 1, 15000.00, 15000.00, NULL);
 
 -- --------------------------------------------------------
 
@@ -231,7 +239,8 @@ CREATE TABLE `pelanggan` (
 
 INSERT INTO `pelanggan` (`id`, `nama`, `email`, `telepon`, `dibuat_pada`) VALUES
 (1, 'John Doe', 'john@example.com', '628123456789', '2025-11-11 00:29:35'),
-(2, 'Jane Smith', 'jane@example.com', '628987654321', '2025-11-11 00:29:35');
+(2, 'Jane Smith', 'jane@example.com', '628987654321', '2025-11-11 00:29:35'),
+(3, 'daffa', NULL, '081223158895', '2025-11-29 00:11:09');
 
 -- --------------------------------------------------------
 
@@ -269,6 +278,13 @@ CREATE TABLE `pesanan` (
   `diperbarui_pada` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `pesanan`
+--
+
+INSERT INTO `pesanan` (`id`, `nomor_pesanan`, `pelanggan_id`, `alamat_id`, `status`, `total`, `ongkir`, `catatan`, `dibuat_pada`, `diperbarui_pada`) VALUES
+(1, 'ORD202511280001', 3, 3, 'pending', 15000.00, 0.00, 'Order dari website', '2025-11-29 00:11:09', '2025-11-29 00:11:09');
+
 -- --------------------------------------------------------
 
 --
@@ -294,13 +310,12 @@ CREATE TABLE `produk` (
 --
 
 INSERT INTO `produk` (`id`, `kategori_id`, `nama`, `slug`, `deskripsi`, `harga`, `stok`, `url_gambar`, `aktif`, `dibuat_pada`, `diperbarui_pada`) VALUES
-(1, 1, 'Kebab Ayam', 'kebab-ayam', 'Kebab dengan isian ayam dan sayuran segar', 15000.00, 50, 'assets\\img\\burger1.png', 1, '2025-11-11 00:29:35', '2025-11-11 21:32:13'),
-(2, 1, 'Kebab Sapi', 'kebab-sapi', 'Kebab dengan isian daging sapi premium', 20000.00, 30, NULL, 1, '2025-11-11 00:29:35', '2025-11-11 00:29:35'),
-(3, 2, 'Burger Beef', 'burger-beef', 'Burger dengan patty daging sapi 100%', 25000.00, 40, NULL, 1, '2025-11-11 00:29:35', '2025-11-11 00:29:35'),
-(4, 2, 'Burger Chicken', 'burger-chicken', 'Burger dengan chicken crispy', 20000.00, 45, NULL, 1, '2025-11-11 00:29:35', '2025-11-11 00:29:35'),
-(5, 3, 'Es Teh Manis', 'es-teh-manis', 'Es teh manis segar', 5000.00, 100, NULL, 1, '2025-11-11 00:29:35', '2025-11-11 00:29:35'),
-(6, 3, 'Jus Jeruk', 'jus-jeruk', 'Jus jeruk segar tanpa gula tambahan', 10000.00, 50, NULL, 1, '2025-11-11 00:29:35', '2025-11-11 00:29:35'),
-(7, 4, 'French Fries', 'french-fries', 'Kentang goreng crispy', 12000.00, 60, NULL, 1, '2025-11-11 00:29:35', '2025-11-11 00:29:35');
+(1, 1, 'Kebab Ayam', 'kebab-ayam', 'Kebab dengan isian ayam dan sayuran segar', 15000.00, 50, 'assets\\img\\product\\kebab1.png', 1, '2025-11-11 00:29:35', '2025-12-03 20:05:45'),
+(2, 1, 'Kebab Sapi', 'kebab-sapi', 'Kebab dengan isian daging sapi premium', 20000.00, 30, 'assets\\img\\product\\kebab2.png', 1, '2025-11-11 00:29:35', '2025-12-03 20:05:41'),
+(3, 2, 'Burger Daging', 'burger-beef', 'Burger dengan patty daging sapi 100%', 25000.00, 40, 'assets\\img\\product\\burger1.png', 1, '2025-11-11 00:29:35', '2025-12-03 20:09:08'),
+(4, 2, 'Burger Ayam', 'burger-chicken', 'Burger dengan chicken crispy', 20000.00, 45, 'assets\\img\\product\\burger2.png', 1, '2025-11-11 00:29:35', '2025-12-03 20:09:11'),
+(5, 3, 'Es Teh Manis', 'es-teh-manis', 'Es teh manis segar', 5000.00, 100, 'assets\\img\\product\\es-teh.png', 1, '2025-11-11 00:29:35', '2025-12-03 20:06:15'),
+(6, 3, 'Jus Jeruk', 'jus-jeruk', 'Jus jeruk segar tanpa gula tambahan', 10000.00, 50, 'assets\\img\\product\\jus-jeruk.png', 1, '2025-11-11 00:29:35', '2025-12-03 20:06:28');
 
 -- --------------------------------------------------------
 
@@ -527,7 +542,7 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `alamat`
 --
 ALTER TABLE `alamat`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `item_keranjang`
@@ -539,7 +554,7 @@ ALTER TABLE `item_keranjang`
 -- AUTO_INCREMENT for table `item_pesanan`
 --
 ALTER TABLE `item_pesanan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `kategori`
@@ -563,7 +578,7 @@ ALTER TABLE `log_wa`
 -- AUTO_INCREMENT for table `pelanggan`
 --
 ALTER TABLE `pelanggan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `pembayaran`
@@ -575,7 +590,7 @@ ALTER TABLE `pembayaran`
 -- AUTO_INCREMENT for table `pesanan`
 --
 ALTER TABLE `pesanan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `produk`
