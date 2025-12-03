@@ -28,7 +28,7 @@ include 'includes/settings_helper.php';
         <?php
         // Ambil URL gambar dari DB (menggunakan helper getSetting)
         // Pastikan ada default jika belum diset di DB
-        $heroImage = getSetting('hero_image', 'assets/img/hero-burger.png');
+        $heroImage = getSetting('hero_image', 'assets/img/product/hero-burger.png');
         $heroAlt   = getSetting('hero_image_alt', 'Burger');
         $heroImage = trim($heroImage) !== '' ? $heroImage : 'assets/img/hero-burger.png';
         ?>
@@ -36,7 +36,7 @@ include 'includes/settings_helper.php';
     </div>
 </section>
 
-<<section class="product-section">
+<section class="product-section">
     <h2>Menu Kami!</h2>
 
     <div class="product-grid">

@@ -7,6 +7,30 @@ requireAdminLogin();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $updates = [];
     
+    // Handle QRIS Image Upload
+    if (isset($_FILES['qris_image']) && $_FILES['qris_image']['error'] == 0) {
+        $target_dir = "../assets/img/";
+        $file_extension = pathinfo($_FILES['qris_image']['name'], PATHINFO_EXTENSION);
+        $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
+        
+        if (in_array(strtolower($file_extension), $allowed_types)) {
+            $target_file = $target_dir . "qris.png";
+            
+            // Hapus file lama jika ada
+            if (file_exists($target_file)) {
+                unlink($target_file);
+            }
+            
+            if (move_uploaded_file($_FILES['qris_image']['tmp_name'], $target_file)) {
+                $_SESSION['success'] = "QRIS berhasil diupload!";
+            } else {
+                $_SESSION['error'] = "Gagal upload QRIS!";
+            }
+        } else {
+            $_SESSION['error'] = "Format file harus JPG, PNG, atau GIF!";
+        }
+    }
+    
     foreach ($_POST as $key => $value) {
         if ($key != 'action') {
             $key_escaped = mysqli_real_escape_string($conn, $key);
@@ -30,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if (count($updates) > 0) {
         $_SESSION['success'] = "Settings berhasil disimpan! (" . count($updates) . " item updated)";
-    } else {
+    } else if (!isset($_SESSION['success']) && !isset($_SESSION['error'])) {
         $_SESSION['error'] = "Tidak ada perubahan yang disimpan.";
     }
     
@@ -248,6 +272,39 @@ function getSetting($key, $default = '') {
                     </div>
 
                     <button type="submit" class="btn btn-primary">Simpan Link Media Sosial</button>
+                </form>
+            </div>
+
+            <!-- QRIS Payment -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Pembayaran QRIS</h2>
+                </div>
+
+                <form class="admin-form" method="POST" action="settings.php" enctype="multipart/form-data">
+                    <div class="info-box">
+                        <p>Upload gambar QRIS untuk pembayaran. Gambar akan ditampilkan di halaman checkout.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="qris-image">Upload QRIS Image</label>
+                        <input type="file" id="qris-image" name="qris_image" accept="image/png,image/jpeg,image/jpg,image/gif">
+                        <small style="display: block; margin-top: 5px; color: #666;">Format: JPG, PNG, GIF (Max 2MB)</small>
+                    </div>
+
+                    <!-- Preview Gambar QRIS -->
+                    <div class="form-group">
+                        <label>Preview QRIS Saat Ini</label>
+                        <?php if (file_exists('../assets/img/qris.png')): ?>
+                            <div style="border: 1px solid #ddd; padding: 15px; border-radius: 8px; display: inline-block;">
+                                <img src="../assets/img/qris.png?v=<?php echo time(); ?>" alt="QRIS" style="max-width: 300px; display: block;">
+                            </div>
+                        <?php else: ?>
+                            <p style="color: #888;">Belum ada QRIS yang diupload</p>
+                        <?php endif; ?>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Upload QRIS</button>
                 </form>
             </div>
 
