@@ -7,10 +7,40 @@ requireAdminLogin();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $updates = [];
     
+    // Handle QRIS Image Upload
+    if (isset($_FILES['qris_image']) && $_FILES['qris_image']['error'] == 0) {
+        $target_dir = "../assets/img/";
+        $file_extension = pathinfo($_FILES['qris_image']['name'], PATHINFO_EXTENSION);
+        $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
+        
+        if (in_array(strtolower($file_extension), $allowed_types)) {
+            $target_file = $target_dir . "qris.png";
+            
+            // Hapus file lama jika ada
+            if (file_exists($target_file)) {
+                unlink($target_file);
+            }
+            
+            if (move_uploaded_file($_FILES['qris_image']['tmp_name'], $target_file)) {
+                $_SESSION['success'] = "QRIS berhasil diupload!";
+            } else {
+                $_SESSION['error'] = "Gagal upload QRIS!";
+            }
+        } else {
+            $_SESSION['error'] = "Format file harus JPG, PNG, atau GIF!";
+        }
+    }
+    
     foreach ($_POST as $key => $value) {
         if ($key != 'action') {
             $key_escaped = mysqli_real_escape_string($conn, $key);
-            $value_escaped = mysqli_real_escape_string($conn, $value);
+            
+            // Handle array values (untuk checkbox)
+            if (is_array($value)) {
+                $value_escaped = mysqli_real_escape_string($conn, implode(',', $value));
+            } else {
+                $value_escaped = mysqli_real_escape_string($conn, $value);
+            }
             
             $query = "INSERT INTO settings (setting_key, setting_value) 
                       VALUES ('$key_escaped', '$value_escaped')
@@ -24,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if (count($updates) > 0) {
         $_SESSION['success'] = "Settings berhasil disimpan! (" . count($updates) . " item updated)";
-    } else {
+    } else if (!isset($_SESSION['success']) && !isset($_SESSION['error'])) {
         $_SESSION['error'] = "Tidak ada perubahan yang disimpan.";
     }
     
@@ -166,24 +196,24 @@ function getSetting($key, $default = '') {
                     </div>
 
                     <div class="form-group">
-                        <label for="holiday-note">Holiday Note</label>
+                        <label for="holiday-note">Catatan Hari Libur</label>
                         <textarea id="holiday-note" name="holiday_note" rows="2"
                                   placeholder="e.g., Closed on national holidays"><?php echo htmlspecialchars(getSetting('holiday_note', '')); ?></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Save Business Hours</button>
+                    <button type="submit" class="btn btn-primary">Simpan Jam Operasional</button>
                 </form>
             </div>
 
             <!-- Google Maps -->
             <div class="content-section">
                 <div class="section-header">
-                    <h2>Location & Map</h2>
+                    <h2>Lokasi & Peta</h2>
                 </div>
 
                 <form class="admin-form" id="locationForm" method="POST" action="settings.php">
                     <div class="form-group">
-                        <label for="maps-embed">Google Maps Embed URL or iframe *</label>
+                        <label for="maps-embed">Google Maps Embed URL atau iframe *</label>
                         <textarea id="maps-embed" name="map_embed_url" rows="3" required
                                   placeholder='Either paste the embed <iframe> HTML or only the map "src" URL'><?php echo htmlspecialchars(getSetting('map_embed_url', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.687140235874!2d117.14484747589199!3d-0.46461823528196516!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2df67900560a5033%3A0xd14b9dfd79c14c60!2sOurStuffies!5e0!3m2!1sid!2sid!4v1762506331525!5m2!1sid!2sid')); ?></textarea>
                     </div>
@@ -203,65 +233,98 @@ function getSetting($key, $default = '') {
                     </div>
 
                     <div class="info-box">
-                        <p><strong>How to get Google Maps embed code:</strong><br>
-                        1. Open Google Maps and find your store location<br>
-                        2. Click "Share" → "Embed a map"<br>
-                        3. Copy the iframe code and paste it above (or paste only the src URL)</p>
+                        <p><strong>Cara mendapatkan kode embed Google Maps:</strong><br>
+                        1. Buka Google Maps dan temukan lokasi toko Anda<br>
+                        2. Klik "Bagikan" → "Sematkan peta"<br>
+                        3. Salin kode iframe dan tempelkan di atas (atau tempel hanya URL src)</p>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Save Location Settings</button>
+                    <button type="submit" class="btn btn-primary">Simpan Pengaturan Lokasi</button>
                 </form>
             </div>
 
             <!-- Social Media -->
             <div class="content-section">
                 <div class="section-header">
-                    <h2>Social Media Links</h2>
+                    <h2>Link Media Sosial</h2>
                 </div>
 
                 <form class="admin-form" method="POST" action="settings.php">
                     <div class="form-group">
-                        <label for="instagram">Instagram URL</label>
+                        <label for="instagram">URL Instagram</label>
                         <input type="url" id="instagram" name="social_instagram" 
                                value="<?php echo htmlspecialchars(getSetting('social_instagram', '')); ?>"
                                placeholder="https://instagram.com/ourstuffies">
                     </div>
 
                     <div class="form-group">
-                        <label for="facebook">Facebook URL</label>
+                        <label for="facebook">URL Facebook</label>
                         <input type="url" id="facebook" name="social_facebook" 
                                value="<?php echo htmlspecialchars(getSetting('social_facebook', '')); ?>"
                                placeholder="https://facebook.com/ourstuffies">
                     </div>
 
                     <div class="form-group">
-                        <label for="twitter">Twitter / X URL</label>
+                        <label for="twitter">URL Twitter / X</label>
                         <input type="url" id="twitter" name="social_twitter" 
                                value="<?php echo htmlspecialchars(getSetting('social_twitter', '')); ?>"
                                placeholder="https://twitter.com/ourstuffies">
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Save Social Media Links</button>
+                    <button type="submit" class="btn btn-primary">Simpan Link Media Sosial</button>
+                </form>
+            </div>
+
+            <!-- QRIS Payment -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Pembayaran QRIS</h2>
+                </div>
+
+                <form class="admin-form" method="POST" action="settings.php" enctype="multipart/form-data">
+                    <div class="info-box">
+                        <p>Upload gambar QRIS untuk pembayaran. Gambar akan ditampilkan di halaman checkout.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="qris-image">Upload QRIS Image</label>
+                        <input type="file" id="qris-image" name="qris_image" accept="image/png,image/jpeg,image/jpg,image/gif">
+                        <small style="display: block; margin-top: 5px; color: #666;">Format: JPG, PNG, GIF (Max 2MB)</small>
+                    </div>
+
+                    <!-- Preview Gambar QRIS -->
+                    <div class="form-group">
+                        <label>Preview QRIS Saat Ini</label>
+                        <?php if (file_exists('../assets/img/qris.png')): ?>
+                            <div style="border: 1px solid #ddd; padding: 15px; border-radius: 8px; display: inline-block;">
+                                <img src="../assets/img/qris.png?v=<?php echo time(); ?>" alt="QRIS" style="max-width: 300px; display: block;">
+                            </div>
+                        <?php else: ?>
+                            <p style="color: #888;">Belum ada QRIS yang diupload</p>
+                        <?php endif; ?>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Upload QRIS</button>
                 </form>
             </div>
 
             <!-- Delivery Settings -->
             <div class="content-section">
                 <div class="section-header">
-                    <h2>Delivery Settings</h2>
+                    <h2>Pengaturan Pengiriman</h2>
                 </div>
 
                 <form class="admin-form" method="POST" action="settings.php">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="delivery-fee">Standard Delivery Fee (Rp)</label>
+                            <label for="delivery-fee">Biaya Pengiriman Standar (Rp)</label>
                             <input type="number" id="delivery-fee" name="delivery_fee" 
                                    value="<?php echo htmlspecialchars(getSetting('delivery_fee', '10000')); ?>" 
                                    placeholder="10000" min="0">
                         </div>
 
                         <div class="form-group">
-                            <label for="free-delivery">Free Delivery Above (Rp)</label>
+                            <label for="free-delivery">Gratis Pengiriman Di Atas (Rp)</label>
                             <input type="number" id="free-delivery" name="free_delivery_min" 
                                    value="<?php echo htmlspecialchars(getSetting('free_delivery_min', '100000')); ?>" 
                                    placeholder="100000" min="0">
@@ -269,31 +332,76 @@ function getSetting($key, $default = '') {
                     </div>
 
                     <div class="form-group">
-                        <label for="delivery-note">Delivery Notes</label>
+                        <label for="delivery-note">Catatan Pengiriman</label>
                         <textarea id="delivery-note" name="delivery_note" rows="3"
-                                  placeholder="Special delivery instructions..."><?php echo htmlspecialchars(getSetting('delivery_note', '')); ?></textarea>
+                                  placeholder="Instruksi pengiriman khusus..."><?php echo htmlspecialchars(getSetting('delivery_note', '')); ?></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Save Delivery Settings</button>
+                    <button type="submit" class="btn btn-primary">Simpan Pengaturan Pengiriman</button>
                 </form>
             </div>
 
-            <!-- Danger Zone -->
+            <!-- Sauce Options Settings -->
+            <div class="content-section">
+                <div class="section-header">
+                    <h2>Pilihan Saus Produk</h2>
+                </div>
+
+                <form class="admin-form" method="POST" action="settings.php">
+                    <div class="info-box">
+                        <p>Atur pilihan saus yang tersedia untuk produk. Pelanggan dapat memilih beberapa pilihan saus sekaligus.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pilihan Saus yang Tersedia</label>
+                        <div style="display: grid; gap: 10px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="sauce_no_sauce" name="sauce_options[]" value="tidak-bersaus" 
+                                       <?php echo (strpos(getSetting('sauce_options', 'tidak-bersaus,pedas,manis'), 'tidak-bersaus') !== false) ? 'checked' : ''; ?>>
+                                <label for="sauce_no_sauce" style="margin: 0; font-weight: normal;">Tidak Bersaus</label>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="sauce_spicy" name="sauce_options[]" value="pedas" 
+                                       <?php echo (strpos(getSetting('sauce_options', 'tidak-bersaus,pedas,manis'), 'pedas') !== false) ? 'checked' : ''; ?>>
+                                <label for="sauce_spicy" style="margin: 0; font-weight: normal;">Pedas</label>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="sauce_sweet" name="sauce_options[]" value="manis" 
+                                       <?php echo (strpos(getSetting('sauce_options', 'tidak-bersaus,pedas,manis'), 'manis') !== false) ? 'checked' : ''; ?>>
+                                <label for="sauce_sweet" style="margin: 0; font-weight: normal;">Manis</label>
+                            </div>
+                        </div>
+                        <small style="color: #666; display: block; margin-top: 8px;">Centang pilihan yang ingin Anda tampilkan ke pelanggan</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sauce_label">Label untuk Pilihan Saus</label>
+                        <input type="text" id="sauce_label" name="sauce_label" 
+                               value="<?php echo htmlspecialchars(getSetting('sauce_label', 'Pilih Saus')); ?>" 
+                               placeholder="Pilih Saus">
+                        <small style="color: #666; display: block; margin-top: 5px;">Label yang akan ditampilkan di halaman keranjang</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Simpan Pengaturan Saus</button>
+                </form>
+            </div>
+
+            <!-- Danger Zone
             <div class="content-section" style="border: 2px solid #e74c3c;">
                 <div class="section-header">
-                    <h2 style="color: #e74c3c;"> Danger Zone</h2>
+                    <h2 style="color: #e74c3c;"> Zona Bahaya</h2>
                 </div>
 
                 <div class="warning-box">
-                    <p><strong>Warning:</strong> These actions are irreversible. Please be absolutely certain before proceeding.</p>
+                    <p><strong>Peringatan:</strong> Tindakan ini tidak dapat dibatalkan. Harap pastikan sebelum melanjutkan.</p>
                 </div>
 
                 <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                    <button class="btn btn-danger" onclick="clearOrders()">Clear All Orders</button>
+                    <button class="btn btn-danger" onclick="clearOrders()">Hapus Semua Pesanan</button>
                     <button class="btn btn-danger" onclick="resetDatabase()">Reset Database</button>
-                    <button class="btn btn-danger" onclick="deleteAccount()">Delete Admin Account</button>
+                    <button class="btn btn-danger" onclick="deleteAccount()">Hapus Akun Admin</button>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 

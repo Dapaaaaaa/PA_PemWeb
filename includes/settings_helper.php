@@ -2,6 +2,11 @@
 // Helper function untuk load settings dari database
 // Include file ini di halaman yang butuh settings
 
+// Pastikan koneksi database tersedia
+if (!isset($conn)) {
+    require_once __DIR__ . '/../koneksi.php';
+}
+
 if (!function_exists('getSettings')) {
     function getSettings() {
         global $conn;

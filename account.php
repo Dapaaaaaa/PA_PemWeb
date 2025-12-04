@@ -17,80 +17,80 @@ $userName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : '';
             <!-- Login Form -->
             <div class="form-wrapper" id="loginForm">
                 <div class="form-header">
-                    <h2>Welcome Back! 👋</h2>
-                    <p>Login to access your account</p>
+                    <h2>Selamat Datang Kembali! 👋</h2>
+                    <p>Masuk untuk mengakses akun Anda</p>
                 </div>
                 
                 <form class="auth-form" action="process-login.php" method="POST">
                     <div class="form-group">
-                        <label for="login-email">Email Address</label>
-                        <input type="email" id="login-email" name="email" required placeholder="your.email@example.com">
+                        <label for="login-email">Alamat Email</label>
+                        <input type="email" id="login-email" name="email" required placeholder="namaemail@gmail.com">
                     </div>
 
                     <div class="form-group">
-                        <label for="login-password">Password</label>
-                        <input type="password" id="login-password" name="password" required placeholder="Enter your password">
+                        <label for="login-password">Kata Sandi</label>
+                        <input type="password" id="login-password" name="password" required placeholder="Masukkan kata sandi Anda">
                     </div>
 
                     <div class="form-options">
                         <label class="checkbox-label">
-                            <input type="checkbox" name="remember"> Remember me
+                            <input type="checkbox" name="remember"> Ingat saya
                         </label>
-                        <a href="#" class="forgot-link">Forgot password?</a>
+                        <a href="#" class="forgot-link">Lupa kata sandi?</a>
                     </div>
 
-                    <button type="submit" class="btn-auth">Login</button>
+                    <button type="submit" class="btn-auth">Masuk</button>
                 </form>
 
                 <div class="form-footer">
-                    <p>Don't have an account? <a href="#" onclick="toggleForms(); return false;">Sign up</a></p>
+                    <p>Belum punya akun? <a href="#" onclick="toggleForms(); return false;">Daftar</a></p>
                 </div>
             </div>
 
             <!-- Register Form -->
             <div class="form-wrapper hidden" id="registerForm">
                 <div class="form-header">
-                    <h2>Create Account 🎉</h2>
-                    <p>Join OurStuff family today!</p>
+                    <h2>Buat Akun 🎉</h2>
+                    <p>Bergabunglah dengan keluarga OurStuff hari ini!</p>
                 </div>
                 
                 <form class="auth-form" action="process-register.php" method="POST">
                     <div class="form-group">
-                        <label for="register-name">Full Name</label>
-                        <input type="text" id="register-name" name="name" required placeholder="Your full name">
+                        <label for="register-name">Nama Lengkap</label>
+                        <input type="text" id="register-name" name="name" required placeholder="Nama lengkap Anda">
                     </div>
 
                     <div class="form-group">
-                        <label for="register-email">Email Address</label>
-                        <input type="email" id="register-email" name="email" required placeholder="your.email@example.com">
+                        <label for="register-email">Alamat Email</label>
+                        <input type="email" id="register-email" name="email" required placeholder="namaemail@gmail.com">
                     </div>
 
                     <div class="form-group">
-                        <label for="register-phone">Phone Number</label>
+                        <label for="register-phone">Nomor Telepon</label>
                         <input type="tel" id="register-phone" name="phone" required placeholder="+62 xxx-xxxx-xxxx">
                     </div>
 
                     <div class="form-group">
-                        <label for="register-password">Password</label>
-                        <input type="password" id="register-password" name="password" required placeholder="Create a strong password">
+                        <label for="register-password">Kata Sandi</label>
+                        <input type="password" id="register-password" name="password" required placeholder="Buat kata sandi yang kuat">
                     </div>
 
                     <div class="form-group">
-                        <label for="register-confirm">Confirm Password</label>
-                        <input type="password" id="register-confirm" name="confirm_password" required placeholder="Confirm your password">
+                        <label for="register-confirm">Konfirmasi Kata Sandi</label>
+                        <input type="password" id="register-confirm" name="confirm_password" required placeholder="Konfirmasi kata sandi Anda">
                     </div>
 
                     <div class="form-options">
                         <label class="checkbox-label">
-                            <input type="checkbox" name="terms" required> I agree to <a href="#">Terms & Conditions</a>
+                            <input type="checkbox" name="terms" required> Saya setuju dengan <a href="#">Syarat & Ketentuan</a>
                         </label>
                     </div>
 
-                    <button type="submit" class="btn-auth">Create Account</button>
+                    <button type="submit" class="btn-auth">Buat Akun</button>
                 </form>
 
                 <div class="form-footer">
-                    <p>Already have an account? <a href="#" onclick="toggleForms(); return false;">Login</a></p>
+                    <p>Sudah punya akun? <a href="#" onclick="toggleForms(); return false;">Masuk</a></p>
                 </div>
             </div>
         </div>
@@ -98,44 +98,44 @@ $userName = isset($_SESSION['user_name']) ? $_SESSION['user_name'] : '';
         <!-- Info Side -->
         <div class="account-info">
             <div class="info-content">
-                <h2>Why Create an Account?</h2>
+                <h2>Mengapa Membuat Akun?</h2>
                 <div class="benefits-list">
-                    <div class="benefit-item">
+                    <!-- <div class="benefit-item">
                         <div class="benefit-icon"></div>
                         <div class="benefit-text">
                             <h4>Exclusive Rewards</h4>
                             <p>Earn points with every purchase and get special discounts</p>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="benefit-item">
                         <div class="benefit-icon"></div>
                         <div class="benefit-text">
-                            <h4>Fast Checkout</h4>
-                            <p>Save your info for quicker ordering next time</p>
+                            <h4>Checkout Cepat</h4>
+                            <p>Simpan info Anda untuk pemesanan lebih cepat berikutnya</p>
                         </div>
                     </div>
                     <div class="benefit-item">
                         <div class="benefit-icon"></div>
                         <div class="benefit-text">
-                            <h4>Order History</h4>
-                            <p>Track your orders and reorder your favorites easily</p>
+                            <h4>Riwayat Pesanan</h4>
+                            <p>Lacak pesanan Anda dan pesan ulang favorit Anda dengan mudah</p>
                         </div>
                     </div>
-                    <div class="benefit-item">
+                    <!-- <div class="benefit-item">
                         <div class="benefit-icon"></div>
                         <div class="benefit-text">
                             <h4>Special Offers</h4>
-                            <p>Get notified about new menu items and promotions</p>
+                            <p>Dapatkan pemberitahuan tentang menu baru dan promosi</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="quick-order">
-                    <h3>Want to Order Without Account?</h3>
-                    <p>You can always order directly via WhatsApp!</p>
+                    <h3>Ingin Memesan Tanpa Akun?</h3>
+                    <p>Anda selalu dapat memesan langsung melalui WhatsApp!</p>
                     <a href="https://wa.me/<?php echo getSetting('store_whatsapp', '6285974906945'); ?>?text=Halo%20OurStuff,%20saya%20ingin%20order!" 
                        class="btn-whatsapp-account" target="_blank">
-                        💬 Order via WhatsApp
+                        Pesan via WhatsApp
                     </a>
                 </div>
             </div>
@@ -157,8 +157,8 @@ function toggleForms() {
 <!-- User Dashboard -->
 <section class="page-header">
     <div class="page-header-content">
-        <h1>Hello, <?php echo htmlspecialchars($userName); ?>!</h1>
-        <p>Welcome to your account dashboard</p>
+        <h1>Halo, <?php echo htmlspecialchars($userName); ?>!</h1>
+        <p>Selamat datang di dasbor akun Anda</p>
     </div>
 </section>
 

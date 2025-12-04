@@ -67,7 +67,7 @@ while ($kategori = mysqli_fetch_assoc($resultKategori)) {
                 $harga = number_format($produk['harga'], 0, ',', '.');
                 $namaEncode = urlencode($produk['nama']);
             ?>
-                <div class="menu-item">
+                <div class="menu-item" id="product-<?php echo $produk['id']; ?>">
                     <div class="menu-item-image">
                         <img src="<?php echo $gambar; ?>" alt="<?php echo $nama; ?>">
                         <?php if ($produk['stok'] > 0) { ?>
@@ -83,15 +83,16 @@ while ($kategori = mysqli_fetch_assoc($resultKategori)) {
                             <span class="price">Rp <?php echo $harga; ?></span>
                             <div style="display: flex; gap: 8px;">
                                 <!-- Add to Cart Form -->
-                                <form method="POST" action="add_to_cart.php" style="margin: 0;">
+                                <form method="POST" action="add_to_cart.php" class="add-to-cart-form" data-product-id="<?php echo $produk['id']; ?>" style="margin: 0;">
                                     <input type="hidden" name="name" value="<?php echo $nama; ?>">
                                     <input type="hidden" name="price" value="<?php echo $produk['harga']; ?>">
                                     <input type="hidden" name="img" value="<?php echo $gambar; ?>">
                                     <input type="hidden" name="qty" value="1">
                                     <input type="hidden" name="redirect" value="menu.php">
+                                    <input type="hidden" name="product_id" value="<?php echo $produk['id']; ?>">
                                     <button type="submit" class="btn-add-cart" 
                                             <?php echo ($produk['stok'] <= 0) ? 'disabled' : ''; ?>>
-                                        Add
+                                        Tambah
                                     </button>
                                 </form>
                                 <!-- WhatsApp Order
@@ -112,11 +113,11 @@ while ($kategori = mysqli_fetch_assoc($resultKategori)) {
 
     <!-- Call to Action -->
     <div class="menu-cta">
-        <h2>Ready to Order?</h2>
-        <p>Contact us via WhatsApp for fast ordering and delivery!</p>
-        <a href="https://wa.me/<?php echo getSetting('store_whatsapp', '6285974906945'); ?>?text=Halo%20OurStuff,%20saya%20ingin%20melihat%20menu%20lengkap!" 
+        <h2>Siap untuk Memesan?</h2>
+        <p>Hubungi kami lewat WhatsApp untuk pemesanan cepat dan pengantaran!</p>
+        <a href="https://wa.me/<?php echo getSetting('store_whatsapp', '6285974906945'); ?>?text=Halo%2C%20saya%20ingin%20melihat%20menu%20lengkap%21" 
            class="btn-whatsapp-large" target="_blank">
-            Order via WhatsApp
+            Pesan via WhatsApp
         </a>
     </div>
 </section>
@@ -141,6 +142,46 @@ document.querySelectorAll('.category-btn').forEach(button => {
             } else {
                 section.style.display = 'none';
             }
+        });
+    });
+});
+
+// AJAX Add to Cart (No Reload)
+document.querySelectorAll('.add-to-cart-form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const button = this.querySelector('.btn-add-cart');
+        
+        button.disabled = true;
+        
+        fetch('add_to_cart.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            // Update cart badge di header
+            const cartBadge = document.querySelector('.cart-badge-count');
+            if (cartBadge) {
+                let currentCount = parseInt(cartBadge.textContent) || 0;
+                cartBadge.textContent = currentCount + 1;
+            } else {
+                // Jika badge belum ada, buat baru
+                const cartLink = document.querySelector('.cart-badge');
+                if (cartLink && !cartLink.querySelector('.cart-badge-count')) {
+                    const badge = document.createElement('span');
+                    badge.className = 'cart-badge-count';
+                    badge.textContent = '1';
+                    cartLink.appendChild(badge);
+                }
+            }
+            
+            button.disabled = false;
+        })
+        .catch(error => {
+            button.disabled = false;
         });
     });
 });

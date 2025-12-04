@@ -70,9 +70,9 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
             <!-- Dashboard Stats -->
             <div class="dashboard-stats">
                 <div class="stat-card">
-                    <div class="stat-icon green">
+                    <!-- <div class="stat-icon green">
                         
-                    </div>
+                    </div> -->
                     <div class="stat-info">
                         <h3>Total Menu</h3>
                         <div class="stat-number"><?php echo $total_menu; ?></div>
@@ -80,9 +80,9 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon blue">
+                    <!-- <div class="stat-icon blue">
                         
-                    </div>
+                    </div> -->
                     <div class="stat-info">
                         <h3>Kategori</h3>
                         <div class="stat-number"><?php echo $total_kategori; ?></div>
@@ -90,9 +90,9 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon orange">
+                    <!-- <div class="stat-icon orange">
                         
-                    </div>
+                    </div> -->
                     <div class="stat-info">
                         <h3>Total Pesanan</h3>
                         <div class="stat-number"><?php echo $total_pesanan; ?></div>
@@ -100,9 +100,9 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon red">
+                    <!-- <div class="stat-icon red">
                         
-                    </div>
+                    </div> -->
                     <div class="stat-info">
                         <h3>Pendapatan</h3>
                         <div class="stat-number">Rp <?php echo number_format($total_pendapatan, 0, ',', '.'); ?></div>
@@ -203,15 +203,15 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
                 </div>
 
                 <div class="info-box">
-                    <p><strong>📍 Alamat:</strong> <?php echo getSetting('store_address', 'Blk. A-B No.53b, Gn. Kelua, Kec. Samarinda Ulu, Kota Samarinda, Kalimantan Timur 75243'); ?></p>
+                    <p><strong>Alamat:</strong> <?php echo getSetting('store_address', 'Blk. A-B No.53b, Gn. Kelua, Kec. Samarinda Ulu, Kota Samarinda, Kalimantan Timur 75243'); ?></p>
                 </div>
 
                 <div class="info-box">
-                    <p><strong>📞 WhatsApp:</strong> <?php echo getSetting('store_phone', '+62 859-7490-6945'); ?></p>
+                    <p><strong>WhatsApp:</strong> <?php echo getSetting('store_phone', '+62 859-7490-6945'); ?></p>
                 </div>
 
                 <div class="info-box">
-                    <p><strong>🕐 Jam Operasional:</strong> Senin - Minggu: <?php echo getSetting('opening_time', '10:00'); ?> - <?php echo getSetting('closing_time', '22:00'); ?></p>
+                    <p><strong>Jam Operasional:</strong> Senin - Minggu: <?php echo getSetting('opening_time', '10:00'); ?> - <?php echo getSetting('closing_time', '22:00'); ?></p>
                 </div>
             </div>
         </div>

@@ -22,14 +22,14 @@
                     <path d="M3 9h18"></path>
                     <path d="M9 3v18"></path>
                 </svg>
-                <span>Menu Items</span>
+                <span>Daftar Menu</span>
             </a>
 
             <a href="categories.php" class="menu-item">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
-                <span>Categories</span>
+                <span>Kategori</span>
             </a>
 
             <a href="orders.php" class="menu-item">
@@ -38,7 +38,7 @@
                     <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
                     <line x1="12" y1="22.08" x2="12" y2="12"></line>
                 </svg>
-                <span>Orders</span>
+                <span>Pesanan</span>
             </a>
 
             <div class="menu-separator"></div>
@@ -48,7 +48,7 @@
                     <circle cx="12" cy="12" r="3"></circle>
                     <path d="M12 1v6m0 6v6m-9-9h6m6 0h6m-2.828 8.485l-4.243-4.242m0 0L4.343 4.93M19.657 4.93l-4.243 4.242"></path>
                 </svg>
-                <span>Settings</span>
+                <span>Pengaturan</span>
             </a>
 
             <a href="logout.php" class="menu-item">
@@ -57,7 +57,7 @@
                     <polyline points="16 17 21 12 16 7"></polyline>
                     <line x1="21" y1="12" x2="9" y2="12"></line>
                 </svg>
-                <span>Logout</span>
+                <span>Keluar</span>
             </a>
         </nav>
     </aside>

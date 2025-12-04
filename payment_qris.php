@@ -55,14 +55,49 @@ $items_text = "";
 $no = 1;
 foreach ($items as $item) {
     $items_text .= $no . ". " . $item['product_name'] . " (x" . $item['qty'] . ") - Rp " . number_format($item['subtotal'], 0, ',', '.') . "%0A";
+    
+    // Tambahkan info pilihan saus
+    if (!empty($item['level_pedas'])) {
+        $sauce_labels = [
+            'tidak-bersaus' => 'Tidak Bersaus',
+            'pedas' => 'Pedas',
+            'manis' => 'Manis'
+        ];
+        
+        $sauces = explode(',', $item['level_pedas']);
+        $sauce_names = [];
+        foreach ($sauces as $sauce) {
+            $sauce = trim($sauce);
+            if (isset($sauce_labels[$sauce])) {
+                $sauce_names[] = $sauce_labels[$sauce];
+            }
+        }
+        
+        if (!empty($sauce_names)) {
+            $items_text .= implode(', ', $sauce_names) . "%0A";
+        }
+    }
+    
+    // Tambahkan catatan jika ada
+    if (!empty($item['catatan'])) {
+        $items_text .= $item['catatan'] . "%0A";
+    }
+    
     $no++;
 }
 
 $wa_message = "*KONFIRMASI PEMBAYARAN*%0A%0A";
 $wa_message .= "Nomor Pesanan: *" . $order_number . "*%0A";
 $wa_message .= "Nama: " . $order['nama'] . "%0A";
-$wa_message .= "Total: *Rp " . number_format($order['total_bayar'], 0, ',', '.') . "*%0A%0A";
-$wa_message .= "Detail Pesanan:%0A" . $items_text . "%0A";
+$wa_message .= "Telepon: " . $order['telepon'] . "%0A";
+$wa_message .= "Email: " . ($order['email'] ?? '-') . "%0A%0A";
+$wa_message .= "*Alamat Pengiriman:*%0A";
+$wa_message .= ($order['jalan'] ?? '-') . "%0A";
+$wa_message .= ($order['kota'] ?? '-') . " " . ($order['kode_pos'] ?? '') . "%0A%0A";
+$wa_message .= "*Detail Pesanan:*%0A" . $items_text . "%0A";
+$wa_message .= "Subtotal: Rp " . number_format($order['total'], 0, ',', '.') . "%0A";
+$wa_message .= "Ongkir: Rp " . number_format($order['ongkir'], 0, ',', '.') . "%0A";
+$wa_message .= "*Total Bayar: Rp " . number_format($order['total_bayar'], 0, ',', '.') . "*%0A%0A";
 $wa_message .= "Saya telah melakukan pembayaran via QRIS.%0A";
 $wa_message .= "Mohon konfirmasi pesanan saya.%0A%0A";
 $wa_message .= "Terima kasih!";
@@ -146,7 +181,7 @@ include 'includes/header.php';
                         </svg>
                         Konfirmasi Pembayaran via WhatsApp
                     </a>
-                    <a href="index.php" class="btn-back-home">Kembali ke Beranda</a>
+                    <a href="index.php" class="btn-back-home" onclick="return confirm('Apakah Anda yakin ingin kembali ke beranda? Pastikan Anda sudah mengkonfirmasi pembayaran melalui WhatsApp.');">Kembali ke Beranda</a>
                 </div>
 
                 <div class="payment-note">

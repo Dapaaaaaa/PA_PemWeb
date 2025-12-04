@@ -37,13 +37,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'name' => $name,
             'price' => $price,
             'img' => $img,
-            'qty' => $qty
+            'qty' => $qty,
+            'notes' => '',
+            'sauce_options' => []
         ];
     }
 
     // Redirect ke halaman sebelumnya atau cart
     $redirect = $_POST['redirect'] ?? 'menu.php';
-    header('Location: ' . $redirect . '?added=success');
+    $product_id = $_POST['product_id'] ?? '';
+    
+    // Tambahkan anchor untuk kembali ke posisi produk
+    if (!empty($product_id)) {
+        header('Location: ' . $redirect . '?added=success#product-' . $product_id);
+    } else {
+        header('Location: ' . $redirect . '?added=success');
+    }
     exit;
 } else {
     // Jika bukan POST, redirect ke menu

@@ -84,6 +84,22 @@ if (isset($_POST['complete_order'])) {
                 $item_price = floatval($item['price']);
                 $item_qty = intval($item['qty']);
                 $subtotal = $item_price * $item_qty;
+                $item_notes = mysqli_real_escape_string($conn, $item['notes'] ?? '');
+                
+                // Gabungkan pilihan saus menjadi string
+                $sauce_options = isset($item['sauce_options']) && is_array($item['sauce_options']) 
+                    ? implode(',', $item['sauce_options']) 
+                    : '';
+                
+                // Gabungkan saus + catatan jadi satu
+                $combined_notes = '';
+                if (!empty($sauce_options)) {
+                    $combined_notes = "Saus: $sauce_options";
+                }
+                if (!empty($item_notes)) {
+                    $combined_notes .= ($combined_notes ? ' | ' : '') . "Catatan: $item_notes";
+                }
+                $final_notes = mysqli_real_escape_string($conn, $combined_notes);
                 
                 // Cari produk_id berdasarkan nama
                 $query_find_product = "SELECT id FROM produk WHERE nama = '$item_name' LIMIT 1";
@@ -93,8 +109,8 @@ if (isset($_POST['complete_order'])) {
                     $product = mysqli_fetch_assoc($result_product);
                     $product_id = $product['id'];
                     
-                    $query_insert_item = "INSERT INTO item_pesanan (pesanan_id, produk_id, qty, harga_satuan, subtotal) 
-                                          VALUES ($order_id, $product_id, $item_qty, $item_price, $subtotal)";
+                    $query_insert_item = "INSERT INTO item_pesanan (pesanan_id, produk_id, qty, harga_satuan, subtotal, catatan) 
+                                          VALUES ($order_id, $product_id, $item_qty, $item_price, $subtotal, '$final_notes')";
                     if (!mysqli_query($conn, $query_insert_item)) {
                         throw new Exception("Gagal menyimpan item pesanan");
                     }
@@ -120,7 +136,7 @@ if (isset($_POST['complete_order'])) {
 }
 ?>
 
-<div class="cart-container">
+<div class="checkout-container checkout-page-container">
     <h2>Konfirmasi Pesanan</h2>
     <p>Silakan lengkapi detail Anda dan konfirmasi pesanan.</p>
 
@@ -132,8 +148,33 @@ if (isset($_POST['complete_order'])) {
         <h3>Ringkasan Pesanan</h3>
         <?php foreach ($_SESSION['cart'] as $item): ?>
             <div class="summary-item">
-                <span><?php echo htmlspecialchars($item['name']); ?> (x<?php echo $item['qty']; ?>)</span>
-                <span>Rp <?php echo number_format($item['price'] * $item['qty'], 0, ',', '.'); ?></span>
+                <div class="summary-item-main">
+                    <span><?php echo htmlspecialchars($item['name']); ?> (x<?php echo $item['qty']; ?>)</span>
+                    <span>Rp <?php echo number_format($item['price'] * $item['qty'], 0, ',', '.'); ?></span>
+                </div>
+                <?php if (!empty($item['notes']) || !empty($item['sauce_options'])): ?>
+                <div class="summary-item-details">
+                    <?php if (!empty($item['sauce_options'])): ?>
+                    <small class="spice-info">🍽️ 
+                        <?php 
+                        $sauce_labels = [
+                            'tidak-bersaus' => 'Tidak Bersaus',
+                            'pedas' => 'Pedas',
+                            'manis' => 'Manis'
+                        ];
+                        $sauce_names = [];
+                        foreach ($item['sauce_options'] as $sauce) {
+                            $sauce_names[] = $sauce_labels[$sauce] ?? $sauce;
+                        }
+                        echo implode(', ', $sauce_names);
+                        ?>
+                    </small>
+                    <?php endif; ?>
+                    <?php if (!empty($item['notes'])): ?>
+                    <small class="note-info">📝 <?php echo htmlspecialchars($item['notes']); ?></small>
+                    <?php endif; ?>
+                </div>
+                <?php endif; ?>
             </div>
         <?php endforeach; ?>
         <div class="summary-item">

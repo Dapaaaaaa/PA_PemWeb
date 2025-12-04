@@ -1,6 +1,6 @@
-# QRIS Payment Setup Instructions
+# Instruksi Setup Pembayaran QRIS
 
-## Upload QRIS Image
+## Upload Gambar QRIS
 
 Untuk mengaktifkan pembayaran QRIS, upload gambar QRIS kamu ke:
 
@@ -20,7 +20,7 @@ Untuk mengaktifkan pembayaran QRIS, upload gambar QRIS kamu ke:
 4. Upload ke folder `assets/img/`
 5. Refresh halaman payment untuk melihat perubahan
 
-### Test Placeholder:
+### Placeholder untuk Testing:
 
 Sementara ada placeholder image yang sudah dibuat di `assets/img/qris.png`
 Ganti dengan QRIS asli saat deployment.
