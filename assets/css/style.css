@@ -2056,7 +2056,7 @@ body {
 
 .checkout-container {
   width: 100%;
-  max-width: 700px; /* Lebih sempit untuk checkout form */
+  max-width: 1200px; /* Lebih lebar untuk layout 2 kolom */
   margin: 60px auto;
   padding: 40px;
   background: white;

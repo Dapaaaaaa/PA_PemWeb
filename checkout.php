@@ -194,89 +194,166 @@ if (isset($_POST['complete_order'])) {
         <p class="alert-message alert-error"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></p>
     <?php endif; ?>
 
-    <div class="checkout-summary">
-        <h3>Ringkasan Pesanan</h3>
-        <?php foreach ($_SESSION['cart'] as $item): ?>
+    <div class="checkout-grid">
+        <!-- Left Column: Ringkasan Pesanan -->
+        <div class="checkout-summary">
+            <h3>Ringkasan Pesanan</h3>
+            <?php foreach ($_SESSION['cart'] as $item): ?>
+                <div class="summary-item">
+                    <div class="summary-item-main">
+                        <span><?php echo htmlspecialchars($item['name']); ?> (x<?php echo $item['qty']; ?>)</span>
+                        <span>Rp <?php echo number_format($item['price'] * $item['qty'], 0, ',', '.'); ?></span>
+                    </div>
+                    <?php if (!empty($item['notes']) || !empty($item['sauce_options'])): ?>
+                    <div class="summary-item-details">
+                        <?php if (!empty($item['sauce_options'])): ?>
+                        <small class="spice-info">
+                            <?php 
+                            $sauce_labels = [
+                                'tidak-bersaus' => 'Tidak Bersaus',
+                                'pedas' => 'Pedas',
+                                'manis' => 'Manis'
+                            ];
+                            $sauce_names = [];
+                            foreach ($item['sauce_options'] as $sauce) {
+                                $sauce_names[] = $sauce_labels[$sauce] ?? $sauce;
+                            }
+                            echo implode(', ', $sauce_names);
+                            ?>
+                        </small>
+                        <?php endif; ?>
+                        <?php if (!empty($item['notes'])): ?>
+                        <small class="note-info"> <?php echo htmlspecialchars($item['notes']); ?></small>
+                        <?php endif; ?>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
             <div class="summary-item">
-                <div class="summary-item-main">
-                    <span><?php echo htmlspecialchars($item['name']); ?> (x<?php echo $item['qty']; ?>)</span>
-                    <span>Rp <?php echo number_format($item['price'] * $item['qty'], 0, ',', '.'); ?></span>
-                </div>
-                <?php if (!empty($item['notes']) || !empty($item['sauce_options'])): ?>
-                <div class="summary-item-details">
-                    <?php if (!empty($item['sauce_options'])): ?>
-                    <small class="spice-info">
-                        <?php 
-                        $sauce_labels = [
-                            'tidak-bersaus' => 'Tidak Bersaus',
-                            'pedas' => 'Pedas',
-                            'manis' => 'Manis'
-                        ];
-                        $sauce_names = [];
-                        foreach ($item['sauce_options'] as $sauce) {
-                            $sauce_names[] = $sauce_labels[$sauce] ?? $sauce;
-                        }
-                        echo implode(', ', $sauce_names);
-                        ?>
-                    </small>
-                    <?php endif; ?>
-                    <?php if (!empty($item['notes'])): ?>
-                    <small class="note-info"> <?php echo htmlspecialchars($item['notes']); ?></small>
-                    <?php endif; ?>
-                </div>
-                <?php endif; ?>
+                <span>Subtotal Produk:</span>
+                <span>Rp <?php echo number_format($total_price, 0, ',', '.'); ?></span>
             </div>
-        <?php endforeach; ?>
-        <div class="summary-item">
-            <span>Subtotal Produk:</span>
-            <span>Rp <?php echo number_format($total_price, 0, ',', '.'); ?></span>
+            <div class="summary-item" id="delivery-summary" style="display: none;">
+                <span>Ongkos Kirim:</span>
+                <span id="delivery-fee-summary">Rp 0</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-total">Total Akhir:</span>
+                <span class="summary-total" id="final-total">Rp <?php echo number_format($total_price, 0, ',', '.'); ?></span>
+            </div>
         </div>
-        <div class="summary-item" id="delivery-summary" style="display: none;">
-            <span>Ongkos Kirim:</span>
-            <span id="delivery-fee-summary">Rp 0</span>
-        </div>
-        <div class="summary-item">
-            <span class="summary-total">Total Akhir:</span>
-            <span class="summary-total" id="final-total">Rp <?php echo number_format($total_price, 0, ',', '.'); ?></span>
+
+        <!-- Right Column: Form Detail Pelanggan -->
+        <div class="checkout-form-wrapper">
+            <form method="POST" action="checkout.php" class="checkout-form" id="checkoutForm">
+                <h3>Detail Pelanggan</h3>
+                <div class="form-group">
+                    <label for="name">Nama Lengkap</label>
+                    <input type="text" id="name" name="name" placeholder="Nama Anda" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Nomor Telepon / WhatsApp</label>
+                    <input type="tel" id="phone" name="phone" placeholder="08xxxxxxxxxx" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Alamat Pengiriman</label>
+                    <textarea id="address" name="address" placeholder="Alamat lengkap dan detail" required></textarea>
+                    <small>Klik peta untuk menandai lokasi Anda</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Tandai Lokasi Pengiriman Anda</label>
+                    <div id="map" style="width: 100%; height: 300px; border-radius: 8px; margin-bottom: 10px;"></div>
+                    <input type="hidden" id="latitude" name="latitude">
+                    <input type="hidden" id="longitude" name="longitude">
+                    <div id="distance-info" style="padding: 10px; background: #f0f0f0; border-radius: 4px; display: none;">
+                        <p style="margin: 0;"><strong>Jarak dari toko:</strong> <span id="distance-text">-</span> km</p>
+                        <p style="margin: 5px 0 0;"><strong>Ongkos kirim:</strong> <span id="delivery-fee-text">Rp 0</span></p>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 
-    <form method="POST" action="checkout.php" class="checkout-form">
-        <h3>Detail Pelanggan</h3>
-        <div class="form-group">
-            <label for="name">Nama Lengkap</label>
-            <input type="text" id="name" name="name" placeholder="Nama Anda" required>
-        </div>
-        <div class="form-group">
-            <label for="phone">Nomor Telepon / WhatsApp</label>
-            <input type="tel" id="phone" name="phone" placeholder="08xxxxxxxxxx" required>
-        </div>
-        <div class="form-group">
-            <label for="address">Alamat Pengiriman</label>
-            <textarea id="address" name="address" placeholder="Alamat lengkap dan detail" required></textarea>
-            <small>Klik peta untuk menandai lokasi Anda</small>
-        </div>
-
-        <div class="form-group">
-            <label>Tandai Lokasi Pengiriman Anda</label>
-            <div id="map" style="width: 100%; height: 300px; border-radius: 8px; margin-bottom: 10px;"></div>
-            <input type="hidden" id="latitude" name="latitude">
-            <input type="hidden" id="longitude" name="longitude">
-            <div id="distance-info" style="padding: 10px; background: #f0f0f0; border-radius: 4px; display: none;">
-                <p style="margin: 0;"><strong>Jarak dari toko:</strong> <span id="distance-text">-</span> km</p>
-                <p style="margin: 5px 0 0;"><strong>Ongkos kirim:</strong> <span id="delivery-fee-text">Rp 0</span></p>
-            </div>
-        </div>
-
-        <button type="submit" name="complete_order" class="btn-action btn-continue">
+    <!-- Tombol di bawah -->
+    <div class="checkout-actions">
+        <a href="cart.php" class="btn-back">← Kembali ke Keranjang</a>
+        <button type="submit" form="checkoutForm" name="complete_order" class="btn-action btn-continue">
             Bayar & Selesaikan Pesanan
         </button>
-    </form>
-    
-    <p class="back-link" style="text-align: center;">
-        <a href="cart.php" class="back-link">← Kembali ke Keranjang</a>
-    </p>
+    </div>
 </div>
+
+<style>
+.checkout-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.checkout-summary {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.checkout-form-wrapper {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.checkout-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.btn-back {
+    color: #666;
+    text-decoration: none;
+    padding: 12px 24px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.btn-back:hover {
+    background: #f5f5f5;
+    border-color: #537b2f;
+    color: #537b2f;
+}
+
+@media (max-width: 768px) {
+    .checkout-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .checkout-summary {
+        position: relative;
+        top: 0;
+    }
+    
+    .checkout-actions {
+        flex-direction: column-reverse;
+    }
+    
+    .checkout-actions .btn-back,
+    .checkout-actions .btn-action {
+        width: 100%;
+        text-align: center;
+    }
+}
+</style>
 
 <!-- Leaflet CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
