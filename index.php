@@ -43,22 +43,7 @@ include 'includes/settings_helper.php';
         <div class="hero-slide <?php echo $index === 0 ? 'active' : ''; ?>">
             <div class="hero-content">
                 <div class="hero-banner">
-                    <img src="<?php echo htmlspecialchars($banner['image_url']); ?>" alt="<?php echo htmlspecialchars($banner['title'] ?? 'Banner'); ?>">
-                    <div class="banner-overlay">
-                        <div class="banner-info">
-                            <?php if (!empty($banner['title'])): ?>
-                            <h2><?php echo htmlspecialchars($banner['title']); ?></h2>
-                            <?php endif; ?>
-                            <?php if (!empty($banner['description'])): ?>
-                            <p><?php echo htmlspecialchars($banner['description']); ?></p>
-                            <?php endif; ?>
-                            <?php if (!empty($banner['button_text']) && !empty($banner['button_link'])): ?>
-                            <a href="<?php echo htmlspecialchars($banner['button_link']); ?>" class="btn-order">
-                                <?php echo htmlspecialchars($banner['button_text']); ?>
-                            </a>
-                            <?php endif; ?>
-                        </div>
-                    </div>
+                    <img src="<?php echo htmlspecialchars($banner['image_url']); ?>" alt="Banner <?php echo $index + 1; ?>">
                 </div>
             </div>
         </div>
