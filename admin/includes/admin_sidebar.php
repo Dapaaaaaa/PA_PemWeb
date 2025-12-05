@@ -41,6 +41,15 @@
                 <span>Pesanan</span>
             </a>
 
+            <a href="banners.php" class="menu-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                    <path d="M16 3h-8v4h8V3z"></path>
+                    <path d="M7 15l3-3 2 2 3-3 3 3"></path>
+                </svg>
+                <span>Kelola Banner</span>
+            </a>
+
             <div class="menu-separator"></div>
 
             <a href="settings.php" class="menu-item">
