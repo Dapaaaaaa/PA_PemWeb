@@ -278,83 +278,95 @@ if (isset($_POST['complete_order'])) {
     </p>
 </div>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script>
 let map;
-let marker;
-const storeLocation = {
-    lat: <?php echo getSetting('store_latitude', '-0.464618'); ?>,
-    lng: <?php echo getSetting('store_longitude', '117.147607'); ?>
-};
+let customerMarker;
+const storeLocation = [<?php echo getSetting('store_latitude', '-0.464618'); ?>, <?php echo getSetting('store_longitude', '117.147607'); ?>];
 const subtotalPrice = <?php echo $total_price; ?>;
 const feePerKm = <?php echo getSetting('delivery_fee_per_km', '3000'); ?>;
 const baseFee = <?php echo getSetting('delivery_base_fee', '5000'); ?>;
 const freeDeliveryMin = <?php echo getSetting('free_delivery_min', '100000'); ?>;
 const maxDistance = <?php echo getSetting('max_delivery_distance', '15'); ?>;
 
-function initMap() {
-    // Inisialisasi map di lokasi toko
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: storeLocation,
-        zoom: 13
-    });
+// Inisialisasi map saat halaman load
+document.addEventListener('DOMContentLoaded', function() {
+    // Buat map dengan Leaflet
+    map = L.map('map').setView(storeLocation, 13);
     
-    // Marker toko
-    new google.maps.Marker({
-        position: storeLocation,
-        map: map,
-        title: 'OurStuffies',
-        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
-    });
+    // Tambahkan tile layer dari OpenStreetMap (gratis)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 19
+    }).addTo(map);
     
-    // Marker pelanggan (draggable)
-    marker = new google.maps.Marker({
-        position: storeLocation,
-        map: map,
-        title: 'Lokasi Pengiriman Anda',
+    // Marker untuk toko (biru)
+    const storeMarker = L.marker(storeLocation, {
+        icon: L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        })
+    }).addTo(map);
+    storeMarker.bindPopup('<b>🏪 OurStuffies</b><br>Lokasi Toko').openPopup();
+    
+    // Marker untuk pelanggan (merah, draggable)
+    customerMarker = L.marker(storeLocation, {
         draggable: true,
-        icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+        icon: L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        })
+    }).addTo(map);
+    customerMarker.bindPopup('<b>📍 Lokasi Pengiriman</b><br>Drag marker ini atau klik map');
+    
+    // Event klik map untuk pindahkan marker
+    map.on('click', function(e) {
+        customerMarker.setLatLng(e.latlng);
+        calculateDistance(e.latlng.lat, e.latlng.lng);
     });
     
-    // Event listener untuk klik map
-    map.addListener('click', function(event) {
-        marker.setPosition(event.latLng);
-        calculateDistance(event.latLng);
-    });
-    
-    // Event listener untuk drag marker
-    marker.addListener('dragend', function(event) {
-        calculateDistance(event.latLng);
+    // Event drag marker
+    customerMarker.on('dragend', function(e) {
+        const position = e.target.getLatLng();
+        calculateDistance(position.lat, position.lng);
     });
     
     // Coba deteksi lokasi user
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
-            const userLocation = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            };
-            marker.setPosition(userLocation);
-            map.setCenter(userLocation);
-            calculateDistance(userLocation);
+            const userLocation = [position.coords.latitude, position.coords.longitude];
+            customerMarker.setLatLng(userLocation);
+            map.setView(userLocation, 13);
+            calculateDistance(position.coords.latitude, position.coords.longitude);
+        }, function(error) {
+            console.log('Geolocation error:', error);
         });
     }
-}
+});
 
-function calculateDistance(latLng) {
-    const lat = latLng.lat();
-    const lng = latLng.lng();
-    
+function calculateDistance(lat, lng) {
     // Simpan koordinat ke hidden input
     document.getElementById('latitude').value = lat;
     document.getElementById('longitude').value = lng;
     
     // Haversine formula untuk hitung jarak
     const R = 6371; // Radius bumi dalam km
-    const dLat = (lat - storeLocation.lat) * Math.PI / 180;
-    const dLon = (lng - storeLocation.lng) * Math.PI / 180;
+    const dLat = (lat - storeLocation[0]) * Math.PI / 180;
+    const dLon = (lng - storeLocation[1]) * Math.PI / 180;
     const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(storeLocation.lat * Math.PI / 180) * Math.cos(lat * Math.PI / 180) *
+              Math.cos(storeLocation[0] * Math.PI / 180) * Math.cos(lat * Math.PI / 180) *
               Math.sin(dLon/2) * Math.sin(dLon/2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     const distance = R * c;
@@ -381,10 +393,10 @@ function calculateDistance(latLng) {
     
     // Update tampilan
     document.getElementById('distance-info').style.display = 'block';
-    document.getElementById('distance-info').style.background = '#f0f0f0';
-    document.getElementById('distance-info').style.color = '#333';
+    document.getElementById('distance-info').style.background = '#e8f5e9';
+    document.getElementById('distance-info').style.color = '#2e7d32';
     document.getElementById('distance-text').textContent = distance.toFixed(2);
-    document.getElementById('delivery-fee-text').textContent = deliveryFee === 0 ? 'GRATIS!' : 'Rp ' + deliveryFee.toLocaleString('id-ID');
+    document.getElementById('delivery-fee-text').textContent = deliveryFee === 0 ? 'GRATIS! 🎉' : 'Rp ' + deliveryFee.toLocaleString('id-ID');
     
     // Update summary
     document.getElementById('delivery-summary').style.display = 'flex';
