@@ -4,6 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 include 'includes/header.php';
 include 'koneksi.php';
+include 'includes/settings_helper.php';
 
 // Redirect jika keranjang kosong
 if (empty($_SESSION['cart'])) {
@@ -17,12 +18,60 @@ foreach ($_SESSION['cart'] as $item) {
     $total_price += $item['price'] * $item['qty'];
 }
 
+// Default delivery fee
+$delivery_fee = 0;
+$distance_km = 0;
+
 // Logika untuk menyelesaikan pesanan
 if (isset($_POST['complete_order'])) {
     // Ambil data customer
     $customer_name = mysqli_real_escape_string($conn, $_POST['name'] ?? '');
     $customer_address = mysqli_real_escape_string($conn, $_POST['address'] ?? '');
     $customer_phone = mysqli_real_escape_string($conn, $_POST['phone'] ?? '');
+    $customer_lat = floatval($_POST['latitude'] ?? 0);
+    $customer_lng = floatval($_POST['longitude'] ?? 0);
+    
+    // Hitung ongkir berdasarkan jarak
+    $delivery_fee = 0;
+    $distance_km = 0;
+    
+    if ($customer_lat != 0 && $customer_lng != 0) {
+        $store_lat = floatval(getSetting('store_latitude', '-0.464618'));
+        $store_lng = floatval(getSetting('store_longitude', '117.147607'));
+        
+        // Hitung jarak menggunakan Haversine formula
+        $earth_radius = 6371; // km
+        $lat_diff = deg2rad($customer_lat - $store_lat);
+        $lng_diff = deg2rad($customer_lng - $store_lng);
+        
+        $a = sin($lat_diff/2) * sin($lat_diff/2) +
+             cos(deg2rad($store_lat)) * cos(deg2rad($customer_lat)) *
+             sin($lng_diff/2) * sin($lng_diff/2);
+        $c = 2 * atan2(sqrt($a), sqrt(1-$a));
+        $distance_km = $earth_radius * $c;
+        
+        // Cek maksimal jarak
+        $max_distance = floatval(getSetting('max_delivery_distance', '15'));
+        if ($distance_km > $max_distance) {
+            $_SESSION['error'] = "Maaf, alamat Anda terlalu jauh dari toko kami (" . number_format($distance_km, 1) . " km). Maksimal jarak pengiriman: $max_distance km.";
+            header('Location: checkout.php');
+            exit;
+        }
+        
+        // Hitung ongkir
+        $fee_per_km = floatval(getSetting('delivery_fee_per_km', '3000'));
+        $base_fee = floatval(getSetting('delivery_base_fee', '5000'));
+        $delivery_fee = $base_fee + ($distance_km * $fee_per_km);
+        
+        // Cek gratis ongkir
+        $free_delivery_min = floatval(getSetting('free_delivery_min', '100000'));
+        if ($total_price >= $free_delivery_min) {
+            $delivery_fee = 0;
+        }
+    }
+    
+    // Total akhir
+    $final_total = $total_price + $delivery_fee;
     
     // Validasi input
     if (empty($customer_name) || empty($customer_address) || empty($customer_phone)) {
@@ -71,8 +120,9 @@ if (isset($_POST['complete_order'])) {
             $order_number = 'ORD' . $date . $new_num;
             
             // 4. Buat pesanan
+            $delivery_notes = "Jarak: " . number_format($distance_km, 2) . " km | Ongkir: Rp " . number_format($delivery_fee, 0, ',', '.');
             $query_insert_order = "INSERT INTO pesanan (nomor_pesanan, pelanggan_id, alamat_id, status, total, catatan) 
-                                   VALUES ('$order_number', $customer_id, $address_id, 'pending', $total_price, 'Order dari website')";
+                                   VALUES ('$order_number', $customer_id, $address_id, 'pending', $final_total, '$delivery_notes')";
             if (!mysqli_query($conn, $query_insert_order)) {
                 throw new Exception("Gagal membuat pesanan");
             }
@@ -155,7 +205,7 @@ if (isset($_POST['complete_order'])) {
                 <?php if (!empty($item['notes']) || !empty($item['sauce_options'])): ?>
                 <div class="summary-item-details">
                     <?php if (!empty($item['sauce_options'])): ?>
-                    <small class="spice-info">🍽️ 
+                    <small class="spice-info">
                         <?php 
                         $sauce_labels = [
                             'tidak-bersaus' => 'Tidak Bersaus',
@@ -171,15 +221,23 @@ if (isset($_POST['complete_order'])) {
                     </small>
                     <?php endif; ?>
                     <?php if (!empty($item['notes'])): ?>
-                    <small class="note-info">📝 <?php echo htmlspecialchars($item['notes']); ?></small>
+                    <small class="note-info"> <?php echo htmlspecialchars($item['notes']); ?></small>
                     <?php endif; ?>
                 </div>
                 <?php endif; ?>
             </div>
         <?php endforeach; ?>
         <div class="summary-item">
+            <span>Subtotal Produk:</span>
+            <span>Rp <?php echo number_format($total_price, 0, ',', '.'); ?></span>
+        </div>
+        <div class="summary-item" id="delivery-summary" style="display: none;">
+            <span>Ongkos Kirim:</span>
+            <span id="delivery-fee-summary">Rp 0</span>
+        </div>
+        <div class="summary-item">
             <span class="summary-total">Total Akhir:</span>
-            <span class="summary-total">Rp <?php echo number_format($total_price, 0, ',', '.'); ?></span>
+            <span class="summary-total" id="final-total">Rp <?php echo number_format($total_price, 0, ',', '.'); ?></span>
         </div>
     </div>
 
@@ -196,6 +254,18 @@ if (isset($_POST['complete_order'])) {
         <div class="form-group">
             <label for="address">Alamat Pengiriman</label>
             <textarea id="address" name="address" placeholder="Alamat lengkap dan detail" required></textarea>
+            <small>Klik peta untuk menandai lokasi Anda</small>
+        </div>
+
+        <div class="form-group">
+            <label>Tandai Lokasi Pengiriman Anda</label>
+            <div id="map" style="width: 100%; height: 300px; border-radius: 8px; margin-bottom: 10px;"></div>
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">
+            <div id="distance-info" style="padding: 10px; background: #f0f0f0; border-radius: 4px; display: none;">
+                <p style="margin: 0;"><strong>Jarak dari toko:</strong> <span id="distance-text">-</span> km</p>
+                <p style="margin: 5px 0 0;"><strong>Ongkos kirim:</strong> <span id="delivery-fee-text">Rp 0</span></p>
+            </div>
         </div>
 
         <button type="submit" name="complete_order" class="btn-action btn-continue">
@@ -207,5 +277,122 @@ if (isset($_POST['complete_order'])) {
         <a href="cart.php" class="back-link">← Kembali ke Keranjang</a>
     </p>
 </div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+<script>
+let map;
+let marker;
+const storeLocation = {
+    lat: <?php echo getSetting('store_latitude', '-0.464618'); ?>,
+    lng: <?php echo getSetting('store_longitude', '117.147607'); ?>
+};
+const subtotalPrice = <?php echo $total_price; ?>;
+const feePerKm = <?php echo getSetting('delivery_fee_per_km', '3000'); ?>;
+const baseFee = <?php echo getSetting('delivery_base_fee', '5000'); ?>;
+const freeDeliveryMin = <?php echo getSetting('free_delivery_min', '100000'); ?>;
+const maxDistance = <?php echo getSetting('max_delivery_distance', '15'); ?>;
+
+function initMap() {
+    // Inisialisasi map di lokasi toko
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: storeLocation,
+        zoom: 13
+    });
+    
+    // Marker toko
+    new google.maps.Marker({
+        position: storeLocation,
+        map: map,
+        title: 'OurStuffies',
+        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+    });
+    
+    // Marker pelanggan (draggable)
+    marker = new google.maps.Marker({
+        position: storeLocation,
+        map: map,
+        title: 'Lokasi Pengiriman Anda',
+        draggable: true,
+        icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+    });
+    
+    // Event listener untuk klik map
+    map.addListener('click', function(event) {
+        marker.setPosition(event.latLng);
+        calculateDistance(event.latLng);
+    });
+    
+    // Event listener untuk drag marker
+    marker.addListener('dragend', function(event) {
+        calculateDistance(event.latLng);
+    });
+    
+    // Coba deteksi lokasi user
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            const userLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+            marker.setPosition(userLocation);
+            map.setCenter(userLocation);
+            calculateDistance(userLocation);
+        });
+    }
+}
+
+function calculateDistance(latLng) {
+    const lat = latLng.lat();
+    const lng = latLng.lng();
+    
+    // Simpan koordinat ke hidden input
+    document.getElementById('latitude').value = lat;
+    document.getElementById('longitude').value = lng;
+    
+    // Haversine formula untuk hitung jarak
+    const R = 6371; // Radius bumi dalam km
+    const dLat = (lat - storeLocation.lat) * Math.PI / 180;
+    const dLon = (lng - storeLocation.lng) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(storeLocation.lat * Math.PI / 180) * Math.cos(lat * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    const distance = R * c;
+    
+    // Cek apakah melebihi jarak maksimal
+    if (distance > maxDistance) {
+        document.getElementById('distance-info').style.background = '#ffebee';
+        document.getElementById('distance-info').style.color = '#c62828';
+        document.getElementById('distance-text').textContent = distance.toFixed(2) + ' (Terlalu jauh! Max: ' + maxDistance + ' km)';
+        document.getElementById('delivery-fee-text').textContent = '-';
+        if (window.showToast) {
+            showToast('Lokasi terlalu jauh dari toko! Maksimal ' + maxDistance + ' km', 'error', 3000);
+        }
+        return;
+    }
+    
+    // Hitung ongkir
+    let deliveryFee = baseFee + (distance * feePerKm);
+    
+    // Cek gratis ongkir
+    if (subtotalPrice >= freeDeliveryMin) {
+        deliveryFee = 0;
+    }
+    
+    // Update tampilan
+    document.getElementById('distance-info').style.display = 'block';
+    document.getElementById('distance-info').style.background = '#f0f0f0';
+    document.getElementById('distance-info').style.color = '#333';
+    document.getElementById('distance-text').textContent = distance.toFixed(2);
+    document.getElementById('delivery-fee-text').textContent = deliveryFee === 0 ? 'GRATIS!' : 'Rp ' + deliveryFee.toLocaleString('id-ID');
+    
+    // Update summary
+    document.getElementById('delivery-summary').style.display = 'flex';
+    document.getElementById('delivery-fee-summary').textContent = deliveryFee === 0 ? 'GRATIS' : 'Rp ' + deliveryFee.toLocaleString('id-ID');
+    
+    const finalTotal = subtotalPrice + deliveryFee;
+    document.getElementById('final-total').textContent = 'Rp ' + finalTotal.toLocaleString('id-ID');
+}
+</script>
 
 <?php include 'includes/footer.php'; ?>
