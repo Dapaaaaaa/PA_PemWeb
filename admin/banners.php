@@ -115,9 +115,9 @@ $banners = mysqli_query($conn, "SELECT * FROM banners ORDER BY urutan ASC, id DE
 
 <div class="dashboard-content">
     <div class="content-header">
-        <h2>🎨 Kelola Banner Slider</h2>
+        <h2>Kelola Banner Slider</h2>
         <button class="btn-add" onclick="openModal()">
-            <span>➕</span> Tambah Banner Baru
+             Tambah Banner Baru
         </button>
     </div>
 
@@ -145,7 +145,7 @@ $banners = mysqli_query($conn, "SELECT * FROM banners ORDER BY urutan ASC, id DE
 
     <div class="info-box" style="margin-bottom: 20px; padding: 15px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 8px;">
         <p style="margin: 0; color: #856404;">
-            <strong>ℹ️ Catatan:</strong> Maksimal 5 banner aktif. Banner akan otomatis berganti setiap 5 detik. Gunakan urutan untuk mengatur posisi banner.
+            <strong>Catatan:</strong> Maksimal 5 banner aktif. Banner akan otomatis berganti setiap 5 detik. Gunakan urutan untuk mengatur posisi banner.
         </p>
     </div>
 
@@ -155,9 +155,6 @@ $banners = mysqli_query($conn, "SELECT * FROM banners ORDER BY urutan ASC, id DE
                 <tr>
                     <th>Urutan</th>
                     <th>Preview</th>
-                    <th>Judul</th>
-                    <th>Deskripsi</th>
-                    <th>Tombol</th>
                     <th>Status</th>
                     <th>Aksi</th>
                 </tr>
@@ -172,19 +169,6 @@ $banners = mysqli_query($conn, "SELECT * FROM banners ORDER BY urutan ASC, id DE
                                  alt="Banner" 
                                  style="width: 100px; height: 60px; object-fit: cover; border-radius: 4px;">
                         </td>
-                        <td><?php echo htmlspecialchars($banner['title'] ?? '-'); ?></td>
-                        <td style="max-width: 300px;">
-                            <?php echo htmlspecialchars(substr($banner['description'] ?? '', 0, 80)) . (strlen($banner['description'] ?? '') > 80 ? '...' : ''); ?>
-                        </td>
-                        <td>
-                            <?php if (!empty($banner['button_text'])): ?>
-                                <span style="background: #537b2f; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px;">
-                                    <?php echo htmlspecialchars($banner['button_text']); ?>
-                                </span>
-                            <?php else: ?>
-                                -
-                            <?php endif; ?>
-                        </td>
                         <td>
                             <label class="switch">
                                 <input type="checkbox" 
@@ -196,10 +180,10 @@ $banners = mysqli_query($conn, "SELECT * FROM banners ORDER BY urutan ASC, id DE
                         <td>
                             <div class="action-buttons">
                                 <button class="btn-edit" onclick='editBanner(<?php echo json_encode($banner); ?>)'>
-                                    ✏️ Edit
+                                    Edit
                                 </button>
-                                <button class="btn-delete" onclick="confirmDelete(<?php echo $banner['id']; ?>, '<?php echo addslashes($banner['title'] ?? 'Banner'); ?>')">
-                                    🗑️ Hapus
+                                <button class="btn-delete" onclick="confirmDelete(<?php echo $banner['id']; ?>, <?php echo $banner['id']; ?>)">
+                                    Hapus
                                 </button>
                             </div>
                         </td>
@@ -207,7 +191,7 @@ $banners = mysqli_query($conn, "SELECT * FROM banners ORDER BY urutan ASC, id DE
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="7" style="text-align: center; padding: 40px;">
+                        <td colspan="4" style="text-align: center; padding: 40px;">
                             Belum ada banner. Klik "Tambah Banner Baru" untuk memulai.
                         </td>
                     </tr>
@@ -235,31 +219,10 @@ $banners = mysqli_query($conn, "SELECT * FROM banners ORDER BY urutan ASC, id DE
             </div>
 
             <div class="form-group">
-                <label>Judul Banner:</label>
-                <input type="text" name="title" id="title" placeholder="Contoh: Promo Spesial Burger">
-            </div>
-
-            <div class="form-group">
-                <label>Deskripsi:</label>
-                <textarea name="description" id="description" rows="3" placeholder="Deskripsi singkat tentang banner"></textarea>
-            </div>
-
-            <div class="form-group">
                 <label>Gambar Banner: <span style="color: red;">*</span></label>
                 <input type="file" name="banner_image" id="banner_image" accept="image/*" onchange="previewImage(this)">
                 <small>Format: JPG, PNG, GIF, WEBP (Recommended: 1200x400px)</small>
                 <div id="imagePreview" style="margin-top: 10px;"></div>
-            </div>
-
-            <div class="form-group">
-                <label>Teks Tombol:</label>
-                <input type="text" name="button_text" id="button_text" placeholder="Contoh: Lihat Menu">
-            </div>
-
-            <div class="form-group">
-                <label>Link Tombol:</label>
-                <input type="text" name="button_link" id="button_link" placeholder="Contoh: menu.php">
-                <small>Bisa berupa URL relatif (menu.php) atau absolut (https://...)</small>
             </div>
 
             <div class="form-group">
@@ -274,6 +237,18 @@ $banners = mysqli_query($conn, "SELECT * FROM banners ORDER BY urutan ASC, id DE
                 <button type="submit" class="btn-submit">Simpan Banner</button>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- Modal Konfirmasi Delete -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content" style="max-width: 400px;">
+        <h3 style="margin-top: 0; color: #dc3545;">⚠️ Konfirmasi Hapus</h3>
+        <p id="deleteMessage" style="margin: 20px 0; color: #666;">Yakin ingin menghapus banner ini?</p>
+        <div class="form-actions">
+            <button type="button" class="btn-cancel" onclick="closeDeleteModal()">Batal</button>
+            <button type="button" class="btn-delete" onclick="confirmDeleteAction()" style="background: #dc3545; color: white;">Hapus</button>
+        </div>
     </div>
 </div>
 
@@ -545,10 +520,6 @@ function editBanner(banner) {
     document.getElementById('formAction').value = 'edit';
     document.getElementById('bannerId').value = banner.id;
     document.getElementById('urutan').value = banner.urutan;
-    document.getElementById('title').value = banner.title || '';
-    document.getElementById('description').value = banner.description || '';
-    document.getElementById('button_text').value = banner.button_text || '';
-    document.getElementById('button_link').value = banner.button_link || '';
     document.getElementById('aktif').checked = banner.aktif == 1;
     document.getElementById('existingImage').value = banner.image_url;
     
@@ -594,18 +565,23 @@ function toggleStatus(id, status) {
     });
 }
 
-function confirmDelete(id, title) {
-    if (window.showToast) {
-        // Create custom confirmation toast
-        const message = 'Yakin hapus "' + title + '"?';
-        const confirmed = confirm(message);
-        if (confirmed) {
-            deleteBanner(id);
-        }
-    } else {
-        if (confirm('Yakin ingin menghapus banner "' + title + '"?')) {
-            deleteBanner(id);
-        }
+let deleteTargetId = null;
+
+function confirmDelete(id, bannerId) {
+    deleteTargetId = id;
+    document.getElementById('deleteMessage').textContent = 'Yakin ingin menghapus banner #' + bannerId + '?';
+    document.getElementById('deleteModal').style.display = 'block';
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').style.display = 'none';
+    deleteTargetId = null;
+}
+
+function confirmDeleteAction() {
+    if (deleteTargetId) {
+        deleteBanner(deleteTargetId);
+        closeDeleteModal();
     }
 }
 
