@@ -63,6 +63,9 @@ if (isset($_POST['complete_order'])) {
         $base_fee = floatval(getSetting('delivery_base_fee', '5000'));
         $delivery_fee = $base_fee + ($distance_km * $fee_per_km);
         
+        // Bulatkan ke atas per 1000
+        $delivery_fee = ceil($delivery_fee / 1000) * 1000;
+        
         // Cek gratis ongkir
         $free_delivery_min = floatval(getSetting('free_delivery_min', '100000'));
         if ($total_price >= $free_delivery_min) {
@@ -284,77 +287,6 @@ if (isset($_POST['complete_order'])) {
     </div>
 </div>
 
-<style>
-.checkout-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr;
-    gap: 30px;
-    margin-bottom: 30px;
-}
-
-.checkout-summary {
-    background: #fff;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    height: fit-content;
-    position: sticky;
-    top: 20px;
-}
-
-.checkout-form-wrapper {
-    background: #fff;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.checkout-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.btn-back {
-    color: #666;
-    text-decoration: none;
-    padding: 12px 24px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    transition: all 0.3s;
-}
-
-.btn-back:hover {
-    background: #f5f5f5;
-    border-color: #537b2f;
-    color: #537b2f;
-}
-
-@media (max-width: 768px) {
-    .checkout-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    
-    .checkout-summary {
-        position: relative;
-        top: 0;
-    }
-    
-    .checkout-actions {
-        flex-direction: column-reverse;
-    }
-    
-    .checkout-actions .btn-back,
-    .checkout-actions .btn-action {
-        width: 100%;
-        text-align: center;
-    }
-}
-</style>
-
 <!-- Leaflet CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <!-- Leaflet JS -->
@@ -392,7 +324,7 @@ document.addEventListener('DOMContentLoaded', function() {
             shadowSize: [41, 41]
         })
     }).addTo(map);
-    storeMarker.bindPopup('<b>🏪 OurStuffies</b><br>Lokasi Toko').openPopup();
+    storeMarker.bindPopup('<b>OurStuffies</b><br>Lokasi Toko').openPopup();
     
     // Marker untuk pelanggan (merah, draggable)
     customerMarker = L.marker(storeLocation, {
@@ -406,7 +338,7 @@ document.addEventListener('DOMContentLoaded', function() {
             shadowSize: [41, 41]
         })
     }).addTo(map);
-    customerMarker.bindPopup('<b>📍 Lokasi Pengiriman</b><br>Drag marker ini atau klik map');
+    customerMarker.bindPopup('<b>Lokasi Pengiriman</b><br>Drag marker ini atau klik map');
     
     // Event klik map untuk pindahkan marker
     map.on('click', function(e) {
@@ -463,6 +395,9 @@ function calculateDistance(lat, lng) {
     // Hitung ongkir
     let deliveryFee = baseFee + (distance * feePerKm);
     
+    // Bulatkan ke atas per 1000 (7.200 -> 8.000, 7.000 -> 7.000)
+    deliveryFee = Math.ceil(deliveryFee / 1000) * 1000;
+    
     // Cek gratis ongkir
     if (subtotalPrice >= freeDeliveryMin) {
         deliveryFee = 0;
@@ -473,7 +408,7 @@ function calculateDistance(lat, lng) {
     document.getElementById('distance-info').style.background = '#e8f5e9';
     document.getElementById('distance-info').style.color = '#2e7d32';
     document.getElementById('distance-text').textContent = distance.toFixed(2);
-    document.getElementById('delivery-fee-text').textContent = deliveryFee === 0 ? 'GRATIS! 🎉' : 'Rp ' + deliveryFee.toLocaleString('id-ID');
+    document.getElementById('delivery-fee-text').textContent = deliveryFee === 0 ? 'GRATIS! ' : 'Rp ' + deliveryFee.toLocaleString('id-ID');
     
     // Update summary
     document.getElementById('delivery-summary').style.display = 'flex';
