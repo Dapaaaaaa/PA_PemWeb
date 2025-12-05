@@ -127,21 +127,42 @@ $status_label = $status_labels[$order['status']] ?? ucfirst($order['status']);
                             </div>
                             
                             <?php if ($order['status'] != 'completed' && $order['status'] != 'cancelled') { ?>
-                            <form method="POST" style="margin-top: 20px;">
+                            <form method="POST" class="status-update-form">
                                 <input type="hidden" name="action" value="update_status">
                                 <div class="form-group">
-                                    <label>Update Status</label>
-                                    <select name="status" class="form-control" required>
-                                        <option value="">Pilih Status Baru...</option>
-                                        <option value="pending" <?php echo ($order['status'] == 'pending') ? 'selected' : ''; ?>>Pending</option>
-                                        <option value="waiting_confirmation" <?php echo ($order['status'] == 'waiting_confirmation') ? 'selected' : ''; ?>>Menunggu Konfirmasi</option>
-                                        <option value="processing" <?php echo ($order['status'] == 'processing') ? 'selected' : ''; ?>>Proses</option>
-                                        <option value="completed" <?php echo ($order['status'] == 'completed') ? 'selected' : ''; ?>>Selesai</option>
-                                        <option value="cancelled" <?php echo ($order['status'] == 'cancelled') ? 'selected' : ''; ?>>Dibatalkan</option>
-                                    </select>
+                                    <label style="font-weight: 600; margin-bottom: 12px; display: block;">Update Status Pesanan</label>
+                                    <div class="status-options">
+                                        <label class="status-option-card">
+                                            <input type="radio" name="status" value="processing" <?php echo ($order['status'] == 'processing') ? 'checked' : ''; ?> required>
+                                            <div class="status-option-content">
+                                                <!-- <span class="status-icon">🔄</span> -->
+                                                <span class="status-text">Proses</span>
+                                            </div>
+                                        </label>
+                                        <label class="status-option-card">
+                                            <input type="radio" name="status" value="completed" <?php echo ($order['status'] == 'completed') ? 'checked' : ''; ?> required>
+                                            <div class="status-option-content">
+                                                <!-- <span class="status-icon">✅</span> -->
+                                                <span class="status-text">Selesai</span>
+                                            </div>
+                                        </label>
+                                        <label class="status-option-card">
+                                            <input type="radio" name="status" value="cancelled" <?php echo ($order['status'] == 'cancelled') ? 'checked' : ''; ?> required>
+                                            <div class="status-option-content">
+                                                <!-- <span class="status-icon">❌</span> -->
+                                                <span class="status-text">Dibatalkan</span>
+                                            </div>
+                                        </label>
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Update Status</button>
+                                <button type="submit" class="btn btn-primary btn-block" style="width: 100%; padding: 12px; font-weight: 600; margin-top: 16px;">Simpan Perubahan Status</button>
                             </form>
+                            <?php } else { ?>
+                            <div class="status-final-message">
+                                <p style="text-align: center; color: #666; margin-top: 15px; font-style: italic;">
+                                    <?php echo ($order['status'] == 'completed') ? 'Pesanan telah selesai' : 'Pesanan telah dibatalkan'; ?>
+                                </p>
+                            </div>
                             <?php } ?>
                         </div>
                     </div>
@@ -154,15 +175,15 @@ $status_label = $status_labels[$order['status']] ?? ucfirst($order['status']);
                         <div class="customer-info">
                             <div class="info-row">
                                 <strong>Nama:</strong>
-                                <span><?php echo htmlspecialchars($order['nama_pelanggan']); ?></span>
+                                <span><?php echo htmlspecialchars($order['nama_pelanggan'] ?? ''); ?></span>
                             </div>
                             <div class="info-row">
                                 <strong>Email:</strong>
-                                <span><?php echo htmlspecialchars($order['email_pelanggan']); ?></span>
+                                <span><?php echo htmlspecialchars($order['email_pelanggan'] ?? '-'); ?></span>
                             </div>
                             <div class="info-row">
                                 <strong>Telepon:</strong>
-                                <span><?php echo htmlspecialchars($order['telepon_pelanggan']); ?></span>
+                                <span><?php echo htmlspecialchars($order['telepon_pelanggan'] ?? ''); ?></span>
                             </div>
                         </div>
                     </div>
@@ -457,6 +478,101 @@ $status_label = $status_labels[$order['status']] ?? ucfirst($order['status']);
 .badge-purple {
     background: #7c3aed;
     color: white;
+}
+
+/* Status Update Form Styles */
+.status-update-form {
+    margin-top: 20px;
+}
+
+.status-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.status-option-card {
+    display: flex;
+    align-items: center;
+    padding: 14px 18px;
+    border: 2px solid #e1e4e8;
+    border-radius: 8px;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.status-option-card:hover {
+    background: #f1f3f5;
+    border-color: #8da750;
+    transform: translateX(4px);
+}
+
+.status-option-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.status-option-card input[type="radio"]:checked + .status-option-content {
+    font-weight: 600;
+}
+
+.status-option-card input[type="radio"]:checked ~ .status-option-content::before {
+    content: '✓';
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background: #537b2f;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.status-option-card input[type="radio"]:checked {
+    & + .status-option-content {
+        position: relative;
+    }
+}
+
+.status-option-card:has(input[type="radio"]:checked) {
+    background: #e8f5e9;
+    border-color: #537b2f;
+    box-shadow: 0 2px 8px rgba(83, 123, 47, 0.2);
+}
+
+.status-option-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    position: relative;
+}
+
+.status-icon {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.status-text {
+    font-size: 15px;
+    color: #333;
+}
+
+.status-final-message {
+    margin-top: 15px;
+    padding: 12px;
+    background: #f1f3f5;
+    border-radius: 6px;
 }
 
 @media (max-width: 992px) {

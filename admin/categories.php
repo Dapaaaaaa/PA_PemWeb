@@ -82,16 +82,6 @@ $result_categories = mysqli_query($conn, $query_categories);
 
         <!-- Main Area -->
         <div class="admin-main">
-            <?php
-            if (isset($_SESSION['success'])) {
-                echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
-                unset($_SESSION['success']);
-            }
-            if (isset($_SESSION['error'])) {
-                echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
-                unset($_SESSION['error']);
-            }
-            ?>
 
             <!-- Add Category Section -->
             <div class="content-section">
@@ -189,6 +179,15 @@ document.getElementById('category-name').addEventListener('input', function(e) {
         .replace(/^-+|-+$/g, '');
     document.getElementById('category-slug').value = slug;
 });
+
+// Show toast notifications
+<?php if (isset($_SESSION['success'])): ?>
+showToast(<?php echo json_encode($_SESSION['success']); ?>, 'success', 3000);
+<?php unset($_SESSION['success']); endif; ?>
+
+<?php if (isset($_SESSION['error'])): ?>
+showToast(<?php echo json_encode($_SESSION['error']); ?>, 'error', 3000);
+<?php unset($_SESSION['error']); endif; ?>
 </script>
 
 </body>
