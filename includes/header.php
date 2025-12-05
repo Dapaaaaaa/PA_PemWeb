@@ -67,13 +67,13 @@ if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
             </span>
             <span>Lokasi</span>
         </a>
-        <a href="contact.php" class="nav-item">
-            <!-- Phone Icon -->
+        <!-- <a href="contact.php" class="nav-item">
+            Phone Icon 
             <span class="material-icons">
                 phone_iphone
             </span>
             <span>Kontak</span>
-        </a>
+        </a> -->
         <a href="cart.php" class="nav-item cart-badge">
             <!-- Cart Icon -->
             <span class="material-icons">
