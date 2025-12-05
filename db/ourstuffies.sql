@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 05, 2025 at 06:44 AM
+-- Generation Time: Dec 05, 2025 at 10:46 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.4.14
 
@@ -124,7 +124,10 @@ INSERT INTO `alamat` (`id`, `pelanggan_id`, `label`, `jalan`, `kota`, `kode_pos`
 (2, 2, 'Kantor', 'Jl. Sudirman No. 456', 'Jakarta', '12346', NULL, '2025-11-11 00:29:35'),
 (3, 3, 'Default', 'Jalan suwandi blok A no 7', 'Jakarta', NULL, NULL, '2025-11-29 00:11:09'),
 (6, 6, 'Default', '3123sadad', 'Jakarta', NULL, NULL, '2025-12-03 21:20:24'),
-(7, 7, 'Default', 'PCX merah plat KU', 'Jakarta', NULL, NULL, '2025-12-04 00:33:02');
+(7, 7, 'Default', 'PCX merah plat KU', 'Jakarta', NULL, NULL, '2025-12-04 00:33:02'),
+(8, 8, 'Default', 'akwdsakdkalwmdlka\r\n', 'Jakarta', NULL, NULL, '2025-12-05 17:29:31'),
+(9, 9, 'Default', 'awjidskdmkaw', 'Jakarta', NULL, NULL, '2025-12-05 17:50:11'),
+(10, 10, 'Default', 'jahwjdaskljdnmskl', 'Jakarta', NULL, NULL, '2025-12-05 17:54:33');
 
 -- --------------------------------------------------------
 
@@ -143,13 +146,6 @@ CREATE TABLE `banners` (
   `aktif` tinyint(1) DEFAULT '1',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `banners`
---
-
-INSERT INTO `banners` (`id`, `title`, `description`, `image_url`, `button_text`, `button_link`, `urutan`, `aktif`, `created_at`) VALUES
-(1, 'Burger Ayam Premium', 'Nikmati rasa burger yang segar, juicy, dan lezat yang dibuat dengan bahan premium dan penuh cinta.', 'assets/img/product/hero-burger.png', 'Pesan Sekarang', 'menu.php', 1, 1, '2025-12-05 06:44:27');
 
 -- --------------------------------------------------------
 
@@ -196,7 +192,12 @@ INSERT INTO `item_pesanan` (`id`, `pesanan_id`, `produk_id`, `qty`, `harga_satua
 (6, 5, 4, 1, 20000.00, 20000.00, 'Saus: pedas,manis'),
 (7, 5, 3, 1, 25000.00, 25000.00, 'Saus: pedas,manis'),
 (8, 5, 1, 1, 15000.00, 15000.00, 'Saus: pedas,manis'),
-(9, 5, 2, 1, 20000.00, 20000.00, 'Saus: pedas,manis');
+(9, 5, 2, 1, 20000.00, 20000.00, 'Saus: pedas,manis'),
+(10, 6, 1, 1, 15000.00, 15000.00, 'Saus: pedas'),
+(11, 6, 2, 1, 20000.00, 20000.00, 'Saus: manis'),
+(12, 7, 2, 1, 20000.00, 20000.00, 'Saus: manis'),
+(13, 7, 1, 1, 15000.00, 15000.00, 'Saus: manis'),
+(14, 8, 2, 2, 20000.00, 40000.00, 'Saus: manis');
 
 -- --------------------------------------------------------
 
@@ -277,7 +278,10 @@ INSERT INTO `pelanggan` (`id`, `nama`, `email`, `telepon`, `dibuat_pada`) VALUES
 (2, 'Jane Smith', 'jane@example.com', '628987654321', '2025-11-11 00:29:35'),
 (3, 'daffa', NULL, '081223158895', '2025-11-29 00:11:09'),
 (6, 'wadsada', NULL, '213213', '2025-12-03 21:20:24'),
-(7, 'tatang', NULL, '08123128387901', '2025-12-04 00:33:02');
+(7, 'tatang', NULL, '08123128387901', '2025-12-04 00:33:02'),
+(8, 'nanda', NULL, 'a2013213980', '2025-12-05 17:29:31'),
+(9, 'gua', NULL, '81237812789', '2025-12-05 17:50:11'),
+(10, 'rajin', NULL, '203189', '2025-12-05 17:54:33');
 
 -- --------------------------------------------------------
 
@@ -322,7 +326,10 @@ CREATE TABLE `pesanan` (
 INSERT INTO `pesanan` (`id`, `nomor_pesanan`, `pelanggan_id`, `alamat_id`, `status`, `total`, `ongkir`, `catatan`, `dibuat_pada`, `diperbarui_pada`) VALUES
 (1, 'ORD202511280001', 3, 3, 'cancelled', 15000.00, 0.00, 'Order dari website', '2025-11-29 00:11:09', '2025-12-03 21:12:33'),
 (4, 'ORD202512030001', 6, 6, 'completed', 65000.00, 0.00, 'Order dari website', '2025-12-03 21:20:24', '2025-12-03 21:29:00'),
-(5, 'ORD202512030002', 7, 7, 'pending', 95000.00, 0.00, 'Order dari website', '2025-12-04 00:33:02', '2025-12-04 00:33:02');
+(5, 'ORD202512030002', 7, 7, 'pending', 95000.00, 0.00, 'Order dari website', '2025-12-04 00:33:02', '2025-12-04 00:33:02'),
+(6, 'ORD202512050001', 8, 8, 'pending', 46662.54, 0.00, 'Jarak: 2.22 km | Ongkir: Rp 11.663', '2025-12-05 17:29:31', '2025-12-05 17:29:31'),
+(7, 'ORD202512050002', 9, 9, 'pending', 43000.00, 0.00, 'Jarak: 0.69 km | Ongkir: Rp 8.000', '2025-12-05 17:50:11', '2025-12-05 17:50:11'),
+(8, 'ORD202512050003', 10, 10, 'pending', 47000.00, 0.00, 'Jarak: 0.53 km | Ongkir: Rp 7.000', '2025-12-05 17:54:33', '2025-12-05 17:54:33');
 
 -- --------------------------------------------------------
 
@@ -393,7 +400,12 @@ INSERT INTO `settings` (`id`, `setting_key`, `setting_value`, `setting_group`, `
 (16, 'social_twitter', '', 'social', '2025-11-27 13:46:52'),
 (17, 'delivery_fee', '10000', 'delivery', '2025-11-27 13:46:52'),
 (18, 'free_delivery_min', '100000', 'delivery', '2025-11-27 13:46:52'),
-(19, 'delivery_note', 'Pengiriman tersedia di seluruh Samarinda. Estimasi waktu: 30-45 menit.', 'delivery', '2025-11-27 13:46:52');
+(19, 'delivery_note', 'Pengiriman tersedia di seluruh Samarinda. Estimasi waktu: 30-45 menit.', 'delivery', '2025-11-27 13:46:52'),
+(48, 'delivery_fee_per_km', '3000', 'general', '2025-12-05 17:22:17'),
+(49, 'delivery_base_fee', '5000', 'general', '2025-12-05 17:22:17'),
+(50, 'store_latitude', '-0.464618', 'general', '2025-12-05 17:22:17'),
+(51, 'store_longitude', '117.147607', 'general', '2025-12-05 17:22:17'),
+(53, 'max_delivery_distance', '15', 'general', '2025-12-05 17:22:17');
 
 -- --------------------------------------------------------
 
@@ -587,13 +599,13 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `alamat`
 --
 ALTER TABLE `alamat`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `banners`
 --
 ALTER TABLE `banners`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `item_keranjang`
@@ -605,7 +617,7 @@ ALTER TABLE `item_keranjang`
 -- AUTO_INCREMENT for table `item_pesanan`
 --
 ALTER TABLE `item_pesanan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `kategori`
@@ -629,7 +641,7 @@ ALTER TABLE `log_wa`
 -- AUTO_INCREMENT for table `pelanggan`
 --
 ALTER TABLE `pelanggan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `pembayaran`
@@ -641,7 +653,7 @@ ALTER TABLE `pembayaran`
 -- AUTO_INCREMENT for table `pesanan`
 --
 ALTER TABLE `pesanan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `produk`
@@ -653,7 +665,7 @@ ALTER TABLE `produk`
 -- AUTO_INCREMENT for table `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `struk`
