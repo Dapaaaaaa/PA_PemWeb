@@ -18,23 +18,89 @@ include 'includes/settings_helper.php';
 <?php endif; ?>
 
 <section class="hero">
-    <div class="hero-text">
-        <h1><?php echo htmlspecialchars(getSetting('hero_title', 'Burger Ayam')); ?></h1>
-        <p><?php echo htmlspecialchars(getSetting('hero_description', 'Nikmati rasa burger yang segar, juicy, dan lezat yang dibuat dengan bahan premium dan penuh cinta.')); ?></p>
-        <a href="menu.php" class="btn-order"><?php echo htmlspecialchars(getSetting('hero_button_text', 'Pesan Sekarang')); ?></a>
+    <?php
+    // Ambil banner aktif dari database
+    $banners_query = mysqli_query($conn, "SELECT * FROM banners WHERE aktif = 1 ORDER BY urutan ASC LIMIT 5");
+    $banners = [];
+    while ($banner = mysqli_fetch_assoc($banners_query)) {
+        $banners[] = $banner;
+    }
+    
+    // Jika tidak ada banner, gunakan default
+    if (empty($banners)) {
+        $banners = [[
+            'title' => getSetting('hero_title', 'Burger Ayam'),
+            'description' => getSetting('hero_description', 'Nikmati rasa burger yang segar, juicy, dan lezat yang dibuat dengan bahan premium dan penuh cinta.'),
+            'image_url' => getSetting('hero_image', 'assets/img/product/hero-burger.png'),
+            'button_text' => getSetting('hero_button_text', 'Pesan Sekarang'),
+            'button_link' => 'menu.php'
+        ]];
+    }
+    ?>
+    
+    <div class="hero-slider">
+        <?php foreach ($banners as $index => $banner): ?>
+        <div class="hero-slide <?php echo $index === 0 ? 'active' : ''; ?>">
+            <div class="hero-content">
+                <div class="hero-banner">
+                    <img src="<?php echo htmlspecialchars($banner['image_url']); ?>" alt="Banner <?php echo $index + 1; ?>">
+                </div>
+            </div>
+        </div>
+        <?php endforeach; ?>
     </div>
-
-    <div class="hero-image">
-        <?php
-        // Ambil URL gambar dari DB (menggunakan helper getSetting)
-        // Pastikan ada default jika belum diset di DB
-        $heroImage = getSetting('hero_image', 'assets/img/product/hero-burger.png');
-        $heroAlt   = getSetting('hero_image_alt', 'Burger');
-        $heroImage = trim($heroImage) !== '' ? $heroImage : 'assets/img/hero-burger.png';
-        ?>
-        <img src="<?php echo htmlspecialchars($heroImage, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($heroAlt, ENT_QUOTES, 'UTF-8'); ?>">
+    
+    <?php if (count($banners) > 1): ?>
+    <!-- Slider Navigation -->
+    <button class="slider-nav prev" onclick="changeSlide(-1)">❮</button>
+    <button class="slider-nav next" onclick="changeSlide(1)">❯</button>
+    
+    <!-- Slider Indicators -->
+    <div class="slider-indicators">
+        <?php foreach ($banners as $index => $banner): ?>
+        <span class="indicator <?php echo $index === 0 ? 'active' : ''; ?>" onclick="goToSlide(<?php echo $index; ?>)"></span>
+        <?php endforeach; ?>
     </div>
+    <?php endif; ?>
 </section>
+
+<script>
+let currentSlide = 0;
+const slides = document.querySelectorAll('.hero-slide');
+const indicators = document.querySelectorAll('.indicator');
+const totalSlides = slides.length;
+
+function showSlide(index) {
+    slides.forEach(slide => slide.classList.remove('active'));
+    indicators.forEach(ind => ind.classList.remove('active'));
+    
+    if (index >= totalSlides) currentSlide = 0;
+    if (index < 0) currentSlide = totalSlides - 1;
+    
+    slides[currentSlide].classList.add('active');
+    if (indicators[currentSlide]) {
+        indicators[currentSlide].classList.add('active');
+    }
+}
+
+function changeSlide(direction) {
+    currentSlide += direction;
+    showSlide(currentSlide);
+}
+
+function goToSlide(index) {
+    currentSlide = index;
+    showSlide(currentSlide);
+}
+
+// Auto-slide every 5 seconds
+if (totalSlides > 1) {
+    setInterval(() => {
+        currentSlide++;
+        showSlide(currentSlide);
+    }, 5000);
+}
+</script>
 
 <section class="product-section">
     <h2>Menu Kami!</h2>

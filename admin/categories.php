@@ -82,16 +82,6 @@ $result_categories = mysqli_query($conn, $query_categories);
 
         <!-- Main Area -->
         <div class="admin-main">
-            <?php
-            if (isset($_SESSION['success'])) {
-                echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
-                unset($_SESSION['success']);
-            }
-            if (isset($_SESSION['error'])) {
-                echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
-                unset($_SESSION['error']);
-            }
-            ?>
 
             <!-- Add Category Section -->
             <div class="content-section">
@@ -155,9 +145,8 @@ $result_categories = mysqli_query($conn, $query_categories);
                             <td><?php echo date('Y-m-d', strtotime($kategori['dibuat_pada'])); ?></td>
                             <td class="table-actions">
                                 <a href="edit_category.php?id=<?php echo $kategori['id']; ?>" class="btn btn-sm btn-success">Edit</a>
-                                <a href="categories.php?action=delete&id=<?php echo $kategori['id']; ?>" 
-                                   class="btn btn-sm btn-danger" 
-                                   onclick="return confirm('Yakin ingin menghapus kategori ini?')">Hapus</a>
+                                <button onclick="confirmDelete(<?php echo $kategori['id']; ?>, '<?php echo htmlspecialchars($kategori['nama']); ?>')" 
+                                        class="btn btn-sm btn-danger">Hapus</button>
                             </td>
                         </tr>
                         <?php } ?>
@@ -189,6 +178,22 @@ document.getElementById('category-name').addEventListener('input', function(e) {
         .replace(/^-+|-+$/g, '');
     document.getElementById('category-slug').value = slug;
 });
+
+// Show toast notifications
+<?php if (isset($_SESSION['success'])): ?>
+showToast(<?php echo json_encode($_SESSION['success']); ?>, 'success', 3000);
+<?php unset($_SESSION['success']); endif; ?>
+
+<?php if (isset($_SESSION['error'])): ?>
+showToast(<?php echo json_encode($_SESSION['error']); ?>, 'error', 3000);
+<?php unset($_SESSION['error']); endif; ?>
+
+// Delete confirmation function
+function confirmDelete(id, name) {
+    if (confirm('Yakin ingin menghapus kategori "' + name + '"?\n\nSemua produk dalam kategori ini akan terpengaruh!')) {
+        window.location.href = 'categories.php?action=delete&id=' + id;
+    }
+}
 </script>
 
 </body>

@@ -200,11 +200,9 @@ $result_orders = mysqli_query($conn, $query_orders);
                                 <?php if ($order['status'] != 'completed' && $order['status'] != 'cancelled') { ?>
                                     <select onchange="updateStatus(<?php echo $order['id']; ?>, this.value)" class="btn btn-sm btn-primary" style="padding: 4px 8px;">
                                         <option value="">Update Status</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="waiting_confirmation">Menunggu Konfirmasi</option>
-                                        <option value="processing">Processing</option>
-                                        <option value="completed">Completed</option>
-                                        <option value="cancelled">Cancelled</option>
+                                        <option value="processing">Proses</option>
+                                        <option value="completed">Selesai</option>
+                                        <option value="cancelled">Dibatalkan</option>
                                     </select>
                                 <?php } ?>
                             </td>

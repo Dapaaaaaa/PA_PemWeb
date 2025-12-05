@@ -315,19 +315,63 @@ function getSetting($key, $default = '') {
                 </div>
 
                 <form class="admin-form" method="POST" action="settings.php">
+                    <div class="info-box" style="margin-bottom: 20px; padding: 15px; background: #e3f2fd; border-left: 4px solid #2196f3; border-radius: 8px;">
+                        <p style="margin: 0; color: #1976d2;">
+                            <strong>Info:</strong> Ongkir akan dihitung otomatis berdasarkan jarak dari lokasi toko ke alamat pelanggan.
+                        </p>
+                    </div>
+
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="delivery-fee">Biaya Pengiriman Standar (Rp)</label>
-                            <input type="number" id="delivery-fee" name="delivery_fee" 
-                                   value="<?php echo htmlspecialchars(getSetting('delivery_fee', '10000')); ?>" 
-                                   placeholder="10000" min="0">
+                            <label for="delivery-fee">Biaya Pengiriman per KM (Rp)</label>
+                            <input type="number" id="delivery-fee" name="delivery_fee_per_km" 
+                                   value="<?php echo htmlspecialchars(getSetting('delivery_fee_per_km', '3000')); ?>" 
+                                   placeholder="3000" min="0">
+                            <small>Biaya per kilometer yang akan dikalikan dengan jarak</small>
                         </div>
 
+                        <div class="form-group">
+                            <label for="delivery-base">Biaya Dasar Pengiriman (Rp)</label>
+                            <input type="number" id="delivery-base" name="delivery_base_fee" 
+                                   value="<?php echo htmlspecialchars(getSetting('delivery_base_fee', '5000')); ?>" 
+                                   placeholder="5000" min="0">
+                            <small>Biaya tetap yang selalu ditambahkan ke ongkir</small>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="store-lat">Latitude Toko</label>
+                            <input type="text" id="store-lat" name="store_latitude" 
+                                   value="<?php echo htmlspecialchars(getSetting('store_latitude', '-0.464618')); ?>" 
+                                   placeholder="-0.464618" step="any">
+                            <small>Koordinat latitude lokasi toko (untuk kalkulasi jarak)</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="store-lng">Longitude Toko</label>
+                            <input type="text" id="store-lng" name="store_longitude" 
+                                   value="<?php echo htmlspecialchars(getSetting('store_longitude', '117.147607')); ?>" 
+                                   placeholder="117.147607" step="any">
+                            <small>Koordinat longitude lokasi toko</small>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="free-delivery">Gratis Pengiriman Di Atas (Rp)</label>
                             <input type="number" id="free-delivery" name="free_delivery_min" 
                                    value="<?php echo htmlspecialchars(getSetting('free_delivery_min', '100000')); ?>" 
                                    placeholder="100000" min="0">
+                            <small>Total belanja minimum untuk gratis ongkir</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="max-distance">Maksimal Jarak Pengiriman (KM)</label>
+                            <input type="number" id="max-distance" name="max_delivery_distance" 
+                                   value="<?php echo htmlspecialchars(getSetting('max_delivery_distance', '15')); ?>" 
+                                   placeholder="15" min="1">
+                            <small>Jarak maksimal yang dilayani dari toko</small>
                         </div>
                     </div>
 
@@ -354,21 +398,21 @@ function getSetting($key, $default = '') {
 
                     <div class="form-group">
                         <label>Pilihan Saus yang Tersedia</label>
-                        <div style="display: grid; gap: 10px;">
-                            <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="sauce-options-grid">
+                            <div class="sauce-option-item">
                                 <input type="checkbox" id="sauce_no_sauce" name="sauce_options[]" value="tidak-bersaus" 
                                        <?php echo (strpos(getSetting('sauce_options', 'tidak-bersaus,pedas,manis'), 'tidak-bersaus') !== false) ? 'checked' : ''; ?>>
-                                <label for="sauce_no_sauce" style="margin: 0; font-weight: normal;">Tidak Bersaus</label>
+                                <label for="sauce_no_sauce">Tidak Bersaus</label>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="sauce-option-item">
                                 <input type="checkbox" id="sauce_spicy" name="sauce_options[]" value="pedas" 
                                        <?php echo (strpos(getSetting('sauce_options', 'tidak-bersaus,pedas,manis'), 'pedas') !== false) ? 'checked' : ''; ?>>
-                                <label for="sauce_spicy" style="margin: 0; font-weight: normal;">Pedas</label>
+                                <label for="sauce_spicy">Pedas</label>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="sauce-option-item">
                                 <input type="checkbox" id="sauce_sweet" name="sauce_options[]" value="manis" 
                                        <?php echo (strpos(getSetting('sauce_options', 'tidak-bersaus,pedas,manis'), 'manis') !== false) ? 'checked' : ''; ?>>
-                                <label for="sauce_sweet" style="margin: 0; font-weight: normal;">Manis</label>
+                                <label for="sauce_sweet">Manis</label>
                             </div>
                         </div>
                         <small style="color: #666; display: block; margin-top: 8px;">Centang pilihan yang ingin Anda tampilkan ke pelanggan</small>

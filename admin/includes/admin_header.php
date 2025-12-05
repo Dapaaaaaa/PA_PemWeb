@@ -10,6 +10,9 @@
 
     <!-- Admin CSS -->
     <link rel="stylesheet" href="css/admin.css">
+    
+    <!-- Toast Notification Script -->
+    <script src="../assets/js/toast.js"></script>
 </head>
 <body>
 
