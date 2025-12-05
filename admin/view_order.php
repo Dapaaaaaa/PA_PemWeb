@@ -30,7 +30,8 @@ $query_order = "SELECT p.*,
                 pl.nama as nama_pelanggan, 
                 pl.email as email_pelanggan, 
                 pl.telepon as telepon_pelanggan,
-                a.jalan, a.kota, a.kode_pos, a.label as label_alamat, a.catatan as catatan_alamat
+                a.jalan, a.kota, a.kode_pos, a.label as label_alamat, a.catatan as catatan_alamat,
+                a.latitude, a.longitude
                 FROM pesanan p 
                 JOIN pelanggan pl ON p.pelanggan_id = pl.id 
                 LEFT JOIN alamat a ON p.alamat_id = a.id
@@ -217,6 +218,13 @@ $status_label = $status_labels[$order['status']] ?? ucfirst($order['status']);
                                 <div class="info-row">
                                     <strong>Catatan Alamat:</strong>
                                     <span><?php echo nl2br(htmlspecialchars($order['catatan_alamat'])); ?></span>
+                                </div>
+                                <?php } ?>
+                                
+                                <!-- Map Section -->
+                                <?php if ($order['latitude'] && $order['longitude']) { ?>
+                                <div class="map-container" style="margin-top: 20px;">
+                                    <div id="orderMap" style="height: 300px; border-radius: 8px; border: 2px solid #e1e4e8;"></div>
                                 </div>
                                 <?php } ?>
                             <?php } else { ?>
@@ -582,6 +590,10 @@ $status_label = $status_labels[$order['status']] ?? ucfirst($order['status']);
 }
 </style>
 
+<!-- Leaflet CSS & JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script>
 // Set active menu
 document.querySelectorAll('.menu-item').forEach(item => {
@@ -589,6 +601,37 @@ document.querySelectorAll('.menu-item').forEach(item => {
         item.classList.add('active');
     }
 });
+
+<?php if ($order['latitude'] && $order['longitude']) { ?>
+// Initialize Leaflet Map
+document.addEventListener('DOMContentLoaded', function() {
+    const deliveryLat = <?php echo $order['latitude']; ?>;
+    const deliveryLng = <?php echo $order['longitude']; ?>;
+    
+    // Create map centered on delivery location
+    const map = L.map('orderMap').setView([deliveryLat, deliveryLng], 15);
+    
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19
+    }).addTo(map);
+    
+    // Custom delivery marker icon
+    const deliveryIcon = L.divIcon({
+        className: 'custom-marker',
+        html: '<div style="background: #dc3545; width: 40px; height: 40px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;"><span style="transform: rotate(45deg); font-size: 20px;">📍</span></div>',
+        iconSize: [40, 40],
+        iconAnchor: [20, 40]
+    });
+    
+    // Add delivery location marker
+    L.marker([deliveryLat, deliveryLng], { icon: deliveryIcon })
+        .addTo(map)
+        .bindPopup('<strong>Alamat Pengiriman</strong><br><?php echo htmlspecialchars($order['jalan']); ?>')
+        .openPopup();
+});
+<?php } ?>
 </script>
 
 </body>
