@@ -9,15 +9,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     $urutan = intval($_POST['urutan']);
     
     // Check if product already exists in menu_display
-    $check = mysqli_query($conn, "SELECT id FROM menu_display WHERE produk_id = $produk_id");
-    if (mysqli_num_rows($check) > 0) {
+    $check_product = mysqli_query($conn, "SELECT id FROM menu_display WHERE produk_id = $produk_id");
+    if (mysqli_num_rows($check_product) > 0) {
         $_SESSION['error'] = "Produk sudah ada di Menu Kami!";
     } else {
-        $query = "INSERT INTO menu_display (produk_id, urutan, aktif) VALUES ($produk_id, $urutan, 1)";
-        if (mysqli_query($conn, $query)) {
-            $_SESSION['success'] = "Produk berhasil ditambahkan ke Menu Kami!";
+        // Check if urutan already exists
+        $check_urutan = mysqli_query($conn, "SELECT id FROM menu_display WHERE urutan = $urutan");
+        if (mysqli_num_rows($check_urutan) > 0) {
+            $_SESSION['error'] = "Urutan ke-$urutan sudah digunakan! Silakan pilih urutan yang lain.";
         } else {
-            $_SESSION['error'] = "Gagal menambahkan produk!";
+            $query = "INSERT INTO menu_display (produk_id, urutan, aktif) VALUES ($produk_id, $urutan, 1)";
+            if (mysqli_query($conn, $query)) {
+                $_SESSION['success'] = "Produk berhasil ditambahkan ke Menu Kami!";
+            } else {
+                $_SESSION['error'] = "Gagal menambahkan produk!";
+            }
         }
     }
     header("Location: featured_products.php");
@@ -41,10 +47,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     $id = intval($_POST['id']);
     $urutan = intval($_POST['urutan']);
     
-    if (mysqli_query($conn, "UPDATE menu_display SET urutan = $urutan WHERE id = $id")) {
-        $_SESSION['success'] = "Urutan berhasil diupdate!";
+    // Check if urutan already exists (excluding current item)
+    $check_urutan = mysqli_query($conn, "SELECT id FROM menu_display WHERE urutan = $urutan AND id != $id");
+    if (mysqli_num_rows($check_urutan) > 0) {
+        $_SESSION['error'] = "Urutan ke-$urutan sudah digunakan oleh produk lain! Silakan pilih urutan yang berbeda.";
     } else {
-        $_SESSION['error'] = "Gagal mengupdate urutan!";
+        if (mysqli_query($conn, "UPDATE menu_display SET urutan = $urutan WHERE id = $id")) {
+            $_SESSION['success'] = "Urutan berhasil diupdate!";
+        } else {
+            $_SESSION['error'] = "Gagal mengupdate urutan!";
+        }
     }
     header("Location: featured_products.php");
     exit();
@@ -175,7 +187,6 @@ $result_products = mysqli_query($conn, $query_products);
                                     <input type="hidden" name="action" value="update_order">
                                     <input type="hidden" name="id" value="<?php echo $item['id']; ?>">
                                     <input type="number" name="urutan" value="<?php echo $item['urutan']; ?>" min="1" style="width: 60px; padding: 4px; text-align: center;" required>
-                                    <button type="submit" class="btn btn-sm btn-success" style="padding: 4px 8px;">✓</button>
                                 </form>
                             </td>
                             <td>
