@@ -176,7 +176,7 @@ $result_kategori = mysqli_query($conn, $query_kategori);
                     </div>
 
                     <div style="display: flex; gap: 10px;">
-                        <button type="submit" class="btn btn-primary">💾 Simpan Perubahan</button>
+                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                         <a href="menus.php" class="btn btn-secondary">Batal</a>
                     </div>
                 </form>

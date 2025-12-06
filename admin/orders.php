@@ -27,15 +27,15 @@ $query_waiting = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'waiting_
 $result_waiting = mysqli_query($conn, $query_waiting);
 $total_waiting = mysqli_fetch_assoc($result_waiting)['total'];
 
-$query_processing = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'processing'";
+$query_processing = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'proses'";
 $result_processing = mysqli_query($conn, $query_processing);
 $total_processing = mysqli_fetch_assoc($result_processing)['total'];
 
-$query_completed = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'completed'";
+$query_completed = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'selesai'";
 $result_completed = mysqli_query($conn, $query_completed);
 $total_completed = mysqli_fetch_assoc($result_completed)['total'];
 
-$query_cancelled = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'cancelled'";
+$query_cancelled = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'dibatalkan'";
 $result_cancelled = mysqli_query($conn, $query_cancelled);
 $total_cancelled = mysqli_fetch_assoc($result_cancelled)['total'];
 
@@ -182,10 +182,10 @@ $result_orders = mysqli_query($conn, $query_orders);
                                 
                                 // Badge status
                                 $status_badge = 'info';
-                                if ($order['status'] == 'completed') $status_badge = 'success';
+                                if ($order['status'] == 'selesai') $status_badge = 'success';
                                 elseif ($order['status'] == 'waiting_confirmation') $status_badge = 'purple';
-                                elseif ($order['status'] == 'processing') $status_badge = 'warning';
-                                elseif ($order['status'] == 'cancelled') $status_badge = 'danger';
+                                elseif ($order['status'] == 'proses') $status_badge = 'warning';
+                                elseif ($order['status'] == 'dibatalkan') $status_badge = 'danger';
                         ?>
                         <tr>
                             <td><strong><?php echo $order['nomor_pesanan']; ?></strong></td>

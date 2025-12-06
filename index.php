@@ -108,36 +108,33 @@ if (totalSlides > 1) {
     <div class="product-grid">
 
     <?php 
-    // Ambil semua kategori (misal 1 = makanan, 2 = minuman, 3 = snack, dst)
-    $kategori_q = mysqli_query($conn, "SELECT * FROM kategori ORDER BY id ASC");
+    // Ambil produk yang sudah diatur admin dari tabel menu_display
+    $query_featured = "SELECT p.*, k.nama as kategori_nama
+                       FROM menu_display md
+                       JOIN produk p ON md.produk_id = p.id
+                       LEFT JOIN kategori k ON p.kategori_id = k.id
+                       WHERE md.aktif = 1 AND p.aktif = 1
+                       ORDER BY md.urutan ASC
+                       LIMIT 6";
+    $result_featured = mysqli_query($conn, $query_featured);
 
-    while ($kat = mysqli_fetch_assoc($kategori_q)) {
-
-        // Ambil 1 produk pertama dari kategori ini
-        $produk_q = mysqli_query($conn, "
-            SELECT * FROM produk 
-            WHERE kategori_id = ".$kat['id']." AND aktif = 1
-            ORDER BY id ASC
-            LIMIT 1
-        ");
-
-        // Kalau produk kategori ini ada
-        if ($produk = mysqli_fetch_assoc($produk_q)) {
-
+    if ($result_featured && mysqli_num_rows($result_featured) > 0) {
+        while ($produk = mysqli_fetch_assoc($result_featured)) {
             echo '
-                    <div class="product-card">
-                        <img src="'.$produk['url_gambar'].'" alt="'.$produk['nama'].'">
-                        <h3>'.$produk['nama'].'</h3>
-                        <p>'.$produk['deskripsi'].'</p>
-                        <span class="price">Rp '.number_format($produk['harga'], 0, ',', '.').'</span>
+                <div class="product-card">
+                    <img src="'.$produk['url_gambar'].'" alt="'.htmlspecialchars($produk['nama']).'">
+                    <h3>'.htmlspecialchars($produk['nama']).'</h3>
+                    <p>'.htmlspecialchars($produk['deskripsi']).'</p>
+                    <span class="price">Rp '.number_format($produk['harga'], 0, ',', '.').'</span>
 
-                        <a href="menu.php?kategori='.$kat['id'].'" class="btn-lihat">
-                            Lihat Semua '.$kat['nama'].'
-                        </a>
-                    </div>
-                ';
-
+                    <a href="menu.php?kategori='.$produk['kategori_id'].'" class="btn-lihat">
+                        Lihat Semua '.htmlspecialchars($produk['kategori_nama']).'
+                    </a>
+                </div>
+            ';
         }
+    } else {
+        echo '<p style="text-align: center; color: #666;">Belum ada produk yang ditampilkan. Silakan atur di admin panel.</p>';
     }
     ?>
 

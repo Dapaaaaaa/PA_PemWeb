@@ -112,393 +112,145 @@ $banners = mysqli_query($conn, "SELECT * FROM banners ORDER BY urutan ASC, id DE
 
 <!-- Main Content -->
 <div class="admin-content">
-
-<div class="dashboard-content">
-    <div class="content-header">
-        <h2>Kelola Banner Slider</h2>
-        <button class="btn-add" onclick="openModal()">
-             Tambah Banner Baru
-        </button>
+    <!-- Topbar -->
+    <div class="admin-topbar">
+        <div class="topbar-left">
+            <h1>Kelola Banner</h1>
+        </div>
+        <div class="topbar-right">
+            <div class="admin-user">
+                <div class="admin-user-avatar"><?php echo strtoupper(substr($_SESSION['admin_name'] ?? 'A', 0, 1)); ?></div>
+                <div class="admin-user-info">
+                    <h4><?php echo htmlspecialchars($_SESSION['admin_name'] ?? 'Admin User'); ?></h4>
+                    <p>Administrator</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <?php if (isset($_SESSION['success_message'])): ?>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                if (typeof showToast === 'function') {
-                    showToast('<?php echo addslashes($_SESSION['success_message']); ?>', 'success', 2000);
-                }
-            });
-        </script>
-        <?php unset($_SESSION['success_message']); ?>
-    <?php endif; ?>
+    <!-- Main Area -->
+    <div class="admin-main">
+        <?php if (isset($_SESSION['success_message'])): ?>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    if (typeof showToast === 'function') {
+                        showToast('<?php echo addslashes($_SESSION['success_message']); ?>', 'success');
+                    }
+                });
+            </script>
+            <?php unset($_SESSION['success_message']); ?>
+        <?php endif; ?>
 
-    <?php if (isset($_SESSION['error_message'])): ?>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                if (typeof showToast === 'function') {
-                    showToast('<?php echo addslashes($_SESSION['error_message']); ?>', 'error', 3000);
-                }
-            });
-        </script>
-        <?php unset($_SESSION['error_message']); ?>
-    <?php endif; ?>
+        <?php if (isset($_SESSION['error_message'])): ?>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    if (typeof showToast === 'function') {
+                        showToast('<?php echo addslashes($_SESSION['error_message']); ?>', 'error');
+                    }
+                });
+            </script>
+            <?php unset($_SESSION['error_message']); ?>
+        <?php endif; ?>
 
-    <div class="info-box" style="margin-bottom: 20px; padding: 15px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 8px;">
-        <p style="margin: 0; color: #856404;">
-            <strong>Catatan:</strong> Maksimal 5 banner aktif. Banner akan otomatis berganti setiap 5 detik. Gunakan urutan untuk mengatur posisi banner.
-        </p>
-    </div>
+        <!-- Info Box -->
+        <div style="margin-bottom: 25px; padding: 16px 20px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 8px;">
+            <p style="margin: 0; color: #856404;">
+                <strong>📌 Catatan:</strong> Maksimal 5 banner aktif. Banner akan otomatis berganti setiap 5 detik. Gunakan urutan untuk mengatur posisi banner.
+            </p>
+        </div>
 
-    <div class="table-container">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Urutan</th>
-                    <th>Preview</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (mysqli_num_rows($banners) > 0): ?>
-                    <?php while($banner = mysqli_fetch_assoc($banners)): ?>
+        <!-- Banners List -->
+        <div class="content-section">
+            <div class="section-header">
+                <h2>Daftar Banner</h2>
+                <button class="btn btn-primary" onclick="openModal()">+ Tambah Banner</button>
+            </div>
+
+            <table class="data-table">
+                <thead>
                     <tr>
-                        <td><?php echo $banner['urutan']; ?></td>
-                        <td>
-                            <img src="../<?php echo htmlspecialchars($banner['image_url']); ?>" 
-                                 alt="Banner" 
-                                 style="width: 100px; height: 60px; object-fit: cover; border-radius: 4px;">
-                        </td>
-                        <td>
-                            <label class="switch">
-                                <input type="checkbox" 
-                                       <?php echo $banner['aktif'] ? 'checked' : ''; ?>
-                                       onchange="toggleStatus(<?php echo $banner['id']; ?>, this.checked ? 1 : 0)">
-                                <span class="slider-switch"></span>
-                            </label>
-                        </td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn-edit" onclick='editBanner(<?php echo json_encode($banner); ?>)'>
-                                    Edit
-                                </button>
-                                <button class="btn-delete" onclick="confirmDelete(<?php echo $banner['id']; ?>, <?php echo $banner['id']; ?>)">
-                                    Hapus
-                                </button>
-                            </div>
-                        </td>
+                        <th style="width: 80px;">Urutan</th>
+                        <th style="width: 150px;">Preview</th>
+                        <th style="text-align: center; width: 120px;">Status</th>
+                        <th style="text-align: center; width: 180px;">Aksi</th>
                     </tr>
-                    <?php endwhile; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="4" style="text-align: center; padding: 40px;">
-                            Belum ada banner. Klik "Tambah Banner Baru" untuk memulai.
-                        </td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php if (mysqli_num_rows($banners) > 0): ?>
+                        <?php while($banner = mysqli_fetch_assoc($banners)): ?>
+                        <tr>
+                            <td><strong><?php echo $banner['urutan']; ?></strong></td>
+                            <td>
+                                <img src="../<?php echo htmlspecialchars($banner['image_url']); ?>" 
+                                     alt="Banner" 
+                                     style="width: 120px; height: 70px; object-fit: cover; border-radius: 8px;">
+                            </td>
+                            <td style="text-align: center;">
+                                <span class="badge badge-<?php echo $banner['aktif'] ? 'success' : 'danger'; ?>">
+                                    <?php echo $banner['aktif'] ? 'Aktif' : 'Nonaktif'; ?>
+                                </span>
+                            </td>
+                            <td class="table-actions" style="text-align: center;">
+                                <button class="btn btn-sm btn-warning" onclick='editBanner(<?php echo json_encode($banner); ?>)'>Edit</button>
+                                <button class="btn btn-sm btn-<?php echo $banner['aktif'] ? 'secondary' : 'success'; ?>" 
+                                        onclick="toggleStatus(<?php echo $banner['id']; ?>, <?php echo $banner['aktif'] ? 0 : 1; ?>)">
+                                    <?php echo $banner['aktif'] ? 'Nonaktifkan' : 'Aktifkan'; ?>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="confirmDeleteBanner(<?php echo $banner['id']; ?>, <?php echo $banner['id']; ?>)">Hapus</button>
+                            </td>
+                        </tr>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="4" style="text-align: center; padding: 40px; color: #666;">
+                                Belum ada banner. Klik "Tambah Banner" untuk memulai.
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
 <!-- Modal Form -->
-<div id="bannerModal" class="modal">
-    <div class="modal-content" style="max-width: 600px;">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h3 id="modalTitle">Tambah Banner Baru</h3>
+<div id="bannerModal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); overflow: auto;">
+    <div style="background-color: white; margin: 5% auto; padding: 30px; border-radius: 12px; max-width: 600px; position: relative;">
+        <span onclick="closeModal()" style="position: absolute; right: 20px; top: 20px; font-size: 28px; font-weight: bold; cursor: pointer; color: #999;">&times;</span>
+        <h3 id="modalTitle" style="margin-top: 0; margin-bottom: 25px; color: #333;">Tambah Banner Baru</h3>
         
-        <form method="POST" enctype="multipart/form-data" id="bannerForm">
+        <form method="POST" enctype="multipart/form-data" id="bannerForm" class="admin-form">
             <input type="hidden" name="action" id="formAction" value="add">
             <input type="hidden" name="id" id="bannerId">
             <input type="hidden" name="existing_image" id="existingImage">
             
             <div class="form-group">
-                <label>Urutan:</label>
-                <input type="number" name="urutan" id="urutan" min="1" value="1" required>
-                <small>Semakin kecil angka, semakin awal urutan tampil</small>
+                <label>Urutan</label>
+                <input type="number" name="urutan" id="urutan" min="1" value="1" required class="form-control">
+                <small style="color: #666; display: block; margin-top: 5px;">Semakin kecil angka, semakin awal urutan tampil</small>
             </div>
 
             <div class="form-group">
-                <label>Gambar Banner: <span style="color: red;">*</span></label>
-                <input type="file" name="banner_image" id="banner_image" accept="image/*" onchange="previewImage(this)">
-                <small>Format: JPG, PNG, GIF, WEBP (Recommended: 1200x400px)</small>
-                <div id="imagePreview" style="margin-top: 10px;"></div>
+                <label>Gambar Banner <span style="color: red;">*</span></label>
+                <input type="file" name="banner_image" id="banner_image" accept="image/*" onchange="previewImage(this)" class="form-control">
+                <small style="color: #666; display: block; margin-top: 5px;">Format: JPG, PNG, GIF, WEBP (Recommended: 1200x400px)</small>
+                <div id="imagePreview" style="margin-top: 15px;"></div>
             </div>
 
             <div class="form-group">
-                <label class="checkbox-label">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                     <input type="checkbox" name="aktif" id="aktif" checked>
                     <span>Aktifkan Banner</span>
                 </label>
             </div>
 
-            <div class="form-actions">
-                <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
-                <button type="submit" class="btn-submit">Simpan Banner</button>
+            <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 30px;">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan Banner</button>
             </div>
         </form>
     </div>
 </div>
-
-<!-- Modal Konfirmasi Delete -->
-<div id="deleteModal" class="modal">
-    <div class="modal-content" style="max-width: 400px;">
-        <h3 style="margin-top: 0; color: #dc3545;">⚠️ Konfirmasi Hapus</h3>
-        <p id="deleteMessage" style="margin: 20px 0; color: #666;">Yakin ingin menghapus banner ini?</p>
-        <div class="form-actions">
-            <button type="button" class="btn-cancel" onclick="closeDeleteModal()">Batal</button>
-            <button type="button" class="btn-delete" onclick="confirmDeleteAction()" style="background: #dc3545; color: white;">Hapus</button>
-        </div>
-    </div>
-</div>
-
-<style>
-.content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-}
-
-.btn-add {
-    background: linear-gradient(135deg, #537b2f 0%, #6a9d3a 100%);
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-}
-
-.btn-add:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(83, 123, 47, 0.3);
-}
-
-.table-container {
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-}
-
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.data-table th {
-    background: #537b2f;
-    color: white;
-    padding: 15px;
-    text-align: left;
-    font-weight: 600;
-}
-
-.data-table td {
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-}
-
-.data-table tr:hover {
-    background: #f8f9fa;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 8px;
-}
-
-.btn-edit, .btn-delete {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 600;
-    transition: all 0.2s;
-}
-
-.btn-edit {
-    background: #ffc107;
-    color: #333;
-}
-
-.btn-edit:hover {
-    background: #ffb300;
-}
-
-.btn-delete {
-    background: #dc3545;
-    color: white;
-}
-
-.btn-delete:hover {
-    background: #c82333;
-}
-
-/* Toggle Switch */
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 24px;
-}
-
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider-switch {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 24px;
-}
-
-.slider-switch:before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
-}
-
-input:checked + .slider-switch {
-    background-color: #537b2f;
-}
-
-input:checked + .slider-switch:before {
-    transform: translateX(26px);
-}
-
-/* Modal */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    overflow: auto;
-}
-
-.modal-content {
-    background-color: white;
-    margin: 5% auto;
-    padding: 30px;
-    border-radius: 12px;
-    max-width: 600px;
-    position: relative;
-}
-
-.close {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-    color: #999;
-}
-
-.close:hover {
-    color: #333;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #333;
-}
-
-.form-group input[type="text"],
-.form-group input[type="number"],
-.form-group input[type="file"],
-.form-group textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 2px solid #ddd;
-    border-radius: 6px;
-    font-size: 14px;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: #537b2f;
-}
-
-.form-group small {
-    display: block;
-    margin-top: 5px;
-    color: #666;
-    font-size: 12px;
-}
-
-.checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-}
-
-.form-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: flex-end;
-    margin-top: 30px;
-}
-
-.btn-cancel, .btn-submit {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s;
-}
-
-.btn-cancel {
-    background: #6c757d;
-    color: white;
-}
-
-.btn-cancel:hover {
-    background: #5a6268;
-}
-
-.btn-submit {
-    background: #537b2f;
-    color: white;
-}
-
-.btn-submit:hover {
-    background: #3d5b22;
-}
-</style>
 
 <script>
 function openModal() {
@@ -523,10 +275,9 @@ function editBanner(banner) {
     document.getElementById('aktif').checked = banner.aktif == 1;
     document.getElementById('existingImage').value = banner.image_url;
     
-    // Show existing image
     if (banner.image_url) {
         document.getElementById('imagePreview').innerHTML = 
-            '<img src="../' + banner.image_url + '" style="max-width: 200px; border-radius: 8px;">';
+            '<img src="../' + banner.image_url + '" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">';
     }
 }
 
@@ -535,7 +286,7 @@ function previewImage(input) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            preview.innerHTML = '<img src="' + e.target.result + '" style="max-width: 200px; border-radius: 8px;">';
+            preview.innerHTML = '<img src="' + e.target.result + '" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">';
         }
         reader.readAsDataURL(input.files[0]);
     }
@@ -555,33 +306,22 @@ function toggleStatus(id, status) {
     .then(data => {
         if (data.success && window.showToast) {
             const statusText = status == 1 ? 'diaktifkan' : 'dinonaktifkan';
-            showToast('Banner berhasil ' + statusText, 'success', 2000);
+            showToast('Banner berhasil ' + statusText, 'success');
+            setTimeout(() => window.location.reload(), 500);
         }
     })
     .catch(error => {
         if (window.showToast) {
-            showToast('Gagal mengubah status banner', 'error', 2000);
+            showToast('Gagal mengubah status banner', 'error');
         }
     });
 }
 
-let deleteTargetId = null;
-
-function confirmDelete(id, bannerId) {
-    deleteTargetId = id;
-    document.getElementById('deleteMessage').textContent = 'Yakin ingin menghapus banner #' + bannerId + '?';
-    document.getElementById('deleteModal').style.display = 'block';
-}
-
-function closeDeleteModal() {
-    document.getElementById('deleteModal').style.display = 'none';
-    deleteTargetId = null;
-}
-
-function confirmDeleteAction() {
-    if (deleteTargetId) {
-        deleteBanner(deleteTargetId);
-        closeDeleteModal();
+function confirmDeleteBanner(id, bannerId) {
+    if (window.confirmDelete) {
+        confirmDelete(id, 'Banner #' + bannerId, 'banners.php');
+    } else if (confirm('Yakin ingin menghapus banner #' + bannerId + '?')) {
+        deleteBanner(id);
     }
 }
 
@@ -597,18 +337,18 @@ function deleteBanner(id) {
     .then(response => {
         if (response.ok) {
             if (window.showToast) {
-                showToast('Banner berhasil dihapus', 'success', 2000);
+                showToast('Banner berhasil dihapus', 'success');
             }
             setTimeout(() => window.location.reload(), 500);
         } else {
             if (window.showToast) {
-                showToast('Gagal menghapus banner', 'error', 2000);
+                showToast('Gagal menghapus banner', 'error');
             }
         }
     })
     .catch(error => {
         if (window.showToast) {
-            showToast('Terjadi kesalahan saat menghapus', 'error', 2000);
+            showToast('Terjadi kesalahan saat menghapus', 'error');
         }
     });
 }
@@ -622,15 +362,6 @@ window.onclick = function(event) {
 }
 </script>
 
-</div>
-
-<script>
-// Set active menu
-document.querySelectorAll('.menu-item').forEach(item => {
-    if (item.href === window.location.href) {
-        item.classList.add('active');
-    }
-});
 </script>
 
 </body>
