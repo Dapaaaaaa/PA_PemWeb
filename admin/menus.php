@@ -228,7 +228,6 @@ $result_kategori = mysqli_query($conn, $query_kategori);
                             <td><span class="badge badge-info"><?php echo htmlspecialchars($menu['kategori_nama']); ?></span></td>
                             <td>Rp <?php echo number_format($menu['harga'], 0, ',', '.'); ?></td>
                             <td><?php echo $menu['stok']; ?></td>
-                            <!-- PERBAIKAN: Tambah kolom Status -->
                             <td>
                                 <?php if ($menu['aktif'] == 1) { ?>
                                     <span class="badge badge-success">Aktif</span>

@@ -145,9 +145,10 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
                         <tr>
                             <td><?php echo $pesanan['nomor_pesanan']; ?></td>
                             <td><?php echo htmlspecialchars($pesanan['nama_pelanggan']); ?></td>
+                            <td>-</td>
                             <td>Rp <?php echo number_format($pesanan['total'], 0, ',', '.'); ?></td>
                             <td><span class="badge badge-<?php echo $status_badge; ?>"><?php echo ucfirst($pesanan['status']); ?></span></td>
-                            <td><?php echo date('d M Y', strtotime($pesanan['dibuat_pada'])); ?></td>
+                            <td><?php echo date('d M Y H:i', strtotime($pesanan['dibuat_pada'])); ?></td>
                         </tr>
                         <?php } ?>
                     </tbody>

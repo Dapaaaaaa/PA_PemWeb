@@ -277,16 +277,13 @@ $result_products = mysqli_query($conn, $query_products);
                                     <?php echo $item['aktif'] ? 'Aktif' : 'Nonaktif'; ?>
                                 </span>
                             </td>
-                            <td style="text-align: center;">
-                                <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
-                                    <button onclick="confirmStatusToggle(<?php echo $item['id']; ?>, '<?php echo htmlspecialchars($item['nama']); ?>', <?php echo $item['aktif'] ? 'false' : 'true'; ?>)" 
-                                            class="btn btn-sm btn-<?php echo $item['aktif'] ? 'warning' : 'success'; ?>"
-                                            style="min-width: 95px; white-space: nowrap;">
-                                        <?php echo $item['aktif'] ? 'Nonaktifkan' : 'Aktifkan'; ?>
-                                    </button>
-                                    <button onclick="confirmRemoveFromFeatured(<?php echo $item['id']; ?>, '<?php echo htmlspecialchars($item['nama']); ?>')" 
-                                            class="btn btn-sm btn-danger" style="min-width: 60px;">Hapus</button>
-                                </div>
+                            <td class="table-actions">
+                                <button onclick="confirmStatusToggle(<?php echo $item['id']; ?>, '<?php echo htmlspecialchars($item['nama']); ?>', <?php echo $item['aktif'] ? 'false' : 'true'; ?>)" 
+                                        class="btn btn-sm btn-<?php echo $item['aktif'] ? 'warning' : 'success'; ?>">
+                                    <?php echo $item['aktif'] ? 'Nonaktifkan' : 'Aktifkan'; ?>
+                                </button>
+                                <button onclick="confirmRemoveFromFeatured(<?php echo $item['id']; ?>, '<?php echo htmlspecialchars($item['nama']); ?>')" 
+                                        class="btn btn-sm btn-danger">Hapus</button>
                             </td>
                         </tr>
                         <?php 
@@ -392,6 +389,13 @@ function updateLabel(id) {
     // Send AJAX request or redirect
     window.location.href = 'featured_products.php?action=update_label&id=' + id + '&label=' + encodeURIComponent(label);
 }
+
+// Set active menu
+document.querySelectorAll('.menu-item').forEach(item => {
+    if (item.href && item.href.includes('featured_products.php')) {
+        item.classList.add('active');
+    }
+});
 </script>
 
 </body>

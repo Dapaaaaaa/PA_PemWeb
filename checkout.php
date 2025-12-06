@@ -125,7 +125,7 @@ if (isset($_POST['complete_order'])) {
             // 4. Buat pesanan
             $delivery_notes = "Jarak: " . number_format($distance_km, 2) . " km | Ongkir: Rp " . number_format($delivery_fee, 0, ',', '.');
             $query_insert_order = "INSERT INTO pesanan (nomor_pesanan, pelanggan_id, alamat_id, status, total, catatan) 
-                                   VALUES ('$order_number', $customer_id, $address_id, 'pending', $final_total, '$delivery_notes')";
+                                   VALUES ('$order_number', $customer_id, $address_id, 'proses', $final_total, '$delivery_notes')";
             if (!mysqli_query($conn, $query_insert_order)) {
                 throw new Exception("Gagal membuat pesanan");
             }
