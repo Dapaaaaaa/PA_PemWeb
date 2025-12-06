@@ -211,7 +211,6 @@ $result_products = mysqli_query($conn, $query_products);
                         <label>Label Khusus (Opsional)</label>
                         <select name="label" class="form-control">
                             <option value="">-- Tanpa Label --</option>
-                            <option value="best_seller">🔥 Best Seller</option>
                             <option value="favorit">⭐ Favorit</option>
                         </select>
                         <small style="color: #666; display: block; margin-top: 5px;">Label akan ditampilkan di homepage untuk menarik perhatian pengunjung</small>
@@ -270,7 +269,6 @@ $result_products = mysqli_query($conn, $query_products);
                                         style="padding: 6px 10px; border: 2px solid #ddd; border-radius: 6px; font-size: 13px; width: 130px;"
                                         onchange="updateLabel(<?php echo $item['id']; ?>)">
                                     <option value="" <?php echo $item['label'] === NULL ? 'selected' : ''; ?>>Tanpa Label</option>
-                                    <option value="best_seller" <?php echo $item['label'] === 'best_seller' ? 'selected' : ''; ?>>🔥 Best Seller</option>
                                     <option value="favorit" <?php echo $item['label'] === 'favorit' ? 'selected' : ''; ?>>⭐ Favorit</option>
                                 </select>
                             </td>
