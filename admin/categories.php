@@ -96,20 +96,20 @@ $result_categories = mysqli_query($conn, $query_categories);
                         <div class="form-group">
                             <label for="category-name">Nama Kategori *</label>
                             <input type="text" id="category-name" name="category_name" required 
-                                   placeholder="e.g., Burger, Minuman, Snack">
+                                   placeholder="Contoh: Burger, Minuman, Snack">
                         </div>
 
                         <div class="form-group">
                             <label for="category-slug">Selogan *</label>
                             <input type="text" id="category-slug" name="slug" required 
-                                   placeholder="e.g., burger, minuman, snack">
+                                   placeholder="Contoh: burger, minuman, snack">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="category-description">Deskripsi</label>
                         <textarea id="category-description" name="description" 
-                                  placeholder="Describe this category..." rows="4"></textarea>
+                                  placeholder="Jelaskan kategori ini..." rows="4"></textarea>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Tambah Kategori</button>

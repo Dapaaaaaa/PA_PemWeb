@@ -319,8 +319,23 @@ function toggleStatus(id, status) {
 }
 
 function confirmDeleteBanner(id, bannerId) {
-    if (window.confirmDelete) {
-        confirmDelete(id, 'Banner #' + bannerId, 'banners.php');
+    const modal = document.getElementById('deleteModal');
+    if (modal) {
+        document.getElementById('deleteMessage').innerHTML = 
+            'Yakin ingin menghapus <strong>Banner #' + bannerId + '</strong>?<br><br>' +
+            '<span style="color: #dc3545;">Banner akan dihapus permanen!</span>';
+        
+        modal.classList.add('show');
+        
+        // Override confirm button action
+        const confirmBtn = document.getElementById('confirmDeleteBtn');
+        const newConfirmBtn = confirmBtn.cloneNode(true);
+        confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+        
+        newConfirmBtn.onclick = function() {
+            deleteBanner(id);
+            modal.classList.remove('show');
+        };
     } else if (confirm('Yakin ingin menghapus banner #' + bannerId + '?')) {
         deleteBanner(id);
     }
