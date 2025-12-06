@@ -138,7 +138,7 @@ $result_orders = mysqli_query($conn, $query_orders);
                 <div class="section-header">
                     <h2>Semua Pesanan</h2>
                     <div>
-                        <input type="text" placeholder="Search by order ID or customer..." 
+                        <input type="text" placeholder="Cari berdasarkan ID pesanan atau pelanggan..." 
                                style="padding: 8px 16px; border: 2px solid #ddd; border-radius: 8px; margin-right: 10px; width: 250px;">
                         <select style="padding: 8px 16px; border: 2px solid #ddd; border-radius: 8px;">
                             <option value="">Semua Status</option>

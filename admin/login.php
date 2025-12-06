@@ -28,7 +28,7 @@ if (isAdminLoggedIn()) {
     <div class="login-container">
         <div class="login-header">
             <h1>Admin Login</h1>
-            <p>Welcome back! Please login to your account.</p>
+            <p>Selamat datang kembali! Silakan masuk ke akun Anda.</p>
         </div>
 
         <?php
@@ -47,22 +47,22 @@ if (isAdminLoggedIn()) {
 
         <form class="login-form" action="process_login.php" method="POST">
             <div class="form-group">
-                <label for="email">Email Address</label>
+                <label for="email">Email</label>
                 <input type="email" id="email" name="email" required 
-                       placeholder="admin@ourstuffies.com" value="admin@ourstuffies.com">
+                       placeholder="admin@ourstuffies.com">
             </div>
 
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required 
-                       placeholder="Enter your password" value="admin123">
+                       placeholder="Enter your password">
             </div>
 
-            <button type="submit" class="btn-login">Login to Dashboard</button>
+            <button type="submit" class="btn-login">Masuk ke Dashboard</button>
         </form>
 
         <div class="login-footer">
-            <p><a href="../index.php">← Back to Main Site</a></p>
+            <p><a href="../index.php">← Kembali ke Situs Utama</a></p>
         </div>
     </div>
 </section>
