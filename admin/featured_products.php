@@ -7,6 +7,7 @@ requireAdminLogin();
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'add') {
     $produk_id = intval($_POST['produk_id']);
     $urutan = intval($_POST['urutan']);
+    $label = isset($_POST['label']) && $_POST['label'] !== '' ? mysqli_real_escape_string($conn, $_POST['label']) : NULL;
     
     // Check if product already exists in menu_display
     $check_product = mysqli_query($conn, "SELECT id FROM menu_display WHERE produk_id = $produk_id");
@@ -18,7 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
         if (mysqli_num_rows($check_urutan) > 0) {
             $_SESSION['error'] = "Urutan ke-$urutan sudah digunakan! Silakan pilih urutan yang lain.";
         } else {
-            $query = "INSERT INTO menu_display (produk_id, urutan, aktif) VALUES ($produk_id, $urutan, 1)";
+            $label_sql = $label ? "'$label'" : "NULL";
+            $query = "INSERT INTO menu_display (produk_id, urutan, label, aktif) VALUES ($produk_id, $urutan, $label_sql, 1)";
             if (mysqli_query($conn, $query)) {
                 $_SESSION['success'] = "Produk berhasil ditambahkan ke Menu Kami!";
             } else {
@@ -92,6 +94,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
         $_SESSION['success'] = "Berhasil menyimpan urutan untuk $updated produk!";
     } else {
         $_SESSION['error'] = "Beberapa urutan gagal diupdate: " . implode(', ', $errors);
+    }
+    header("Location: featured_products.php");
+    exit();
+}
+
+// Handle UPDATE Label
+if (isset($_GET['action']) && $_GET['action'] == 'update_label' && isset($_GET['id']) && isset($_GET['label'])) {
+    $id = intval($_GET['id']);
+    $label = $_GET['label'] === '' ? NULL : mysqli_real_escape_string($conn, $_GET['label']);
+    
+    $label_sql = $label ? "'$label'" : "NULL";
+    $query = "UPDATE menu_display SET label = $label_sql WHERE id = $id";
+    
+    if (mysqli_query($conn, $query)) {
+        $_SESSION['success'] = "Label berhasil diupdate!";
+    } else {
+        $_SESSION['error'] = "Gagal mengupdate label!";
     }
     header("Location: featured_products.php");
     exit();
@@ -188,6 +207,16 @@ $result_products = mysqli_query($conn, $query_products);
                         <small style="color: #666; display: block; margin-top: 5px;">Urutan tampilan produk di homepage (kecil ke besar)</small>
                     </div>
 
+                    <div class="form-group">
+                        <label>Label Khusus (Opsional)</label>
+                        <select name="label" class="form-control">
+                            <option value="">-- Tanpa Label --</option>
+                            <option value="best_seller">🔥 Best Seller</option>
+                            <option value="favorit">⭐ Favorit</option>
+                        </select>
+                        <small style="color: #666; display: block; margin-top: 5px;">Label akan ditampilkan di homepage untuk menarik perhatian pengunjung</small>
+                    </div>
+
                     <button type="submit" class="btn btn-primary">Tambahkan Produk</button>
                 </form>
             </div>
@@ -207,6 +236,7 @@ $result_products = mysqli_query($conn, $query_products);
                             <th>Nama Produk</th>
                             <th>Kategori</th>
                             <th style="width: 130px;">Harga</th>
+                            <th style="text-align: center; width: 140px;">Label</th>
                             <th style="text-align: center; width: 100px;">Status</th>
                             <th style="text-align: center; width: 180px;">Aksi</th>
                         </tr>
@@ -236,6 +266,15 @@ $result_products = mysqli_query($conn, $query_products);
                             <td><?php echo htmlspecialchars($item['kategori_nama']); ?></td>
                             <td><strong>Rp <?php echo number_format($item['harga'], 0, ',', '.'); ?></strong></td>
                             <td style="text-align: center;">
+                                <select id="label_<?php echo $item['id']; ?>" 
+                                        style="padding: 6px 10px; border: 2px solid #ddd; border-radius: 6px; font-size: 13px; width: 130px;"
+                                        onchange="updateLabel(<?php echo $item['id']; ?>)">
+                                    <option value="" <?php echo $item['label'] === NULL ? 'selected' : ''; ?>>Tanpa Label</option>
+                                    <option value="best_seller" <?php echo $item['label'] === 'best_seller' ? 'selected' : ''; ?>>🔥 Best Seller</option>
+                                    <option value="favorit" <?php echo $item['label'] === 'favorit' ? 'selected' : ''; ?>>⭐ Favorit</option>
+                                </select>
+                            </td>
+                            <td style="text-align: center;">
                                 <span class="badge badge-<?php echo $item['aktif'] ? 'success' : 'danger'; ?>">
                                     <?php echo $item['aktif'] ? 'Aktif' : 'Nonaktif'; ?>
                                 </span>
@@ -255,7 +294,7 @@ $result_products = mysqli_query($conn, $query_products);
                         <?php 
                             }
                         } else {
-                            echo '<tr><td colspan="7" style="text-align:center;">Belum ada produk di Menu Kami</td></tr>';
+                            echo '<tr><td colspan="8" style="text-align:center;">Belum ada produk di Menu Kami</td></tr>';
                         }
                         ?>
                     </tbody>
@@ -264,7 +303,7 @@ $result_products = mysqli_query($conn, $query_products);
                 <?php if (mysqli_num_rows($result_featured) > 0): ?>
                 <div style="margin-top: 20px;">
                     <button type="button" onclick="saveAllOrders()" class="btn btn-primary" style="padding: 10px 24px;">
-                        💾 Simpan Semua Urutan
+                        Simpan Semua Urutan
                     </button>
                 </div>
                 <?php endif; ?>
@@ -346,6 +385,14 @@ function confirmRemoveFromFeatured(id, productName) {
             window.location.href = 'featured_products.php?action=delete&id=' + id;
         }
     }
+}
+
+function updateLabel(id) {
+    const labelSelect = document.getElementById('label_' + id);
+    const label = labelSelect.value;
+    
+    // Send AJAX request or redirect
+    window.location.href = 'featured_products.php?action=update_label&id=' + id + '&label=' + encodeURIComponent(label);
 }
 </script>
 
