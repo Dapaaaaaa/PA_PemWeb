@@ -197,12 +197,12 @@ $result_orders = mysqli_query($conn, $query_orders);
                             <td><?php echo date('Y-m-d H:i', strtotime($order['dibuat_pada'])); ?></td>
                             <td class="table-actions">
                                 <a href="view_order.php?id=<?php echo $order['id']; ?>" class="btn btn-sm btn-success">Lihat</a>
-                                <?php if ($order['status'] != 'completed' && $order['status'] != 'cancelled') { ?>
+                                <?php if ($order['status'] != 'selesai' && $order['status'] != 'dibatalkan') { ?>
                                     <select onchange="updateStatus(<?php echo $order['id']; ?>, this.value)" class="btn btn-sm btn-primary" style="padding: 4px 8px;">
                                         <option value="">Update Status</option>
-                                        <option value="processing">Proses</option>
-                                        <option value="completed">Selesai</option>
-                                        <option value="cancelled">Dibatalkan</option>
+                                        <option value="proses">Proses</option>
+                                        <option value="selesai">Selesai</option>
+                                        <option value="dibatalkan">Dibatalkan</option>
                                     </select>
                                 <?php } ?>
                             </td>
@@ -235,9 +235,9 @@ function updateStatus(orderId, status) {
     if (!status) return;
     
     const statusLabels = {
-        'processing': 'Proses',
-        'completed': 'Selesai',
-        'cancelled': 'Dibatalkan'
+        'proses': 'Proses',
+        'selesai': 'Selesai',
+        'dibatalkan': 'Dibatalkan'
     };
     
     const statusLabel = statusLabels[status] || status;
