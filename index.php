@@ -108,36 +108,40 @@ if (totalSlides > 1) {
     <div class="product-grid">
 
     <?php 
-    // Ambil semua kategori (misal 1 = makanan, 2 = minuman, 3 = snack, dst)
-    $kategori_q = mysqli_query($conn, "SELECT * FROM kategori ORDER BY id ASC");
+    // Ambil produk yang sudah diatur admin dari tabel menu_display
+    $query_featured = "SELECT p.*, k.nama as kategori_nama, md.label
+                       FROM menu_display md
+                       JOIN produk p ON md.produk_id = p.id
+                       LEFT JOIN kategori k ON p.kategori_id = k.id
+                       WHERE md.aktif = 1 AND p.aktif = 1
+                       ORDER BY md.urutan ASC
+                       LIMIT 6";
+    $result_featured = mysqli_query($conn, $query_featured);
 
-    while ($kat = mysqli_fetch_assoc($kategori_q)) {
-
-        // Ambil 1 produk pertama dari kategori ini
-        $produk_q = mysqli_query($conn, "
-            SELECT * FROM produk 
-            WHERE kategori_id = ".$kat['id']." AND aktif = 1
-            ORDER BY id ASC
-            LIMIT 1
-        ");
-
-        // Kalau produk kategori ini ada
-        if ($produk = mysqli_fetch_assoc($produk_q)) {
-
+    if ($result_featured && mysqli_num_rows($result_featured) > 0) {
+        while ($produk = mysqli_fetch_assoc($result_featured)) {
+            // Tentukan badge label
+            $label_html = '';
+            if ($produk['label'] === 'favorit') {
+                $label_html = '<span class="product-label" style="background: linear-gradient(135deg, #ffd700, #ffb700); color: #333; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; position: absolute; top: 10px; right: 10px; box-shadow: 0 2px 8px rgba(255,183,0,0.3); z-index: 1;">⭐ Favorit</span>';
+            }
+            
             echo '
-                    <div class="product-card">
-                        <img src="'.$produk['url_gambar'].'" alt="'.$produk['nama'].'">
-                        <h3>'.$produk['nama'].'</h3>
-                        <p>'.$produk['deskripsi'].'</p>
-                        <span class="price">Rp '.number_format($produk['harga'], 0, ',', '.').'</span>
+                <div class="product-card" style="position: relative;">
+                    '.$label_html.'
+                    <img src="'.$produk['url_gambar'].'" alt="'.htmlspecialchars($produk['nama']).'">
+                    <h3>'.htmlspecialchars($produk['nama']).'</h3>
+                    <p>'.htmlspecialchars($produk['deskripsi']).'</p>
+                    <span class="price">Rp '.number_format($produk['harga'], 0, ',', '.').'</span>
 
-                        <a href="menu.php?kategori='.$kat['id'].'" class="btn-lihat">
-                            Lihat Semua '.$kat['nama'].'
-                        </a>
-                    </div>
-                ';
-
+                    <a href="menu.php?kategori='.$produk['kategori_id'].'" class="btn-lihat">
+                        Lihat Semua '.htmlspecialchars($produk['kategori_nama']).'
+                    </a>
+                </div>
+            ';
         }
+    } else {
+        echo '<p style="text-align: center; color: #666;">Belum ada produk yang ditampilkan. Silakan atur di admin panel.</p>';
     }
     ?>
 

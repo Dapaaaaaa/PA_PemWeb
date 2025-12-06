@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 05, 2025 at 10:46 AM
+-- Generation Time: Dec 06, 2025 at 08:05 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.4.14
 
@@ -258,6 +258,33 @@ CREATE TABLE `log_wa` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `menu_display`
+--
+
+CREATE TABLE `menu_display` (
+  `id` int NOT NULL,
+  `produk_id` int NOT NULL,
+  `urutan` int NOT NULL DEFAULT '0',
+  `label` varchar(50) DEFAULT NULL COMMENT 'best_seller, favorit, atau NULL',
+  `aktif` tinyint(1) NOT NULL DEFAULT '1',
+  `dibuat_pada` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `diperbarui_pada` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `menu_display`
+--
+
+INSERT INTO `menu_display` (`id`, `produk_id`, `urutan`, `label`, `aktif`, `dibuat_pada`, `diperbarui_pada`) VALUES
+(1, 1, 1, 'best_seller', 1, '2025-12-06 06:44:53', '2025-12-06 07:53:31'),
+(2, 3, 2, 'favorit', 1, '2025-12-06 06:44:53', '2025-12-06 07:53:58'),
+(3, 5, 3, NULL, 1, '2025-12-06 06:44:53', '2025-12-06 06:44:53'),
+(4, 4, 4, NULL, 1, '2025-12-06 07:11:16', '2025-12-06 07:11:16'),
+(5, 2, 5, NULL, 1, '2025-12-06 07:11:32', '2025-12-06 07:11:32');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `pelanggan`
 --
 
@@ -324,12 +351,12 @@ CREATE TABLE `pesanan` (
 --
 
 INSERT INTO `pesanan` (`id`, `nomor_pesanan`, `pelanggan_id`, `alamat_id`, `status`, `total`, `ongkir`, `catatan`, `dibuat_pada`, `diperbarui_pada`) VALUES
-(1, 'ORD202511280001', 3, 3, 'cancelled', 15000.00, 0.00, 'Order dari website', '2025-11-29 00:11:09', '2025-12-03 21:12:33'),
-(4, 'ORD202512030001', 6, 6, 'completed', 65000.00, 0.00, 'Order dari website', '2025-12-03 21:20:24', '2025-12-03 21:29:00'),
-(5, 'ORD202512030002', 7, 7, 'pending', 95000.00, 0.00, 'Order dari website', '2025-12-04 00:33:02', '2025-12-04 00:33:02'),
-(6, 'ORD202512050001', 8, 8, 'pending', 46662.54, 0.00, 'Jarak: 2.22 km | Ongkir: Rp 11.663', '2025-12-05 17:29:31', '2025-12-05 17:29:31'),
-(7, 'ORD202512050002', 9, 9, 'pending', 43000.00, 0.00, 'Jarak: 0.69 km | Ongkir: Rp 8.000', '2025-12-05 17:50:11', '2025-12-05 17:50:11'),
-(8, 'ORD202512050003', 10, 10, 'pending', 47000.00, 0.00, 'Jarak: 0.53 km | Ongkir: Rp 7.000', '2025-12-05 17:54:33', '2025-12-05 17:54:33');
+(1, 'ORD202511280001', 3, 3, 'dibatalkan', 15000.00, 0.00, 'Order dari website', '2025-11-29 00:11:09', '2025-12-06 14:09:20'),
+(4, 'ORD202512030001', 6, 6, 'selesai', 65000.00, 0.00, 'Order dari website', '2025-12-03 21:20:24', '2025-12-06 14:09:26'),
+(5, 'ORD202512030002', 7, 7, 'proses', 95000.00, 0.00, 'Order dari website', '2025-12-04 00:33:02', '2025-12-06 14:09:35'),
+(6, 'ORD202512050001', 8, 8, 'proses', 46662.54, 0.00, 'Jarak: 2.22 km | Ongkir: Rp 11.663', '2025-12-05 17:29:31', '2025-12-06 14:09:37'),
+(7, 'ORD202512050002', 9, 9, 'selesai', 43000.00, 0.00, 'Jarak: 0.69 km | Ongkir: Rp 8.000', '2025-12-05 17:50:11', '2025-12-06 14:18:36'),
+(8, 'ORD202512050003', 10, 10, 'selesai', 47000.00, 0.00, 'Jarak: 0.53 km | Ongkir: Rp 7.000', '2025-12-05 17:54:33', '2025-12-06 14:10:11');
 
 -- --------------------------------------------------------
 
@@ -361,7 +388,7 @@ INSERT INTO `produk` (`id`, `kategori_id`, `nama`, `slug`, `deskripsi`, `harga`,
 (3, 2, 'Burger Daging', 'burger-beef', 'Burger dengan patty daging sapi 100%', 25000.00, 40, 'assets\\img\\products\\burger1.png', 1, '2025-11-11 00:29:35', '2025-12-03 20:52:20'),
 (4, 2, 'Burger Ayam', 'burger-chicken', 'Burger dengan chicken crispy', 20000.00, 45, 'assets\\img\\products\\burger2.png', 1, '2025-11-11 00:29:35', '2025-12-03 20:52:23'),
 (5, 3, 'Es Teh Manis', 'es-teh-manis', 'Es teh manis segar', 5000.00, 100, 'assets\\img\\products\\es-teh.png', 1, '2025-11-11 00:29:35', '2025-12-03 20:52:27'),
-(6, 3, 'Jus Jeruk', 'jus-jeruk', 'Jus jeruk segar tanpa gula tambahan', 10000.00, 50, 'assets\\img\\products\\jus-jeruk.png', 1, '2025-11-11 00:29:35', '2025-12-03 20:52:30');
+(6, 3, 'Jus Jeruk', 'jus-jeruk', 'Jus jeruk segar tanpa gula tambahan', 10000.00, 50, 'assets\\img\\products\\jus-jeruk.png', 1, '2025-11-11 00:29:35', '2025-12-06 13:41:42');
 
 -- --------------------------------------------------------
 
@@ -428,17 +455,17 @@ CREATE TABLE `struk` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_item_keranjang` (
-`catatan` varchar(255)
-,`harga_saat_tambah` decimal(10,2)
-,`item_keranjang_id` int
-,`keranjang_id` int
-,`nama_produk` varchar(150)
+`keranjang_id` int
 ,`pelanggan_id` int
-,`produk_id` int
-,`qty` int
 ,`session_id` varchar(128)
-,`subtotal` decimal(20,2)
+,`item_keranjang_id` int
+,`produk_id` int
+,`nama_produk` varchar(150)
 ,`url_gambar` varchar(255)
+,`qty` int
+,`harga_saat_tambah` decimal(10,2)
+,`subtotal` decimal(20,2)
+,`catatan` varchar(255)
 );
 
 -- --------------------------------------------------------
@@ -448,23 +475,23 @@ CREATE TABLE `v_item_keranjang` (
 -- (See below for the actual view)
 --
 CREATE TABLE `v_item_pesanan` (
-`catatan_item` varchar(255)
-,`harga_satuan` decimal(10,2)
-,`jalan` text
-,`kode_pos` varchar(20)
-,`kota` varchar(100)
-,`nama_pelanggan` varchar(150)
-,`nama_produk` varchar(150)
+`pesanan_id` int
 ,`nomor_pesanan` varchar(20)
-,`ongkir` decimal(10,2)
-,`pesanan_id` int
-,`produk_id` int
-,`qty` int
 ,`status` varchar(30)
-,`subtotal` decimal(12,2)
-,`tanggal_pesanan` datetime
-,`telepon_pelanggan` varchar(32)
 ,`total` decimal(12,2)
+,`ongkir` decimal(10,2)
+,`tanggal_pesanan` datetime
+,`nama_pelanggan` varchar(150)
+,`telepon_pelanggan` varchar(32)
+,`jalan` text
+,`kota` varchar(100)
+,`kode_pos` varchar(20)
+,`produk_id` int
+,`nama_produk` varchar(150)
+,`qty` int
+,`harga_satuan` decimal(10,2)
+,`subtotal` decimal(12,2)
+,`catatan_item` varchar(255)
 );
 
 --
@@ -530,6 +557,15 @@ ALTER TABLE `log_wa`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_pesanan` (`pesanan_id`),
   ADD KEY `idx_status` (`status`);
+
+--
+-- Indexes for table `menu_display`
+--
+ALTER TABLE `menu_display`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `produk_id` (`produk_id`),
+  ADD KEY `urutan` (`urutan`),
+  ADD KEY `aktif` (`aktif`);
 
 --
 -- Indexes for table `pelanggan`
@@ -638,6 +674,12 @@ ALTER TABLE `log_wa`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `menu_display`
+--
+ALTER TABLE `menu_display`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `pelanggan`
 --
 ALTER TABLE `pelanggan`
@@ -726,6 +768,12 @@ ALTER TABLE `keranjang`
 --
 ALTER TABLE `log_wa`
   ADD CONSTRAINT `log_wa_ibfk_1` FOREIGN KEY (`pesanan_id`) REFERENCES `pesanan` (`id`);
+
+--
+-- Constraints for table `menu_display`
+--
+ALTER TABLE `menu_display`
+  ADD CONSTRAINT `fk_menu_display_produk` FOREIGN KEY (`produk_id`) REFERENCES `produk` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pembayaran`

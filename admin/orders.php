@@ -27,15 +27,15 @@ $query_waiting = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'waiting_
 $result_waiting = mysqli_query($conn, $query_waiting);
 $total_waiting = mysqli_fetch_assoc($result_waiting)['total'];
 
-$query_processing = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'processing'";
+$query_processing = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'proses'";
 $result_processing = mysqli_query($conn, $query_processing);
 $total_processing = mysqli_fetch_assoc($result_processing)['total'];
 
-$query_completed = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'completed'";
+$query_completed = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'selesai'";
 $result_completed = mysqli_query($conn, $query_completed);
 $total_completed = mysqli_fetch_assoc($result_completed)['total'];
 
-$query_cancelled = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'cancelled'";
+$query_cancelled = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'dibatalkan'";
 $result_cancelled = mysqli_query($conn, $query_cancelled);
 $total_cancelled = mysqli_fetch_assoc($result_cancelled)['total'];
 
@@ -182,10 +182,10 @@ $result_orders = mysqli_query($conn, $query_orders);
                                 
                                 // Badge status
                                 $status_badge = 'info';
-                                if ($order['status'] == 'completed') $status_badge = 'success';
+                                if ($order['status'] == 'selesai') $status_badge = 'success';
                                 elseif ($order['status'] == 'waiting_confirmation') $status_badge = 'purple';
-                                elseif ($order['status'] == 'processing') $status_badge = 'warning';
-                                elseif ($order['status'] == 'cancelled') $status_badge = 'danger';
+                                elseif ($order['status'] == 'proses') $status_badge = 'warning';
+                                elseif ($order['status'] == 'dibatalkan') $status_badge = 'danger';
                         ?>
                         <tr>
                             <td><strong><?php echo $order['nomor_pesanan']; ?></strong></td>
@@ -197,12 +197,12 @@ $result_orders = mysqli_query($conn, $query_orders);
                             <td><?php echo date('Y-m-d H:i', strtotime($order['dibuat_pada'])); ?></td>
                             <td class="table-actions">
                                 <a href="view_order.php?id=<?php echo $order['id']; ?>" class="btn btn-sm btn-success">Lihat</a>
-                                <?php if ($order['status'] != 'completed' && $order['status'] != 'cancelled') { ?>
+                                <?php if ($order['status'] != 'selesai' && $order['status'] != 'dibatalkan') { ?>
                                     <select onchange="updateStatus(<?php echo $order['id']; ?>, this.value)" class="btn btn-sm btn-primary" style="padding: 4px 8px;">
                                         <option value="">Update Status</option>
-                                        <option value="processing">Proses</option>
-                                        <option value="completed">Selesai</option>
-                                        <option value="cancelled">Dibatalkan</option>
+                                        <option value="proses">Proses</option>
+                                        <option value="selesai">Selesai</option>
+                                        <option value="dibatalkan">Dibatalkan</option>
                                     </select>
                                 <?php } ?>
                             </td>
@@ -232,9 +232,16 @@ document.querySelectorAll('.menu-item').forEach(item => {
 
 // Update status function
 function updateStatus(orderId, status) {
-    if (status && confirm('Update status pesanan ke: ' + status + '?')) {
-        window.location.href = 'orders.php?action=update_status&id=' + orderId + '&status=' + status;
-    }
+    if (!status) return;
+    
+    const statusLabels = {
+        'proses': 'Proses',
+        'selesai': 'Selesai',
+        'dibatalkan': 'Dibatalkan'
+    };
+    
+    const statusLabel = statusLabels[status] || status;
+    confirmStatusUpdate(orderId, status, statusLabel);
 }
 </script>
 

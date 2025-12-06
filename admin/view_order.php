@@ -55,17 +55,17 @@ $result_items = mysqli_query($conn, $query_items);
 $status_colors = [
     'pending' => 'info',
     'waiting_confirmation' => 'purple',
-    'processing' => 'warning',
-    'completed' => 'success',
-    'cancelled' => 'danger'
+    'proses' => 'warning',
+    'selesai' => 'success',
+    'dibatalkan' => 'danger'
 ];
 
 $status_labels = [
     'pending' => 'Pending',
     'waiting_confirmation' => 'Menunggu Konfirmasi',
-    'processing' => 'Proses',
-    'completed' => 'Selesai',
-    'cancelled' => 'Dibatalkan'
+    'proses' => 'Proses',
+    'selesai' => 'Selesai',
+    'dibatalkan' => 'Dibatalkan'
 ];
 
 $status_badge = $status_colors[$order['status']] ?? 'info';
@@ -126,28 +126,28 @@ $status_label = $status_labels[$order['status']] ?? ucfirst($order['status']);
                                 </span>
                             </div>
                             
-                            <?php if ($order['status'] != 'completed' && $order['status'] != 'cancelled') { ?>
+                            <?php if ($order['status'] != 'selesai' && $order['status'] != 'dibatalkan') { ?>
                             <form method="POST" class="status-update-form">
                                 <input type="hidden" name="action" value="update_status">
                                 <div class="form-group">
                                     <label style="font-weight: 600; margin-bottom: 12px; display: block;">Update Status Pesanan</label>
                                     <div class="status-options">
                                         <label class="status-option-card">
-                                            <input type="radio" name="status" value="processing" <?php echo ($order['status'] == 'processing') ? 'checked' : ''; ?> required>
+                                            <input type="radio" name="status" value="proses" <?php echo ($order['status'] == 'proses') ? 'checked' : ''; ?> required>
                                             <div class="status-option-content">
                                                 <!-- <span class="status-icon">🔄</span> -->
                                                 <span class="status-text">Proses</span>
                                             </div>
                                         </label>
                                         <label class="status-option-card">
-                                            <input type="radio" name="status" value="completed" <?php echo ($order['status'] == 'completed') ? 'checked' : ''; ?> required>
+                                            <input type="radio" name="status" value="selesai" <?php echo ($order['status'] == 'selesai') ? 'checked' : ''; ?> required>
                                             <div class="status-option-content">
                                                 <!-- <span class="status-icon">✅</span> -->
                                                 <span class="status-text">Selesai</span>
                                             </div>
                                         </label>
                                         <label class="status-option-card">
-                                            <input type="radio" name="status" value="cancelled" <?php echo ($order['status'] == 'cancelled') ? 'checked' : ''; ?> required>
+                                            <input type="radio" name="status" value="dibatalkan" <?php echo ($order['status'] == 'dibatalkan') ? 'checked' : ''; ?> required>
                                             <div class="status-option-content">
                                                 <!-- <span class="status-icon">❌</span> -->
                                                 <span class="status-text">Dibatalkan</span>
@@ -160,7 +160,7 @@ $status_label = $status_labels[$order['status']] ?? ucfirst($order['status']);
                             <?php } else { ?>
                             <div class="status-final-message">
                                 <p style="text-align: center; color: #666; margin-top: 15px; font-style: italic;">
-                                    <?php echo ($order['status'] == 'completed') ? 'Pesanan telah selesai' : 'Pesanan telah dibatalkan'; ?>
+                                    <?php echo ($order['status'] == 'selesai') ? 'Pesanan telah selesai' : 'Pesanan telah dibatalkan'; ?>
                                 </p>
                             </div>
                             <?php } ?>

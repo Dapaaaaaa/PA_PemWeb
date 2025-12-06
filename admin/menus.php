@@ -127,16 +127,6 @@ $result_kategori = mysqli_query($conn, $query_kategori);
 
         <!-- Main Area -->
         <div class="admin-main">
-            <?php
-            if (isset($_SESSION['success'])) {
-                echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
-                unset($_SESSION['success']);
-            }
-            if (isset($_SESSION['error'])) {
-                echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
-                unset($_SESSION['error']);
-            }
-            ?>
 
             <!-- Add Menu Section -->
             <div class="content-section">
@@ -248,9 +238,8 @@ $result_kategori = mysqli_query($conn, $query_kategori);
                             </td>
                             <td class="table-actions">
                                 <a href="edit_menu.php?id=<?php echo $menu['id']; ?>" class="btn btn-sm btn-success">Edit</a>
-                                <a href="menus.php?action=delete&id=<?php echo $menu['id']; ?>" 
-                                   class="btn btn-sm btn-danger" 
-                                   onclick="return confirm('Yakin ingin menghapus?')">Hapus</a>
+                                <button onclick="confirmDelete(<?php echo $menu['id']; ?>, '<?php echo htmlspecialchars($menu['nama']); ?>', 'menus.php?action=delete&id={id}')" 
+                                        class="btn btn-sm btn-danger">Hapus</button>
                             </td>
                         </tr>
                         <?php } ?>
@@ -261,6 +250,9 @@ $result_kategori = mysqli_query($conn, $query_kategori);
     </div>
 
 </div>
+
+<!-- Toast Notification Script -->
+<script src="../assets/js/toast.js"></script>
 
 <script>
 // Set active menu
@@ -285,6 +277,19 @@ document.getElementById('categoryFilter').addEventListener('change', function() 
         }
     });
 });
+
+// Show toast notifications
+<?php if (isset($_SESSION['success'])): ?>
+document.addEventListener('DOMContentLoaded', function() {
+    showToast(<?php echo json_encode($_SESSION['success']); ?>, 'success', 3000);
+});
+<?php unset($_SESSION['success']); endif; ?>
+
+<?php if (isset($_SESSION['error'])): ?>
+document.addEventListener('DOMContentLoaded', function() {
+    showToast(<?php echo json_encode($_SESSION['error']); ?>, 'error', 3000);
+});
+<?php unset($_SESSION['error']); endif; ?>
 </script>
 
 </body>
