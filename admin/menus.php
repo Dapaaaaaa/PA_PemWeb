@@ -193,6 +193,8 @@ $result_kategori = mysqli_query($conn, $query_kategori);
                 <div class="section-header">
                     <h2>Semua Menu Item</h2>
                     <div>
+                        <input type="text" id="searchInput" placeholder="Cari menu..." 
+                               style="padding: 8px 16px; border: 2px solid #ddd; border-radius: 8px; margin-right: 10px; width: 200px;">
                         <select id="categoryFilter" style="padding: 8px 16px; border: 2px solid #ddd; border-radius: 8px;">
                             <option value="">Semua Kategori</option>
                             <?php
@@ -261,21 +263,32 @@ document.querySelectorAll('.menu-item').forEach(item => {
     }
 });
 
-// Filter kategori
-document.getElementById('categoryFilter').addEventListener('change', function() {
-    const selectedCategory = this.value.toLowerCase();
+// Filter kategori dan search
+const searchInput = document.getElementById('searchInput');
+const categoryFilter = document.getElementById('categoryFilter');
+
+function filterTable() {
+    const searchTerm = searchInput.value.toLowerCase();
+    const selectedCategory = categoryFilter.value.toLowerCase();
     const rows = document.querySelectorAll('#menuTableBody tr');
     
     rows.forEach(row => {
+        const menuName = row.cells[1].textContent.toLowerCase();
         const kategori = row.getAttribute('data-kategori').toLowerCase();
         
-        if (selectedCategory === '' || kategori === selectedCategory) {
+        const matchesSearch = menuName.includes(searchTerm);
+        const matchesCategory = selectedCategory === '' || kategori === selectedCategory;
+        
+        if (matchesSearch && matchesCategory) {
             row.style.display = '';
         } else {
             row.style.display = 'none';
         }
     });
-});
+}
+
+searchInput.addEventListener('keyup', filterTable);
+categoryFilter.addEventListener('change', filterTable);
 
 // Show toast notifications
 <?php if (isset($_SESSION['success'])): ?>

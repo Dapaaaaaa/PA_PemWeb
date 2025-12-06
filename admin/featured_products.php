@@ -223,8 +223,14 @@ $result_products = mysqli_query($conn, $query_products);
             <!-- Featured Products List -->
             <div class="content-section" style="margin-top: 30px;">
                 <div class="section-header">
-                    <h2>Produk di Menu Kami</h2>
-                    <small style="color: #666;">Produk yang ditampilkan di section "Menu Kami!" di homepage</small>
+                    <div>
+                        <h2>Produk di Menu Kami</h2>
+                        <small style="color: #666;">Produk yang ditampilkan di section "Menu Kami!" di homepage</small>
+                    </div>
+                    <div>
+                        <input type="text" id="searchInput" placeholder="Cari produk..." 
+                               style="padding: 8px 16px; border: 2px solid #ddd; border-radius: 8px; width: 200px;">
+                    </div>
                 </div>
 
                 <table class="data-table">
@@ -396,6 +402,28 @@ document.querySelectorAll('.menu-item').forEach(item => {
         item.classList.add('active');
     }
 });
+
+// Search functionality
+const searchInput = document.getElementById('searchInput');
+if (searchInput) {
+    searchInput.addEventListener('keyup', function() {
+        const searchTerm = this.value.toLowerCase();
+        const rows = document.querySelectorAll('.data-table tbody tr');
+        
+        rows.forEach(row => {
+            if (row.cells.length > 2) {
+                const productName = row.cells[2].textContent.toLowerCase();
+                const category = row.cells[3].textContent.toLowerCase();
+                
+                if (productName.includes(searchTerm) || category.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        });
+    });
+}
 </script>
 
 </body>

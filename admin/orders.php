@@ -101,9 +101,9 @@ $result_orders = mysqli_query($conn, $query_orders);
                 <div class="section-header">
                     <h2>Semua Pesanan</h2>
                     <div>
-                        <input type="text" placeholder="Cari berdasarkan ID pesanan atau pelanggan..." 
+                        <input type="text" id="searchInput" placeholder="Cari berdasarkan ID pesanan atau pelanggan..." 
                                style="padding: 8px 16px; border: 2px solid #ddd; border-radius: 8px; margin-right: 10px; width: 250px;">
-                        <select style="padding: 8px 16px; border: 2px solid #ddd; border-radius: 8px;">
+                        <select id="statusFilter" style="padding: 8px 16px; border: 2px solid #ddd; border-radius: 8px;">
                             <option value="">Semua Status</option>
                             <option value="proses">Proses</option>
                             <option value="selesai">Selesai</option>
@@ -203,6 +203,44 @@ function updateStatus(orderId, status) {
     const statusLabel = statusLabels[status] || status;
     confirmStatusUpdate(orderId, status, statusLabel);
 }
+
+// Search and Filter functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const tableRows = document.querySelectorAll('.data-table tbody tr');
+    
+    function filterTable() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const selectedStatus = statusFilter.value.toLowerCase();
+        
+        tableRows.forEach(row => {
+            // Skip if it's the "no data" row
+            if (row.cells.length < 2) return;
+            
+            const orderId = row.cells[0].textContent.toLowerCase();
+            const customerName = row.cells[1].textContent.toLowerCase();
+            const statusCell = row.querySelector('.badge');
+            const rowStatus = statusCell ? statusCell.textContent.toLowerCase() : '';
+            
+            // Check search match
+            const matchesSearch = orderId.includes(searchTerm) || customerName.includes(searchTerm);
+            
+            // Check status match
+            const matchesStatus = !selectedStatus || rowStatus.includes(selectedStatus);
+            
+            // Show/hide row
+            if (matchesSearch && matchesStatus) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+    
+    searchInput.addEventListener('keyup', filterTable);
+    statusFilter.addEventListener('change', filterTable);
+});
 </script>
 
 </body>

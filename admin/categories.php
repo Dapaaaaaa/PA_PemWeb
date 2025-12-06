@@ -120,6 +120,10 @@ $result_categories = mysqli_query($conn, $query_categories);
             <div class="content-section">
                 <div class="section-header">
                     <h2>Semua Kategori</h2>
+                    <div>
+                        <input type="text" id="searchInput" placeholder="Cari kategori..." 
+                               style="padding: 8px 16px; border: 2px solid #ddd; border-radius: 8px; width: 200px;">
+                    </div>
                 </div>
 
                 <table class="data-table">
@@ -178,6 +182,29 @@ document.getElementById('category-name').addEventListener('input', function(e) {
         .replace(/^-+|-+$/g, '');
     document.getElementById('category-slug').value = slug;
 });
+
+// Search functionality
+const searchInput = document.getElementById('searchInput');
+if (searchInput) {
+    searchInput.addEventListener('keyup', function() {
+        const searchTerm = this.value.toLowerCase();
+        const rows = document.querySelectorAll('.data-table tbody tr');
+        
+        rows.forEach(row => {
+            if (row.cells.length > 2) {
+                const categoryName = row.cells[1].textContent.toLowerCase();
+                const slug = row.cells[2].textContent.toLowerCase();
+                const description = row.cells[3].textContent.toLowerCase();
+                
+                if (categoryName.includes(searchTerm) || slug.includes(searchTerm) || description.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        });
+    });
+}
 
 // Show toast notifications
 <?php if (isset($_SESSION['success'])): ?>
