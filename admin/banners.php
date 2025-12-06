@@ -155,7 +155,7 @@ $banners = mysqli_query($conn, "SELECT * FROM banners ORDER BY urutan ASC, id DE
         <!-- Info Box -->
         <div style="margin-bottom: 25px; padding: 16px 20px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 8px;">
             <p style="margin: 0; color: #856404;">
-                <strong>📌 Catatan:</strong> Maksimal 5 banner aktif. Banner akan otomatis berganti setiap 5 detik. Gunakan urutan untuk mengatur posisi banner.
+                <strong>Catatan:</strong> Maksimal 5 banner aktif. Banner akan otomatis berganti setiap 5 detik. Gunakan urutan untuk mengatur posisi banner.
             </p>
         </div>
 
@@ -172,7 +172,7 @@ $banners = mysqli_query($conn, "SELECT * FROM banners ORDER BY urutan ASC, id DE
                         <th style="width: 80px;">Urutan</th>
                         <th style="width: 150px;">Preview</th>
                         <th style="text-align: center; width: 120px;">Status</th>
-                        <th style="text-align: center; width: 180px;">Aksi</th>
+                        <th style="width: 180px;">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -183,16 +183,17 @@ $banners = mysqli_query($conn, "SELECT * FROM banners ORDER BY urutan ASC, id DE
                             <td>
                                 <img src="../<?php echo htmlspecialchars($banner['image_url']); ?>" 
                                      alt="Banner" 
-                                     style="width: 120px; height: 70px; object-fit: cover; border-radius: 8px;">
+                                     class="table-image"
+                                     style="width: 120px; height: 70px;">
                             </td>
                             <td style="text-align: center;">
                                 <span class="badge badge-<?php echo $banner['aktif'] ? 'success' : 'danger'; ?>">
                                     <?php echo $banner['aktif'] ? 'Aktif' : 'Nonaktif'; ?>
                                 </span>
                             </td>
-                            <td class="table-actions" style="text-align: center;">
+                            <td class="table-actions">
                                 <button class="btn btn-sm btn-warning" onclick='editBanner(<?php echo json_encode($banner); ?>)'>Edit</button>
-                                <button class="btn btn-sm btn-<?php echo $banner['aktif'] ? 'secondary' : 'success'; ?>" 
+                                <button class="btn btn-sm btn-<?php echo $banner['aktif'] ? 'secondary' : 'success'; ?>\" 
                                         onclick="toggleStatus(<?php echo $banner['id']; ?>, <?php echo $banner['aktif'] ? 0 : 1; ?>)">
                                     <?php echo $banner['aktif'] ? 'Nonaktifkan' : 'Aktifkan'; ?>
                                 </button>
@@ -360,8 +361,13 @@ window.onclick = function(event) {
         closeModal();
     }
 }
-</script>
 
+// Set active menu
+document.querySelectorAll('.menu-item').forEach(item => {
+    if (item.href && item.href.includes('banners.php')) {
+        item.classList.add('active');
+    }
+});
 </script>
 
 </body>

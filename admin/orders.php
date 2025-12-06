@@ -191,14 +191,14 @@ $result_orders = mysqli_query($conn, $query_orders);
                             <td><strong><?php echo $order['nomor_pesanan']; ?></strong></td>
                             <td><?php echo htmlspecialchars($order['nama_pelanggan']); ?></td>
                             <td><?php echo $order['telepon']; ?></td>
-                            <td><small><?php echo $items_text; ?></small></td>
+                            <td><div style="max-height: 60px; overflow-y: auto;"><small><?php echo $items_text; ?></small></div></td>
                             <td><strong>Rp <?php echo number_format($order['total'], 0, ',', '.'); ?></strong></td>
                             <td><span class="badge badge-<?php echo $status_badge; ?>"><?php echo ucfirst($order['status']); ?></span></td>
                             <td><?php echo date('Y-m-d H:i', strtotime($order['dibuat_pada'])); ?></td>
                             <td class="table-actions">
                                 <a href="view_order.php?id=<?php echo $order['id']; ?>" class="btn btn-sm btn-success">Lihat</a>
                                 <?php if ($order['status'] != 'selesai' && $order['status'] != 'dibatalkan') { ?>
-                                    <select onchange="updateStatus(<?php echo $order['id']; ?>, this.value)" class="btn btn-sm btn-primary" style="padding: 4px 8px;">
+                                    <select onchange="updateStatus(<?php echo $order['id']; ?>, this.value)" class="btn btn-sm btn-primary">
                                         <option value="">Update Status</option>
                                         <option value="proses">Proses</option>
                                         <option value="selesai">Selesai</option>

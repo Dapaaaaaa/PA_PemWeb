@@ -439,6 +439,7 @@ body {
   font-size: 14px;
   color: #666;
   border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
 }
 
 .data-table tbody tr:hover {
@@ -450,11 +451,28 @@ body {
   height: 50px;
   object-fit: cover;
   border-radius: 8px;
+  vertical-align: middle;
 }
 
 .table-actions {
-  display: flex;
-  gap: 8px;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.table-actions .btn,
+.table-actions select {
+  margin: 0 4px !important;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.table-actions .btn:first-child {
+  margin-left: 0 !important;
+}
+
+.table-actions select {
+  height: 32px;
+  padding: 6px 12px;
 }
 
 /* Status Badges */
