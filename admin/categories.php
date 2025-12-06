@@ -145,7 +145,7 @@ $result_categories = mysqli_query($conn, $query_categories);
                             <td><?php echo date('Y-m-d', strtotime($kategori['dibuat_pada'])); ?></td>
                             <td class="table-actions">
                                 <a href="edit_category.php?id=<?php echo $kategori['id']; ?>" class="btn btn-sm btn-success">Edit</a>
-                                <button onclick="confirmDelete(<?php echo $kategori['id']; ?>, '<?php echo htmlspecialchars($kategori['nama']); ?>')" 
+                                <button onclick="confirmDelete(<?php echo $kategori['id']; ?>, '<?php echo htmlspecialchars($kategori['nama']); ?>', 'categories.php?action=delete&id={id}')" 
                                         class="btn btn-sm btn-danger">Hapus</button>
                             </td>
                         </tr>
@@ -187,13 +187,6 @@ showToast(<?php echo json_encode($_SESSION['success']); ?>, 'success', 3000);
 <?php if (isset($_SESSION['error'])): ?>
 showToast(<?php echo json_encode($_SESSION['error']); ?>, 'error', 3000);
 <?php unset($_SESSION['error']); endif; ?>
-
-// Delete confirmation function
-function confirmDelete(id, name) {
-    if (confirm('Yakin ingin menghapus kategori "' + name + '"?\n\nSemua produk dalam kategori ini akan terpengaruh!')) {
-        window.location.href = 'categories.php?action=delete&id=' + id;
-    }
-}
 </script>
 
 </body>
