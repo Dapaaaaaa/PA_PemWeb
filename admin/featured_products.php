@@ -62,6 +62,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['a
     exit();
 }
 
+// Handle UPDATE ALL Orders (Batch)
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action']) && $_POST['action'] == 'update_all_orders') {
+    $orders = json_decode($_POST['orders'], true);
+    $errors = [];
+    $updated = 0;
+    
+    // Check for duplicate urutan values
+    $urutan_values = array_column($orders, 'urutan');
+    if (count($urutan_values) !== count(array_unique($urutan_values))) {
+        $_SESSION['error'] = "Terdapat urutan yang sama! Setiap produk harus memiliki urutan yang berbeda.";
+        header("Location: featured_products.php");
+        exit();
+    }
+    
+    // Update each order
+    foreach ($orders as $order) {
+        $id = intval($order['id']);
+        $urutan = intval($order['urutan']);
+        
+        if (mysqli_query($conn, "UPDATE menu_display SET urutan = $urutan WHERE id = $id")) {
+            $updated++;
+        } else {
+            $errors[] = "Gagal update urutan untuk ID $id";
+        }
+    }
+    
+    if (empty($errors)) {
+        $_SESSION['success'] = "Berhasil menyimpan urutan untuk $updated produk!";
+    } else {
+        $_SESSION['error'] = "Beberapa urutan gagal diupdate: " . implode(', ', $errors);
+    }
+    header("Location: featured_products.php");
+    exit();
+}
+
 // Handle TOGGLE Active
 if (isset($_GET['action']) && $_GET['action'] == 'toggle' && isset($_GET['id'])) {
     $id = intval($_GET['id']);
@@ -167,7 +202,7 @@ $result_products = mysqli_query($conn, $query_products);
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th style="width: 80px;">Urutan</th>
+                            <th style="width: 80px; text-align: center;">Urutan</th>
                             <th style="width: 100px;">Gambar</th>
                             <th>Nama Produk</th>
                             <th>Kategori</th>
@@ -182,12 +217,13 @@ $result_products = mysqli_query($conn, $query_products);
                             while ($item = mysqli_fetch_assoc($result_featured)) {
                         ?>
                         <tr>
-                            <td>
-                                <form method="POST" style="display: flex; align-items: center; gap: 8px;">
-                                    <input type="hidden" name="action" value="update_order">
-                                    <input type="hidden" name="id" value="<?php echo $item['id']; ?>">
-                                    <input type="number" name="urutan" value="<?php echo $item['urutan']; ?>" min="1" style="width: 60px; padding: 4px; text-align: center;" required>
-                                </form>
+                            <td style="text-align: center;">
+                                <input type="number" 
+                                       id="urutan_<?php echo $item['id']; ?>" 
+                                       value="<?php echo $item['urutan']; ?>" 
+                                       min="1" 
+                                       style="width: 60px; padding: 6px 8px; text-align: center; border: 2px solid #ddd; border-radius: 6px; font-weight: 600;" 
+                                       title="Ubah urutan dan klik tombol Simpan di kolom Aksi">
                             </td>
                             <td>
                                 <?php if ($item['url_gambar']): ?>
@@ -224,12 +260,51 @@ $result_products = mysqli_query($conn, $query_products);
                         ?>
                     </tbody>
                 </table>
+
+                <?php if (mysqli_num_rows($result_featured) > 0): ?>
+                <div style="margin-top: 20px;">
+                    <button type="button" onclick="saveAllOrders()" class="btn btn-primary" style="padding: 10px 24px;">
+                        💾 Simpan Semua Urutan
+                    </button>
+                </div>
+                <?php endif; ?>
             </div>
 
         </div>
     </div>
 
 <script>
+function saveAllOrders() {
+    const inputs = document.querySelectorAll('input[id^="urutan_"]');
+    const orders = [];
+    
+    inputs.forEach(input => {
+        const id = input.id.replace('urutan_', '');
+        const urutan = input.value;
+        orders.push({ id: id, urutan: urutan });
+    });
+    
+    // Create form and submit
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'featured_products.php';
+    
+    const actionInput = document.createElement('input');
+    actionInput.type = 'hidden';
+    actionInput.name = 'action';
+    actionInput.value = 'update_all_orders';
+    form.appendChild(actionInput);
+    
+    const ordersInput = document.createElement('input');
+    ordersInput.type = 'hidden';
+    ordersInput.name = 'orders';
+    ordersInput.value = JSON.stringify(orders);
+    form.appendChild(ordersInput);
+    
+    document.body.appendChild(form);
+    form.submit();
+}
+
 function confirmStatusToggle(id, productName, willActivate) {
     const action = willActivate ? 'mengaktifkan' : 'menonaktifkan';
     const statusText = willActivate ? 'Aktifkan' : 'Nonaktifkan';
