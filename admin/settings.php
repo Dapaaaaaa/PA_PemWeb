@@ -287,7 +287,7 @@ function getSetting($key, $default = '') {
                     </div>
 
                     <div class="form-group">
-                        <label for="qris-image">Upload QRIS Image</label>
+                        <label for="qris-image">Unggah Gambar QRIS</label>
                         <input type="file" id="qris-image" name="qris_image" accept="image/png,image/jpeg,image/jpg,image/gif">
                         <small style="display: block; margin-top: 5px; color: #666;">Format: JPG, PNG, GIF (Max 2MB)</small>
                     </div>

@@ -233,7 +233,12 @@ $banners = mysqli_query($conn, "SELECT * FROM banners ORDER BY urutan ASC, id DE
 
             <div class="form-group">
                 <label>Gambar Banner <span style="color: red;">*</span></label>
-                <input type="file" name="banner_image" id="banner_image" accept="image/*" onchange="previewImage(this)" class="form-control">
+                <div style="position: relative;">
+                    <input type="file" name="banner_image" id="banner_image" accept="image/*" onchange="previewImage(this)" class="form-control" style="position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer;">
+                    <button type="button" onclick="document.getElementById('banner_image').click()" style="padding: 8px 16px; border: 1px solid #ddd; background: white; border-radius: 6px; cursor: pointer; width: 100%; text-align: left; color: #666;">
+                        <span id="fileLabel">Pilih file...</span>
+                    </button>
+                </div>
                 <small style="color: #666; display: block; margin-top: 5px;">Format: JPG, PNG, GIF, WEBP (Recommended: 1200x400px)</small>
                 <div id="imagePreview" style="margin-top: 15px;"></div>
             </div>
@@ -261,6 +266,7 @@ function openModal() {
     document.getElementById('bannerForm').reset();
     document.getElementById('imagePreview').innerHTML = '';
     document.getElementById('bannerId').value = '';
+    document.getElementById('fileLabel').textContent = 'Pilih file...';
 }
 
 function closeModal() {
@@ -277,16 +283,23 @@ function editBanner(banner) {
     document.getElementById('existingImage').value = banner.image_url;
     
     if (banner.image_url) {
-        document.getElementById('imagePreview').innerHTML = 
-            '<img src="../' + banner.image_url + '" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">';
-    }
-}
-
 function previewImage(input) {
     const preview = document.getElementById('imagePreview');
+    const fileLabel = document.getElementById('fileLabel');
+    
     if (input.files && input.files[0]) {
+        const fileName = input.files[0].name;
+        fileLabel.textContent = fileName;
+        
         const reader = new FileReader();
         reader.onload = function(e) {
+            preview.innerHTML = '<img src="' + e.target.result + '" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">';
+        }
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        fileLabel.textContent = 'Pilih file...';
+    }
+}       reader.onload = function(e) {
             preview.innerHTML = '<img src="' + e.target.result + '" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">';
         }
         reader.readAsDataURL(input.files[0]);

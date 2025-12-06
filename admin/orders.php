@@ -19,14 +19,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'update_status' && isset($_GET[
 }
 
 // Statistik pesanan berdasarkan status
-$query_pending = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'pending'";
-$result_pending = mysqli_query($conn, $query_pending);
-$total_pending = mysqli_fetch_assoc($result_pending)['total'];
-
-$query_waiting = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'waiting_confirmation'";
-$result_waiting = mysqli_query($conn, $query_waiting);
-$total_waiting = mysqli_fetch_assoc($result_waiting)['total'];
-
 $query_processing = "SELECT COUNT(*) as total FROM pesanan WHERE status = 'proses'";
 $result_processing = mysqli_query($conn, $query_processing);
 $total_processing = mysqli_fetch_assoc($result_processing)['total'];
@@ -83,29 +75,6 @@ $result_orders = mysqli_query($conn, $query_orders);
             <!-- Order Stats -->
             <div class="dashboard-stats">
                 <div class="stat-card">
-                    <!-- <div class="stat-icon orange">
-                        
-                    </div> -->
-                    <div class="stat-info">
-                        <h3>Pending</h3>
-                        <div class="stat-number"><?php echo $total_pending; ?></div>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <!-- <div class="stat-icon purple">
-                        
-                    </div> -->
-                    <div class="stat-info">
-                        <h3>Menunggu Konfirmasi</h3>
-                        <div class="stat-number"><?php echo $total_waiting; ?></div>
-                    </div>
-                </div>
-
-                <div class="stat-card">
-                    <!-- <div class="stat-icon blue">
-                        
-                    </div> -->
                     <div class="stat-info">
                         <h3>Proses</h3>
                         <div class="stat-number"><?php echo $total_processing; ?></div>
@@ -113,21 +82,15 @@ $result_orders = mysqli_query($conn, $query_orders);
                 </div>
 
                 <div class="stat-card">
-                    <!-- <div class="stat-icon green">
-                        
-                    </div> -->
                     <div class="stat-info">
-                        <h3>Beres</h3>
+                        <h3>Selesai</h3>
                         <div class="stat-number"><?php echo $total_completed; ?></div>
                     </div>
                 </div>
 
                 <div class="stat-card">
-                    <!-- <div class="stat-icon red">
-                        
-                    </div> -->
                     <div class="stat-info">
-                        <h3>Batal</h3>
+                        <h3>Dibatalkan</h3>
                         <div class="stat-number"><?php echo $total_cancelled; ?></div>
                     </div>
                 </div>
@@ -142,11 +105,9 @@ $result_orders = mysqli_query($conn, $query_orders);
                                style="padding: 8px 16px; border: 2px solid #ddd; border-radius: 8px; margin-right: 10px; width: 250px;">
                         <select style="padding: 8px 16px; border: 2px solid #ddd; border-radius: 8px;">
                             <option value="">Semua Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="waiting_confirmation">Menunggu Konfirmasi</option>
-                            <option value="processing">Proses</option>
-                            <option value="completed">Beres</option>
-                            <option value="cancelled">Batal</option>
+                            <option value="proses">Proses</option>
+                            <option value="selesai">Selesai</option>
+                            <option value="dibatalkan">Dibatalkan</option>
                         </select>
                     </div>
                 </div>
@@ -183,7 +144,6 @@ $result_orders = mysqli_query($conn, $query_orders);
                                 // Badge status
                                 $status_badge = 'info';
                                 if ($order['status'] == 'selesai') $status_badge = 'success';
-                                elseif ($order['status'] == 'waiting_confirmation') $status_badge = 'purple';
                                 elseif ($order['status'] == 'proses') $status_badge = 'warning';
                                 elseif ($order['status'] == 'dibatalkan') $status_badge = 'danger';
                         ?>

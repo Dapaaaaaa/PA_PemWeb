@@ -137,17 +137,28 @@ $result_menu_populer = mysqli_query($conn, $query_menu_populer);
                         $result_pesanan = mysqli_query($conn, $query_pesanan);
                         
                         while ($pesanan = mysqli_fetch_assoc($result_pesanan)) {
+                            $status = $pesanan['status'];
                             $status_badge = 'info';
-                            if ($pesanan['status'] == 'completed') $status_badge = 'success';
-                            elseif ($pesanan['status'] == 'processing') $status_badge = 'warning';
-                            elseif ($pesanan['status'] == 'cancelled') $status_badge = 'danger';
+                            $status_text = $status;
+                            
+                            // Map status ke badge dan teks Indonesia
+                            if ($status == 'selesai') {
+                                $status_badge = 'success';
+                                $status_text = 'Selesai';
+                            } elseif ($status == 'proses') {
+                                $status_badge = 'warning';
+                                $status_text = 'Proses';
+                            } elseif ($status == 'dibatalkan') {
+                                $status_badge = 'danger';
+                                $status_text = 'Dibatalkan';
+                            }
                         ?>
                         <tr>
                             <td><?php echo $pesanan['nomor_pesanan']; ?></td>
                             <td><?php echo htmlspecialchars($pesanan['nama_pelanggan']); ?></td>
                             <td>-</td>
                             <td>Rp <?php echo number_format($pesanan['total'], 0, ',', '.'); ?></td>
-                            <td><span class="badge badge-<?php echo $status_badge; ?>"><?php echo ucfirst($pesanan['status']); ?></span></td>
+                            <td><span class="badge badge-<?php echo $status_badge; ?>"><?php echo $status_text; ?></span></td>
                             <td><?php echo date('d M Y H:i', strtotime($pesanan['dibuat_pada'])); ?></td>
                         </tr>
                         <?php } ?>
