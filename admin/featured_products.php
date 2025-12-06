@@ -88,7 +88,7 @@ $result_products = mysqli_query($conn, $query_products);
         <!-- Topbar -->
         <div class="admin-topbar">
             <div class="topbar-left">
-                <h1>Menu Kami (Homepage)</h1>
+                <h1>Menu Kami (Beranda)</h1>
             </div>
             <div class="topbar-right">
                 <div class="admin-user">
@@ -195,13 +195,12 @@ $result_products = mysqli_query($conn, $query_products);
                             </td>
                             <td style="text-align: center;">
                                 <div style="display: flex; gap: 8px; justify-content: center; align-items: center;">
-                                    <a href="?action=toggle&id=<?php echo $item['id']; ?>" 
-                                       class="btn btn-sm btn-<?php echo $item['aktif'] ? 'warning' : 'success'; ?>"
-                                       style="min-width: 95px; white-space: nowrap;"
-                                       onclick="return confirm('Ubah status produk ini?')">
+                                    <button onclick="confirmStatusToggle(<?php echo $item['id']; ?>, '<?php echo htmlspecialchars($item['nama']); ?>', <?php echo $item['aktif'] ? 'false' : 'true'; ?>)" 
+                                            class="btn btn-sm btn-<?php echo $item['aktif'] ? 'warning' : 'success'; ?>"
+                                            style="min-width: 95px; white-space: nowrap;">
                                         <?php echo $item['aktif'] ? 'Nonaktifkan' : 'Aktifkan'; ?>
-                                    </a>
-                                    <button onclick="confirmDelete(<?php echo $item['id']; ?>, '<?php echo htmlspecialchars($item['nama']); ?>', 'featured_products.php')" 
+                                    </button>
+                                    <button onclick="confirmRemoveFromFeatured(<?php echo $item['id']; ?>, '<?php echo htmlspecialchars($item['nama']); ?>')" 
                                             class="btn btn-sm btn-danger" style="min-width: 60px;">Hapus</button>
                                 </div>
                             </td>
@@ -219,6 +218,49 @@ $result_products = mysqli_query($conn, $query_products);
         </div>
     </div>
 
+<script>
+function confirmStatusToggle(id, productName, willActivate) {
+    const action = willActivate ? 'mengaktifkan' : 'menonaktifkan';
+    const statusText = willActivate ? 'Aktifkan' : 'Nonaktifkan';
+    
+    if (window.confirmStatusUpdate) {
+        // Use existing status modal if available
+        confirmStatusUpdate(id, action, statusText, function() {
+            window.location.href = 'featured_products.php?action=toggle&id=' + id;
+        });
+    } else {
+        // Fallback to custom confirmation
+        if (confirm('Yakin ingin ' + action + ' produk "' + productName + '" di Menu Kami?')) {
+            window.location.href = 'featured_products.php?action=toggle&id=' + id;
+        }
+    }
+}
+
+function confirmRemoveFromFeatured(id, productName) {
+    // Custom confirmation for removing from featured list (not deleting product)
+    const modal = document.getElementById('deleteModal');
+    if (modal) {
+        document.getElementById('deleteMessage').innerHTML = 
+            'Yakin ingin menghapus <strong>"' + productName + '"</strong> dari Menu Kami?<br><br>' +
+            '<span style="color: #666; font-size: 13px;">Produk tidak akan dihapus dari database, hanya dihapus dari tampilan Menu Kami di homepage.</span>';
+        
+        modal.classList.add('show');
+        
+        // Override confirm button action
+        const confirmBtn = document.getElementById('confirmDeleteBtn');
+        const newConfirmBtn = confirmBtn.cloneNode(true);
+        confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+        
+        newConfirmBtn.onclick = function() {
+            window.location.href = 'featured_products.php?action=delete&id=' + id;
+        };
+    } else {
+        // Fallback if modal not available
+        if (confirm('Yakin ingin menghapus "' + productName + '" dari Menu Kami?\n\nProduk tidak akan dihapus dari database, hanya dari tampilan homepage.')) {
+            window.location.href = 'featured_products.php?action=delete&id=' + id;
+        }
+    }
+}
 </script>
 
 </body>
