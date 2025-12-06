@@ -232,9 +232,16 @@ document.querySelectorAll('.menu-item').forEach(item => {
 
 // Update status function
 function updateStatus(orderId, status) {
-    if (status && confirm('Update status pesanan ke: ' + status + '?')) {
-        window.location.href = 'orders.php?action=update_status&id=' + orderId + '&status=' + status;
-    }
+    if (!status) return;
+    
+    const statusLabels = {
+        'processing': 'Proses',
+        'completed': 'Selesai',
+        'cancelled': 'Dibatalkan'
+    };
+    
+    const statusLabel = statusLabels[status] || status;
+    confirmStatusUpdate(orderId, status, statusLabel);
 }
 </script>
 
